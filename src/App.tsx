@@ -172,7 +172,7 @@ export default function App() {
 
   return (
     <MobileAppFrame onOpenInstallPrompt={() => setShowInstallPrompt(true)}>
-      <div className="min-h-full bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500 selection:text-slate-950 pb-20">
+      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500 selection:text-slate-950 pb-28">
         <OfflineBanner />
 
         {/* 1. Splash Screen Animation */}

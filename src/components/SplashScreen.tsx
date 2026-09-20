@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import { KiteLogo } from './KiteLogo';
 import { Cpu, Zap, Wifi } from 'lucide-react';
@@ -8,20 +8,24 @@ interface SplashScreenProps {
 }
 
 export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
+  const onFinishRef = useRef(onFinish);
+  onFinishRef.current = onFinish;
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      onFinish();
-    }, 2800);
+      onFinishRef.current();
+    }, 1600);
     return () => clearTimeout(timer);
-  }, [onFinish]);
+  }, []);
 
   return (
     <motion.div
       initial={{ opacity: 1 }}
       exit={{ opacity: 0, scale: 1.04 }}
-      transition={{ duration: 0.5, ease: 'easeInOut' }}
+      transition={{ duration: 0.4, ease: 'easeInOut' }}
       className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-950 text-white overflow-hidden select-none cursor-pointer"
       onClick={onFinish}
+      onTouchStart={onFinish}
     >
       {/* Animated digital grid background */}
       <motion.div

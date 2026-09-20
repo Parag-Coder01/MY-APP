@@ -10,9 +10,26 @@ export const MobileAppFrame: React.FC<MobileAppFrameProps> = ({
   children,
   onOpenInstallPrompt,
 }) => {
+  // Check if viewing from an actual mobile screen (< 768px)
+  const [isMobileScreen, setIsMobileScreen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 768;
+    }
+    return false;
+  });
+
   // Mobile frame simulator toggle for desktop
   const [isPhoneFrame, setIsPhoneFrame] = useState(true);
   const [currentTime, setCurrentTime] = useState('9:41');
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileScreen(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const updateTime = () => {
@@ -26,6 +43,16 @@ export const MobileAppFrame: React.FC<MobileAppFrameProps> = ({
     return () => clearInterval(interval);
   }, []);
 
+  // When on an actual mobile device/screen, render native full-screen with native document scrolling
+  if (isMobileScreen) {
+    return (
+      <div className="w-full min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500 selection:text-slate-950 overflow-x-hidden">
+        {children}
+      </div>
+    );
+  }
+
+  // Desktop simulator mode
   return (
     <div className="min-h-screen bg-[#070b14] flex flex-col text-slate-100 font-sans selection:bg-cyan-500 selection:text-slate-950">
       {/* Desktop Controller Ribbon: Lets user switch between Mobile App Frame and Fullscreen */}
@@ -37,7 +64,7 @@ export const MobileAppFrame: React.FC<MobileAppFrameProps> = ({
           </span>
           <span className="text-slate-500">•</span>
           <span className="text-slate-400 text-[11px]">
-            {isPhoneFrame ? 'Simulating iPhone / Android Flagship Device' : 'Desktop Expanded Mode'}
+            {isPhoneFrame ? 'Desktop Simulator (414×840)' : 'Desktop Wide Mode'}
           </span>
         </div>
 
@@ -80,22 +107,22 @@ export const MobileAppFrame: React.FC<MobileAppFrameProps> = ({
       </div>
 
       {/* Main Container */}
-      <div className={`flex-1 flex items-center justify-center ${isPhoneFrame ? 'md:py-8 md:px-4' : ''}`}>
+      <div className={`flex-1 flex items-center justify-center ${isPhoneFrame ? 'py-8 px-4' : ''}`}>
         {isPhoneFrame ? (
-          /* Phone Device Shell on Desktop, 100% full-bleed on Mobile */
-          <div className="w-full md:max-w-[430px] md:h-[880px] md:max-h-[92vh] bg-slate-950 md:rounded-[52px] md:ring-12 md:ring-slate-800/90 md:shadow-[0_25px_70px_-15px_rgba(0,0,0,0.95),0_0_50px_rgba(6,182,212,0.15)] flex flex-col relative overflow-hidden transition-all duration-300">
+          /* Phone Device Shell on Desktop */
+          <div className="w-[414px] h-[840px] max-h-[92vh] bg-slate-950 rounded-[52px] ring-12 ring-slate-800/90 shadow-[0_25px_70px_-15px_rgba(0,0,0,0.95),0_0_50px_rgba(6,182,212,0.15)] flex flex-col relative overflow-hidden transition-all duration-300">
             {/* Left Hardware Buttons (Decorative) */}
-            <div className="hidden md:block absolute -left-[14px] top-28 w-[4px] h-12 bg-slate-700 rounded-l-sm" />
-            <div className="hidden md:block absolute -left-[14px] top-44 w-[4px] h-12 bg-slate-700 rounded-l-sm" />
+            <div className="absolute -left-[14px] top-28 w-[4px] h-12 bg-slate-700 rounded-l-sm" />
+            <div className="absolute -left-[14px] top-44 w-[4px] h-12 bg-slate-700 rounded-l-sm" />
             {/* Right Power Button (Decorative) */}
-            <div className="hidden md:block absolute -right-[14px] top-32 w-[4px] h-16 bg-slate-700 rounded-r-sm" />
+            <div className="absolute -right-[14px] top-32 w-[4px] h-16 bg-slate-700 rounded-r-sm" />
 
             {/* Mobile Status Bar (iOS / Android style) */}
             <div className="w-full bg-slate-950/95 backdrop-blur-md px-6 pt-3 pb-1 flex items-center justify-between text-slate-300 text-[11px] font-mono-code select-none z-50 shrink-0">
               <span className="font-semibold text-white tracking-wider">{currentTime}</span>
               
               {/* Dynamic Island Capsule in Center */}
-              <div className="hidden md:flex items-center justify-center px-3 py-1 bg-black rounded-full border border-slate-800 shadow-inner">
+              <div className="flex items-center justify-center px-3 py-1 bg-black rounded-full border border-slate-800 shadow-inner">
                 <div className="w-2.5 h-2.5 rounded-full bg-slate-900 border border-slate-700 mr-2" />
                 <div className="w-2 h-2 rounded-full bg-cyan-900/60" />
               </div>
@@ -118,7 +145,7 @@ export const MobileAppFrame: React.FC<MobileAppFrameProps> = ({
             </div>
 
             {/* iOS Home Indicator Bar at Bottom of Phone */}
-            <div className="hidden md:flex justify-center pb-2 pt-1 bg-slate-950/95 shrink-0 z-50">
+            <div className="flex justify-center pb-2 pt-1 bg-slate-950/95 shrink-0 z-50">
               <div className="w-32 h-1 bg-slate-700 hover:bg-slate-500 transition-colors rounded-full" />
             </div>
           </div>

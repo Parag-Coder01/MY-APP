@@ -14,7 +14,10 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
   onOpenQuickMenu,
 }) => {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 backdrop-blur-lg border-t border-slate-800/80 px-2 py-1.5 transition-all">
+    <nav
+      style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom, 0.5rem))' }}
+      className="fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 backdrop-blur-lg border-t border-slate-800/80 px-2 pt-1.5 transition-all"
+    >
       <div className="max-w-md mx-auto flex items-center justify-around relative">
         {/* 1. Home Tab */}
         <button
