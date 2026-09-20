@@ -1,0 +1,6 @@
+{
+  "name": "Kite Robotics — Empowering Innovation with Robotics, AI & IoT",
+  "description": "Next-generation Robotics, AI, IoT and STEM education ecosystem. Hands-on learning, robotics kits, workshops, school programs, and intelligent KMS-AI assistant.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

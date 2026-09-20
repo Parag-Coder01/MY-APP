@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#020617"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="kiteGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="50%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background rounded squircle -->
+  <rect width="512" height="512" rx="110" fill="url(#bgGrad)" stroke="#1e293b" stroke-width="4"/>
+
+  <!-- Circuit grid lines in background -->
+  <path d="M 64 256 H 200 M 312 256 H 448 M 256 64 V 200 M 256 312 V 448" stroke="#1e293b" stroke-width="3" stroke-dasharray="6,6"/>
+  <circle cx="256" cy="256" r="160" stroke="#0e7490" stroke-width="2" fill="none" opacity="0.4"/>
+  <circle cx="256" cy="256" r="210" stroke="#334155" stroke-width="1.5" fill="none" opacity="0.6"/>
+
+  <!-- Kite Robotics Main Hex-Diamond Poly -->
+  <g filter="url(#glow)">
+    <!-- Main Kite Body -->
+    <polygon points="256,96 384,240 256,416 128,240" fill="url(#kiteGrad)" opacity="0.95"/>
+    <!-- Left Wing Highlight -->
+    <polygon points="256,96 128,240 256,256" fill="#22d3ee" opacity="0.35"/>
+    <!-- Right Wing Highlight -->
+    <polygon points="256,96 384,240 256,256" fill="#6366f1" opacity="0.25"/>
+    
+    <!-- Microchip / Robotics Core at Center -->
+    <rect x="226" y="226" width="60" height="60" rx="12" fill="#020617" stroke="#38bdf8" stroke-width="3.5"/>
+    <circle cx="256" cy="256" r="12" fill="url(#goldGrad)"/>
+    <circle cx="256" cy="256" r="6" fill="#ffffff"/>
+
+    <!-- Microchip Pins -->
+    <line x1="214" y1="242" x2="226" y2="242" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="214" y1="270" x2="226" y2="270" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="286" y1="242" x2="298" y2="242" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="286" y1="270" x2="298" y2="270" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="242" y1="214" x2="242" y2="226" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="270" y1="214" x2="270" y2="226" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="242" y1="286" x2="242" y2="298" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="270" y1="286" x2="270" y2="298" stroke="#38bdf8" stroke-width="3"/>
+
+    <!-- Kinetic Robotics Tail / Thruster Nodes -->
+    <circle cx="256" cy="442" r="8" fill="#f59e0b"/>
+    <line x1="256" y1="416" x2="256" y2="434" stroke="#f59e0b" stroke-width="3"/>
+  </g>
+
+  <!-- Node points -->
+  <circle cx="256" cy="96" r="8" fill="#38bdf8" stroke="#020617" stroke-width="2"/>
+  <circle cx="128" cy="240" r="8" fill="#38bdf8" stroke="#020617" stroke-width="2"/>
+  <circle cx="384" cy="240" r="8" fill="#38bdf8" stroke="#020617" stroke-width="2"/>
+  <circle cx="256" cy="416" r="8" fill="#38bdf8" stroke="#020617" stroke-width="2"/>
+</svg>
