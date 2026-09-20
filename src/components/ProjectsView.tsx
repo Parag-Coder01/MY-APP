@@ -8,12 +8,20 @@ export const ProjectsView: React.FC = () => {
   const [selectedDifficulty, setSelectedDifficulty] = useState<'All' | 'Beginner' | 'Intermediate' | 'Advanced'>('All');
   const [activeProjectModal, setActiveProjectModal] = useState<ProjectItem | null>(null);
   const [savedProjects, setSavedProjects] = useState<string[]>([]);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   const toggleSave = (id: string) => {
     if (savedProjects.includes(id)) {
       setSavedProjects(savedProjects.filter((p) => p !== id));
+      showToast('Removed from saved projects');
     } else {
       setSavedProjects([...savedProjects, id]);
+      showToast('Project saved to your notebook');
     }
   };
 
@@ -23,7 +31,12 @@ export const ProjectsView: React.FC = () => {
   });
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-12 relative">
+      {toastMessage && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-cyan-500 text-slate-950 px-4 py-2.5 rounded-xl font-bold text-xs shadow-xl animate-bounce">
+          {toastMessage}
+        </div>
+      )}
       {/* Header */}
       <div>
         <div className="text-xs font-mono-code text-cyan-400 uppercase tracking-widest flex items-center gap-1.5">
@@ -202,7 +215,7 @@ export const ProjectsView: React.FC = () => {
                     <span>Firmware Implementation (C++ / Arduino)</span>
                   </div>
                   <button
-                    onClick={() => alert("Downloaded project firmware sketch (INO / ZIP).")}
+                    onClick={() => showToast("Downloading firmware sketch (INO / ZIP)...")}
                     className="text-cyan-400 hover:underline flex items-center gap-1"
                   >
                     <Download className="w-3 h-3" />
@@ -240,7 +253,7 @@ void loop() {
 
               <button
                 onClick={() => {
-                  alert("Project lab guide sent to your student dashboard.");
+                  showToast("Project lab guide sent to your student dashboard.");
                   setActiveProjectModal(null);
                 }}
                 className="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs"

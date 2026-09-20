@@ -46,7 +46,13 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   };
 
   const copyOrderId = () => {
-    navigator.clipboard.writeText(orderId);
+    try {
+      if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(orderId).catch(() => {});
+      }
+    } catch {
+      // Ignore clipboard failure in restricted browsers
+    }
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };

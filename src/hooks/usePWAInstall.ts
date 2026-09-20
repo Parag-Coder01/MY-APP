@@ -12,14 +12,28 @@ export function usePWAInstall() {
 
   useEffect(() => {
     // Detect standalone mode (already installed as native/PWA mobile app)
-    const isStandalone =
-      window.matchMedia('(display-mode: standalone)').matches ||
-      (window.navigator as unknown as { standalone?: boolean }).standalone === true;
+    let isStandalone = false;
+    try {
+      if (typeof window !== 'undefined') {
+        const matchesMedia = typeof window.matchMedia === 'function' && window.matchMedia('(display-mode: standalone)').matches;
+        const navStandalone = Boolean((window.navigator as unknown as { standalone?: boolean })?.standalone);
+        isStandalone = matchesMedia || navStandalone;
+      }
+    } catch {
+      isStandalone = false;
+    }
     setIsInstalled(isStandalone);
 
     // Detect iOS devices
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    const isIOSDevice = /iphone|ipad|ipod/.test(userAgent);
+    let isIOSDevice = false;
+    try {
+      if (typeof window !== 'undefined' && window.navigator?.userAgent) {
+        const userAgent = window.navigator.userAgent.toLowerCase();
+        isIOSDevice = /iphone|ipad|ipod/.test(userAgent);
+      }
+    } catch {
+      isIOSDevice = false;
+    }
     setIsIOS(isIOSDevice);
 
     const handleBeforeInstallPrompt = (e: Event) => {

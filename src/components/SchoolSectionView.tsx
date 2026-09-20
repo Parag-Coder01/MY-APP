@@ -13,6 +13,7 @@ export const SchoolSectionView: React.FC = () => {
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [downloadNotice, setDownloadNotice] = useState(false);
 
   const schoolOfferings = [
     {
@@ -101,11 +102,14 @@ export const SchoolSectionView: React.FC = () => {
             </a>
 
             <button
-              onClick={() => alert("KITE Robotics 2026 Institutional STEM & ATL Prospectus is downloading (PDF).")}
-              className="px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs sm:text-sm font-medium flex items-center gap-2 transition-colors"
+              onClick={() => {
+                setDownloadNotice(true);
+                setTimeout(() => setDownloadNotice(false), 3000);
+              }}
+              className="px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs sm:text-sm font-medium flex items-center gap-2 transition-colors relative"
             >
               <Download className="w-4 h-4 text-cyan-400" />
-              <span>Curriculum Brochure</span>
+              <span>{downloadNotice ? 'Downloading Brochure...' : 'Curriculum Brochure'}</span>
             </button>
           </div>
         </div>

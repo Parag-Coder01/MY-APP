@@ -11,27 +11,41 @@ interface CertificatesViewProps {
 
 export const CertificatesView: React.FC<CertificatesViewProps> = ({ user }) => {
   const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   const handleDownload = (cert: Certificate) => {
-    alert(`Downloading high-resolution official PDF for certificate ${cert.certificateId}`);
+    showToast(`Downloading official high-resolution certificate (${cert.certificateId})`);
   };
 
   const handleShare = (cert: Certificate) => {
     const verifyUrl = cert.verificationUrl || `https://www.kiterobotics.in/verify/${cert.certificateId}`;
-    if (navigator.share) {
+    if (typeof navigator !== 'undefined' && navigator.share) {
       navigator.share({
         title: `${cert.title} - KITE Robotics`,
         text: `I just earned an official certification in ${cert.title} from KITE ROBOTICS! Certificate ID: ${cert.certificateId}`,
         url: verifyUrl,
       }).catch(() => {});
     } else {
-      navigator.clipboard.writeText(verifyUrl);
-      alert("Certificate verification link copied to clipboard!");
+      if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(verifyUrl).catch(() => {});
+      }
+      showToast("Certificate verification link copied to clipboard!");
     }
   };
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-12 relative">
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-cyan-500 text-slate-950 px-4 py-2.5 rounded-xl font-bold text-xs shadow-xl animate-bounce">
+          {toastMessage}
+        </div>
+      )}
       {/* Header */}
       <div>
         <div className="text-xs font-mono-code text-cyan-400 uppercase tracking-widest flex items-center gap-1.5">

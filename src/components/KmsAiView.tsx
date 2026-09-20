@@ -43,7 +43,13 @@ How can I accelerate your hardware innovation today?
   }, [messages, loading]);
 
   const handleCopy = (text: string, id: string) => {
-    navigator.clipboard.writeText(text);
+    try {
+      if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text).catch(() => {});
+      }
+    } catch {
+      // Ignore copy error in restricted contexts
+    }
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
   };
@@ -60,8 +66,8 @@ How can I accelerate your hardware innovation today?
   };
 
   const handleVoiceToggle = () => {
-    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-      alert("Speech recognition is not supported in this browser. Please type your query.");
+    if (typeof window === 'undefined' || (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window))) {
+      setInputQuery("Voice input is not supported in this browser. Please type your query.");
       return;
     }
 
@@ -77,8 +83,10 @@ How can I accelerate your hardware innovation today?
         recognition.start();
 
         recognition.onresult = (event: any) => {
-          const transcript = event.results[0][0].transcript;
-          setInputQuery(transcript);
+          const transcript = event?.results?.[0]?.[0]?.transcript;
+          if (transcript) {
+            setInputQuery(transcript);
+          }
           setIsRecording(false);
         };
 
