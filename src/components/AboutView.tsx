@@ -2,6 +2,7 @@ import React from 'react';
 import { ShieldCheck, Target, Eye, Award, Users, Cpu, MapPin, Sparkles, PhoneCall, Mail, Globe, ArrowRight } from 'lucide-react';
 import { COMPANY_INFO } from '../data/mockData';
 import { KiteLogo } from './KiteLogo';
+import { AnimatedCounter } from './AnimatedCounter';
 
 interface AboutViewProps {
   onContactClick: () => void;
@@ -56,6 +57,28 @@ export const AboutView: React.FC<AboutViewProps> = ({ onContactClick }) => {
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
             KITE ROBOTICS is an Indian Robotics, Artificial Intelligence, IoT and STEM education company focused on hands-on experiential learning, cutting-edge hardware products, nationwide workshops, and school innovation laboratory setup.
           </p>
+
+          {/* Dynamic Impact Counters */}
+          <div className="grid grid-cols-3 gap-3 pt-6 mt-6 border-t border-slate-800 text-center">
+            <div>
+              <div className="text-xl sm:text-2xl font-display font-black text-cyan-400">
+                <AnimatedCounter target={25000} suffix="+" duration={1800} />
+              </div>
+              <div className="text-[11px] font-mono-code text-slate-400 mt-0.5">Students Mentored</div>
+            </div>
+            <div>
+              <div className="text-xl sm:text-2xl font-display font-black text-amber-400">
+                <AnimatedCounter target={120} suffix="+" duration={1500} />
+              </div>
+              <div className="text-[11px] font-mono-code text-slate-400 mt-0.5">Partner Schools</div>
+            </div>
+            <div>
+              <div className="text-xl sm:text-2xl font-display font-black text-emerald-400">
+                <AnimatedCounter target={45} suffix="+" duration={1400} />
+              </div>
+              <div className="text-[11px] font-mono-code text-slate-400 mt-0.5">ATL Labs Setup</div>
+            </div>
+          </div>
         </div>
       </div>
 

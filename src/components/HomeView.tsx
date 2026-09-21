@@ -1,8 +1,29 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Sparkles, ArrowRight, BookOpen, ShoppingBag, Calendar, School, PhoneCall, Cpu, Wrench, Printer, FlaskConical, Award, Star, ShoppingCart, Zap, CheckCircle2 } from 'lucide-react';
+import {
+  Sparkles,
+  ArrowRight,
+  BookOpen,
+  ShoppingBag,
+  Calendar,
+  School,
+  PhoneCall,
+  Cpu,
+  Printer,
+  FlaskConical,
+  Award,
+  Star,
+  ShoppingCart,
+  Zap,
+  CheckCircle2,
+  ChevronRight,
+  ShieldCheck,
+  TrendingUp,
+  SlidersHorizontal,
+} from 'lucide-react';
 import { Course, Product, UserProfile, MainTab, ExtendedView } from '../types';
 import { COMPANY_INFO } from '../data/mockData';
+import { AnimatedCounter } from './AnimatedCounter';
 
 interface HomeViewProps {
   user: UserProfile;
@@ -32,112 +53,130 @@ export const HomeView: React.FC<HomeViewProps> = ({
   const ecosystemCards = [
     {
       title: 'Robotics & AI',
-      desc: 'Autonomous rovers, computer vision & edge AI',
+      desc: 'Autonomous rovers, computer vision & edge AI algorithms',
       icon: <Cpu className="w-5 h-5 text-cyan-400" />,
       action: () => onSelectTab('learn'),
-      color: 'from-cyan-950/40 to-slate-900',
-      border: 'border-cyan-800/40',
+      badge: 'Core Program',
+      accentColor: 'group-hover:border-cyan-500/50',
+      iconBg: 'dark:bg-cyan-950/60 bg-cyan-100/80 text-cyan-600 dark:text-cyan-400',
     },
     {
       title: 'STEM Education',
-      desc: 'Hands-on experiential learning for ages 8–18',
+      desc: 'Hands-on experiential learning kits for ages 8–18',
       icon: <BookOpen className="w-5 h-5 text-blue-400" />,
       action: () => onSelectTab('learn'),
-      color: 'from-blue-950/40 to-slate-900',
-      border: 'border-blue-800/40',
+      badge: 'NEP 2020',
+      accentColor: 'group-hover:border-blue-500/50',
+      iconBg: 'dark:bg-blue-950/60 bg-blue-100/80 text-blue-600 dark:text-blue-400',
     },
     {
       title: 'IoT & Automation',
-      desc: 'ESP32, smart sensors & MQTT cloud systems',
+      desc: 'ESP32 microcontrollers, smart sensors & MQTT cloud systems',
       icon: <Zap className="w-5 h-5 text-amber-400" />,
       action: () => onSelectTab('learn'),
-      color: 'from-amber-950/40 to-slate-900',
-      border: 'border-amber-800/40',
+      badge: 'Connected',
+      accentColor: 'group-hover:border-amber-500/50',
+      iconBg: 'dark:bg-amber-950/60 bg-amber-100/80 text-amber-600 dark:text-amber-400',
     },
     {
-      title: 'Workshops',
-      desc: 'ROBOZEST 2026 & weekend innovation camps',
+      title: 'Workshops & Camps',
+      desc: 'ROBOZEST 2026 championships & weekend innovation intensives',
       icon: <Calendar className="w-5 h-5 text-emerald-400" />,
       action: () => onSelectExtendedView('workshops'),
-      color: 'from-emerald-950/40 to-slate-900',
-      border: 'border-emerald-800/40',
+      badge: 'Events',
+      accentColor: 'group-hover:border-emerald-500/50',
+      iconBg: 'dark:bg-emerald-950/60 bg-emerald-100/80 text-emerald-600 dark:text-emerald-400',
     },
     {
-      title: '3D Printing',
-      desc: 'Rapid mechanical prototyping & CAD design',
+      title: '3D Prototyping',
+      desc: 'Mechanical CAD modeling, additive manufacturing & slicer lab',
       icon: <Printer className="w-5 h-5 text-pink-400" />,
       action: () => onSelectTab('learn'),
-      color: 'from-pink-950/40 to-slate-900',
-      border: 'border-pink-800/40',
+      badge: 'Hardware',
+      accentColor: 'group-hover:border-pink-500/50',
+      iconBg: 'dark:bg-pink-950/60 bg-pink-100/80 text-pink-600 dark:text-pink-400',
     },
     {
       title: 'R&D Innovation',
-      desc: 'Custom robotics hardware engineering for partners',
+      desc: 'Custom robotics hardware engineering for educational partners',
       icon: <FlaskConical className="w-5 h-5 text-purple-400" />,
       action: () => onSelectExtendedView('schools'),
-      color: 'from-purple-950/40 to-slate-900',
-      border: 'border-purple-800/40',
+      badge: 'Research',
+      accentColor: 'group-hover:border-purple-500/50',
+      iconBg: 'dark:bg-purple-950/60 bg-purple-100/80 text-purple-600 dark:text-purple-400',
     },
     {
-      title: 'ATL Setup',
-      desc: 'Complete Atal Tinkering Lab equipment & support',
+      title: 'ATL Setup & Labs',
+      desc: 'Comprehensive Atal Tinkering Lab equipment, training & setup',
       icon: <School className="w-5 h-5 text-amber-400" />,
       action: () => onSelectExtendedView('schools'),
-      color: 'from-amber-950/50 to-slate-900',
-      border: 'border-amber-700/50',
+      badge: 'Government Ready',
+      accentColor: 'group-hover:border-amber-500/50',
+      iconBg: 'dark:bg-amber-950/60 bg-amber-100/80 text-amber-600 dark:text-amber-400',
     },
     {
-      title: 'Academic Support',
-      desc: 'Curriculum development, mentor training & kits',
+      title: 'Mentor Network',
+      desc: 'Dedicated robotics faculty, mentor training & lab certification',
       icon: <Award className="w-5 h-5 text-indigo-400" />,
-      action: () => onSelectExtendedView('schools'),
-      color: 'from-indigo-950/40 to-slate-900',
-      border: 'border-indigo-800/40',
+      action: () => onSelectExtendedView('contact'),
+      badge: 'Support',
+      accentColor: 'group-hover:border-indigo-500/50',
+      iconBg: 'dark:bg-indigo-950/60 bg-indigo-100/80 text-indigo-600 dark:text-indigo-400',
     },
   ];
 
+  const quickPrompts = [
+    { label: 'Fix Arduino sensor code', query: 'Help me debug Arduino C++ code for an ultrasonic sensor' },
+    { label: 'ESP32 WiFi IoT setup', query: 'How to connect ESP32 to WiFi and send data over MQTT' },
+    { label: 'L298N Motor Driver wiring', query: 'Show me the wiring schematic for L298N motor driver with Arduino' },
+    { label: '3D print slicer tips', query: 'What are the optimal slicer infill and speed settings for robotics gears?' },
+  ];
+
   return (
-    <div className="space-y-7 pb-12">
+    <div className="space-y-6 sm:space-y-8 pb-12">
       {/* 1. Greeting & User Quick Progress Strip */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/60 p-4 rounded-2xl border border-slate-800/80 backdrop-blur-sm">
+      <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 dark:bg-slate-900/70 bg-white p-4 sm:p-5 rounded-2xl border dark:border-slate-800 border-slate-200/80 shadow-sm backdrop-blur-sm transition-colors">
         <div>
-          <div className="text-xs font-mono-code text-cyan-400 flex items-center gap-1.5 uppercase tracking-wider">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-            <span>KITE Robotics Active Hub</span>
+          <div className="text-[11px] font-mono-code dark:text-cyan-400 text-cyan-600 flex items-center gap-2 uppercase tracking-wider font-semibold">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+            </span>
+            <span>KITE Robotics Active Ecosystem</span>
           </div>
-          <h1 className="font-display font-extrabold text-xl sm:text-2xl text-white mt-1">
-            Hello, {user.name} 👋
+          <h1 className="font-display font-extrabold text-xl sm:text-2xl dark:text-white text-slate-900 mt-1 tracking-tight">
+            Welcome, {user.name}
           </h1>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Role: <span className="text-slate-200 capitalize font-medium">{user.role}</span> • Ready to build something intelligent today?
+          <p className="text-xs dark:text-slate-400 text-slate-600 mt-0.5">
+            Role: <span className="dark:text-slate-200 text-slate-800 capitalize font-medium">{user.role}</span> • Ready to build something intelligent today?
           </p>
         </div>
 
-        {/* Learning progress tracker trigger */}
+        {/* Learning progress tracker trigger with dynamic numbers */}
         <button
           onClick={onOpenStudentDashboard}
-          className="flex items-center justify-between sm:justify-end gap-3 px-4 py-2.5 rounded-xl bg-slate-950/80 border border-cyan-800/40 hover:border-cyan-500/60 transition-all text-left group"
+          className="flex items-center justify-between sm:justify-end gap-3 px-4 py-2.5 rounded-xl dark:bg-slate-950/80 bg-slate-50 border dark:border-cyan-800/40 border-slate-200 hover:border-cyan-500/60 transition-all text-left group shadow-sm active:scale-98"
         >
           <div>
-            <div className="text-[11px] font-mono-code text-slate-400">My Learning Tracker</div>
-            <div className="text-xs font-bold text-cyan-300 group-hover:text-cyan-200">
-              Robotics 72% • Arduino 45%
+            <div className="text-[11px] font-mono-code dark:text-slate-400 text-slate-500">My Learning Tracker</div>
+            <div className="text-xs font-bold dark:text-cyan-300 text-cyan-700 group-hover:text-cyan-500 flex items-center gap-1.5 mt-0.5">
+              <span>Robotics</span>
+              <AnimatedCounter target={72} suffix="%" duration={1200} delay={300} className="dark:text-cyan-300 text-cyan-600" />
+              <span className="text-slate-400">• Arduino</span>
+              <AnimatedCounter target={45} suffix="%" duration={1200} delay={500} className="dark:text-amber-300 text-amber-600" />
             </div>
           </div>
-          <div className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400 group-hover:translate-x-0.5 transition-transform">
+          <div className="p-2 rounded-lg dark:bg-cyan-500/15 bg-cyan-100 text-cyan-600 dark:text-cyan-400 group-hover:translate-x-0.5 transition-transform">
             <ArrowRight className="w-4 h-4" />
           </div>
         </button>
-      </div>
+      </section>
 
-      {/* 2. Futuristic Hero Card */}
-      <div className="relative rounded-3xl overflow-hidden border border-cyan-900/40 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 p-6 sm:p-8 shadow-2xl">
+      {/* 2. Refined High-Tech Hero Card */}
+      <section className="relative rounded-3xl overflow-hidden border dark:border-cyan-900/40 border-slate-200/80 bg-gradient-to-br dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 from-slate-900 via-slate-950 to-slate-900 text-white p-6 sm:p-8 lg:p-9 shadow-xl">
         {/* Glow ambient background circles */}
-        <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-cyan-500/15 blur-[100px] pointer-events-none" />
-        <div className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full bg-amber-500/10 blur-[100px] pointer-events-none" />
-        
-        {/* Tech Grid Lines */}
-        <div className="absolute inset-0 bg-grid-tech opacity-15 pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-cyan-500/15 blur-[120px] pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-amber-500/10 blur-[120px] pointer-events-none" />
 
         <div className="relative z-10 max-w-2xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-700/50 text-[11px] font-mono-code text-cyan-300 mb-4">
@@ -150,131 +189,179 @@ export const HomeView: React.FC<HomeViewProps> = ({
           </h2>
 
           <p className="text-slate-300 text-sm sm:text-base mt-3 leading-relaxed">
-            Explore Robotics, AI & IoT through practical learning. Build real-world autonomous rovers, smart IoT stations, and computer vision systems.
+            Hands-on learning in Robotics, AI & IoT. Build real-world autonomous rovers, smart sensor stations, and computer vision systems with certified kits.
           </p>
 
           <div className="flex flex-wrap items-center gap-3 mt-6">
             <button
               onClick={() => onSelectTab('learn')}
-              className="px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-sm flex items-center gap-2 shadow-lg shadow-cyan-500/25 active:scale-95 transition-all"
+              className="px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-sm flex items-center gap-2 shadow-lg shadow-cyan-500/25 active:scale-95 transition-all cursor-pointer"
             >
               <span>Explore Programs</span>
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
               onClick={() => onSelectTab('store')}
-              className="px-5 py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500/50 text-white font-medium text-sm flex items-center gap-2 transition-all active:scale-95"
+              className="px-5 py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500/50 text-white font-medium text-sm flex items-center gap-2 transition-all active:scale-95 cursor-pointer"
             >
               <ShoppingBag className="w-4 h-4 text-cyan-400" />
               <span>Explore Kits</span>
             </button>
           </div>
 
-          {/* Quick metric stamps */}
+          {/* Dynamic metric stamps with delay & smooth progression */}
           <div className="grid grid-cols-3 gap-3 pt-6 mt-6 border-t border-slate-800/80 text-center sm:text-left">
-            <div>
-              <div className="text-lg sm:text-xl font-display font-extrabold text-cyan-400">{COMPANY_INFO.stats.studentsMentored}</div>
-              <div className="text-[11px] text-slate-400 font-mono-code">Students Mentored</div>
+            <div className="p-2.5 rounded-xl bg-slate-950/50 border border-slate-800/60">
+              <div className="text-xl sm:text-2xl font-display font-extrabold text-cyan-400">
+                <AnimatedCounter target={25000} suffix="+" duration={1600} delay={150} />
+              </div>
+              <div className="text-[11px] text-slate-400 font-mono-code mt-0.5">Students Mentored</div>
             </div>
-            <div>
-              <div className="text-lg sm:text-xl font-display font-extrabold text-amber-400">{COMPANY_INFO.stats.partnerSchools}</div>
-              <div className="text-[11px] text-slate-400 font-mono-code">Schools & Labs</div>
+
+            <div className="p-2.5 rounded-xl bg-slate-950/50 border border-slate-800/60">
+              <div className="text-xl sm:text-2xl font-display font-extrabold text-amber-400">
+                <AnimatedCounter target={120} suffix="+" duration={1400} delay={300} />
+              </div>
+              <div className="text-[11px] text-slate-400 font-mono-code mt-0.5">Schools & Labs</div>
             </div>
-            <div>
-              <div className="text-lg sm:text-xl font-display font-extrabold text-emerald-400">{COMPANY_INFO.stats.atlLabsSetup}</div>
-              <div className="text-[11px] text-slate-400 font-mono-code">ATL Labs Setup</div>
+
+            <div className="p-2.5 rounded-xl bg-slate-950/50 border border-slate-800/60">
+              <div className="text-xl sm:text-2xl font-display font-extrabold text-emerald-400">
+                <AnimatedCounter target={45} suffix="+" duration={1300} delay={450} />
+              </div>
+              <div className="text-[11px] text-slate-400 font-mono-code mt-0.5">ATL Labs Setup</div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* 3. Quick Actions */}
+      {/* 3. Direct Portals / Quick Actions */}
       <section className="space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="font-display font-bold text-base sm:text-lg text-white">
+          <h3 className="font-display font-bold text-base sm:text-lg dark:text-white text-slate-900">
             Quick Actions
           </h3>
-          <span className="text-xs font-mono-code text-slate-400">Direct Portals</span>
+          <span className="text-xs font-mono-code dark:text-slate-400 text-slate-500">Direct Portals</span>
         </div>
 
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-2.5">
           <button
             onClick={() => onSelectTab('learn')}
-            className="p-3.5 rounded-2xl bg-slate-900/80 hover:bg-slate-850 border border-slate-800 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95"
+            className="p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-slate-200 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95 shadow-sm hover:-translate-y-0.5"
           >
-            <div className="p-2.5 rounded-xl bg-cyan-950/60 text-cyan-400 mb-2 group-hover:scale-110 transition-transform">
+            <div className="p-2.5 rounded-xl dark:bg-cyan-950/60 bg-cyan-100 text-cyan-600 dark:text-cyan-400 mb-2 group-hover:scale-110 transition-transform">
               <BookOpen className="w-5 h-5" />
             </div>
-            <span className="text-xs font-semibold text-slate-200">Courses</span>
+            <span className="text-xs font-semibold dark:text-slate-200 text-slate-800">Courses</span>
           </button>
 
           <button
             onClick={() => onSelectTab('store')}
-            className="p-3.5 rounded-2xl bg-slate-900/80 hover:bg-slate-850 border border-slate-800 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95"
+            className="p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-slate-200 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95 shadow-sm hover:-translate-y-0.5"
           >
-            <div className="p-2.5 rounded-xl bg-blue-950/60 text-blue-400 mb-2 group-hover:scale-110 transition-transform">
+            <div className="p-2.5 rounded-xl dark:bg-blue-950/60 bg-blue-100 text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
               <ShoppingBag className="w-5 h-5" />
             </div>
-            <span className="text-xs font-semibold text-slate-200">Robotics Kits</span>
+            <span className="text-xs font-semibold dark:text-slate-200 text-slate-800">Robotics Kits</span>
           </button>
 
           <button
             onClick={() => onSelectExtendedView('workshops')}
-            className="p-3.5 rounded-2xl bg-slate-900/80 hover:bg-slate-850 border border-slate-800 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95"
+            className="p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-slate-200 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95 shadow-sm hover:-translate-y-0.5"
           >
-            <div className="p-2.5 rounded-xl bg-amber-950/60 text-amber-400 mb-2 group-hover:scale-110 transition-transform">
+            <div className="p-2.5 rounded-xl dark:bg-amber-950/60 bg-amber-100 text-amber-600 dark:text-amber-400 mb-2 group-hover:scale-110 transition-transform">
               <Calendar className="w-5 h-5" />
             </div>
-            <span className="text-xs font-semibold text-slate-200">Workshops</span>
+            <span className="text-xs font-semibold dark:text-slate-200 text-slate-800">Workshops</span>
           </button>
 
           <button
             onClick={() => onSelectTab('kms-ai')}
-            className="p-3.5 rounded-2xl bg-slate-900/80 hover:bg-slate-850 border border-slate-800 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95 relative"
+            className="p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-slate-200 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95 shadow-sm hover:-translate-y-0.5 relative"
           >
             <span className="absolute top-1.5 right-1.5 px-1 rounded text-[9px] font-mono-code bg-cyan-500 text-slate-950 font-bold">
               AI
             </span>
-            <div className="p-2.5 rounded-xl bg-gradient-to-tr from-cyan-950 to-blue-950 text-cyan-400 mb-2 group-hover:scale-110 transition-transform">
+            <div className="p-2.5 rounded-xl dark:bg-gradient-to-tr dark:from-cyan-950 dark:to-blue-950 bg-cyan-100 text-cyan-600 dark:text-cyan-400 mb-2 group-hover:scale-110 transition-transform">
               <Sparkles className="w-5 h-5" />
             </div>
-            <span className="text-xs font-semibold text-slate-200">KMS-AI</span>
+            <span className="text-xs font-semibold dark:text-slate-200 text-slate-800">KMS-AI</span>
           </button>
 
           <button
             onClick={() => onSelectExtendedView('schools')}
-            className="p-3.5 rounded-2xl bg-slate-900/80 hover:bg-slate-850 border border-slate-800 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95"
+            className="p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-slate-200 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95 shadow-sm hover:-translate-y-0.5"
           >
-            <div className="p-2.5 rounded-xl bg-purple-950/60 text-purple-400 mb-2 group-hover:scale-110 transition-transform">
+            <div className="p-2.5 rounded-xl dark:bg-purple-950/60 bg-purple-100 text-purple-600 dark:text-purple-400 mb-2 group-hover:scale-110 transition-transform">
               <School className="w-5 h-5" />
             </div>
-            <span className="text-xs font-semibold text-slate-200">Schools</span>
+            <span className="text-xs font-semibold dark:text-slate-200 text-slate-800">Schools & ATL</span>
           </button>
 
           <button
             onClick={() => onSelectExtendedView('contact')}
-            className="p-3.5 rounded-2xl bg-slate-900/80 hover:bg-slate-850 border border-slate-800 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95"
+            className="p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-slate-200 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95 shadow-sm hover:-translate-y-0.5"
           >
-            <div className="p-2.5 rounded-xl bg-emerald-950/60 text-emerald-400 mb-2 group-hover:scale-110 transition-transform">
+            <div className="p-2.5 rounded-xl dark:bg-emerald-950/60 bg-emerald-100 text-emerald-600 dark:text-emerald-400 mb-2 group-hover:scale-110 transition-transform">
               <PhoneCall className="w-5 h-5" />
             </div>
-            <span className="text-xs font-semibold text-slate-200">Mentors</span>
+            <span className="text-xs font-semibold dark:text-slate-200 text-slate-800">Mentors</span>
           </button>
         </div>
       </section>
 
-      {/* 4. Explore Our Ecosystem */}
+      {/* 4. KMS-AI Interactive Hardware Copilot Spotlight */}
+      <section className="relative rounded-3xl overflow-hidden border dark:border-cyan-500/40 border-cyan-300 dark:bg-gradient-to-r dark:from-cyan-950/60 dark:via-slate-900 dark:to-blue-950/60 bg-gradient-to-r from-cyan-50 via-white to-blue-50 p-6 sm:p-7 shadow-lg transition-colors">
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+          <div className="space-y-2 max-w-xl">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full dark:bg-cyan-500/20 bg-cyan-100 dark:text-cyan-300 text-cyan-800 text-[11px] font-mono-code border dark:border-cyan-500/30 border-cyan-300">
+              <Sparkles className="w-3 h-3 dark:text-cyan-400 text-cyan-600" />
+              <span>INTELLIGENT HARDWARE COPILOT</span>
+            </div>
+            <h3 className="font-display font-bold text-xl sm:text-2xl dark:text-white text-slate-900">
+              KMS-AI Assistant
+            </h3>
+            <p className="dark:text-slate-300 text-slate-600 text-xs sm:text-sm leading-relaxed">
+              Debug Arduino & ESP32 C++ sketches, calculate motor driver voltages, troubleshoot ultrasonic sensor pinouts, or generate circuit wiring guides instantly.
+            </p>
+
+            {/* Quick interactive prompt chips */}
+            <div className="pt-2 flex flex-wrap gap-2">
+              {quickPrompts.map((prompt, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => onSelectTab('kms-ai')}
+                  className="px-2.5 py-1 rounded-lg dark:bg-slate-900/80 bg-white border dark:border-cyan-800/40 border-slate-300 hover:border-cyan-500 text-[11px] dark:text-cyan-300 text-slate-700 hover:text-cyan-600 flex items-center gap-1.5 transition-all shadow-2xs active:scale-95"
+                >
+                  <Zap className="w-3 h-3 text-cyan-500" />
+                  <span>{prompt.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button
+            onClick={() => onSelectTab('kms-ai')}
+            className="px-5 py-3 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-400/25 shrink-0 active:scale-95 transition-all cursor-pointer"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>Launch KMS-AI</span>
+          </button>
+        </div>
+      </section>
+
+      {/* 5. Explore Our Ecosystem */}
       <section className="space-y-3">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-display font-bold text-base sm:text-lg text-white">
+            <h3 className="font-display font-bold text-base sm:text-lg dark:text-white text-slate-900">
               Explore Our Ecosystem
             </h3>
-            <p className="text-xs text-slate-400">Comprehensive hardware, curriculum and lab infrastructure</p>
+            <p className="text-xs dark:text-slate-400 text-slate-600">Comprehensive hardware, curriculum and lab infrastructure</p>
           </div>
           <button
             onClick={() => onSelectExtendedView('about')}
-            className="text-xs text-cyan-400 hover:underline font-mono-code flex items-center gap-1"
+            className="text-xs text-cyan-500 hover:underline font-mono-code flex items-center gap-1 cursor-pointer"
           >
             <span>Learn More</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -286,19 +373,21 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <button
               key={idx}
               onClick={card.action}
-              className={`p-4 rounded-2xl bg-gradient-to-b ${card.color} border ${card.border} hover:border-slate-500 text-left transition-all group active:scale-[0.98] flex flex-col justify-between`}
+              className={`p-4 rounded-2xl dark:bg-slate-900/70 bg-white border dark:border-slate-800 border-slate-200/90 hover:border-slate-400 dark:hover:border-slate-600 text-left transition-all group active:scale-[0.98] flex flex-col justify-between shadow-2xs hover:shadow-sm`}
             >
               <div className="flex items-center justify-between mb-3">
-                <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
+                <div className={`p-2.5 rounded-xl ${card.iconBg}`}>
                   {card.icon}
                 </div>
-                <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-400 group-hover:translate-x-1 transition-all" />
+                <span className="text-[10px] font-mono-code font-semibold px-2 py-0.5 rounded-full dark:bg-slate-800 bg-slate-100 dark:text-slate-300 text-slate-600">
+                  {card.badge}
+                </span>
               </div>
               <div>
-                <h4 className="font-display font-bold text-sm sm:text-base text-white group-hover:text-cyan-300 transition-colors">
+                <h4 className="font-display font-bold text-sm sm:text-base dark:text-white text-slate-900 group-hover:text-cyan-500 transition-colors">
                   {card.title}
                 </h4>
-                <p className="text-xs text-slate-400 mt-1 line-clamp-2">
+                <p className="text-xs dark:text-slate-400 text-slate-600 mt-1 line-clamp-2 leading-relaxed">
                   {card.desc}
                 </p>
               </div>
@@ -307,44 +396,18 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </section>
 
-      {/* 5. KMS-AI Prominent Futuristic Spotlight Card */}
-      <div className="relative rounded-3xl overflow-hidden border border-cyan-500/40 bg-gradient-to-r from-cyan-950/60 via-slate-900 to-blue-950/60 p-6 sm:p-7 shadow-xl">
-        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
-          <div className="space-y-2 max-w-xl">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[11px] font-mono-code border border-cyan-500/30">
-              <Sparkles className="w-3 h-3 text-cyan-400" />
-              <span>INTELLIGENT HARDWARE COPILOT</span>
-            </div>
-            <h3 className="font-display font-bold text-xl sm:text-2xl text-white">
-              KMS-AI
-            </h3>
-            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-              Your intelligent robotics and learning companion. Debug Arduino & ESP32 C++ code, troubleshoot ultrasonic sensors, calculate motor driver voltages, or upload wiring photos for instant diagnostic feedback.
-            </p>
-          </div>
-
-          <button
-            onClick={() => onSelectTab('kms-ai')}
-            className="px-5 py-3 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-400/25 shrink-0 active:scale-95 transition-all"
-          >
-            <Sparkles className="w-4 h-4" />
-            <span>Ask KMS-AI</span>
-          </button>
-        </div>
-      </div>
-
       {/* 6. Featured Programs */}
       <section className="space-y-3">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-display font-bold text-base sm:text-lg text-white">
+            <h3 className="font-display font-bold text-base sm:text-lg dark:text-white text-slate-900">
               Featured Programs
             </h3>
-            <p className="text-xs text-slate-400">Structured curricula designed by veteran robotics educators</p>
+            <p className="text-xs dark:text-slate-400 text-slate-600">Structured curricula designed by veteran robotics educators</p>
           </div>
           <button
             onClick={() => onSelectTab('learn')}
-            className="text-xs text-cyan-400 hover:underline font-mono-code flex items-center gap-1"
+            className="text-xs text-cyan-500 hover:underline font-mono-code flex items-center gap-1 cursor-pointer"
           >
             <span>View All</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -355,7 +418,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
           {courses.slice(0, 3).map((course) => (
             <div
               key={course.id}
-              className="rounded-2xl bg-slate-900/80 border border-slate-800 overflow-hidden flex flex-col justify-between hover:border-slate-700 transition-all group"
+              className="rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-slate-200 overflow-hidden flex flex-col justify-between hover:border-slate-600 dark:hover:border-slate-700 transition-all group shadow-sm"
             >
               {/* Course Thumbnail */}
               <div className="relative h-44 w-full bg-slate-950 overflow-hidden">
@@ -365,39 +428,41 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   referrerPolicy="no-referrer"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
-                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-slate-950/80 text-[10px] font-mono-code font-semibold text-cyan-400 border border-slate-700 backdrop-blur-sm">
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-slate-950/85 text-[10px] font-mono-code font-semibold text-cyan-400 border border-slate-700 backdrop-blur-sm">
                   {course.category}
                 </div>
-                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[11px] font-medium text-slate-300">
+                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[11px] font-medium text-slate-200">
                   <span className="px-2 py-0.5 rounded bg-slate-900/90 border border-slate-700/60">
                     {course.level}
                   </span>
-                  <span className="text-slate-400 font-mono-code">{course.duration}</span>
+                  <span className="text-slate-300 font-mono-code">{course.duration}</span>
                 </div>
               </div>
 
               {/* Body */}
               <div className="p-4 flex-1 flex flex-col justify-between">
                 <div>
-                  <h4 className="font-display font-bold text-sm sm:text-base text-white group-hover:text-cyan-400 transition-colors line-clamp-2">
+                  <h4 className="font-display font-bold text-sm sm:text-base dark:text-white text-slate-900 group-hover:text-cyan-500 transition-colors line-clamp-2">
                     {course.title}
                   </h4>
-                  <p className="text-xs text-slate-400 mt-2 line-clamp-2 leading-relaxed">
+                  <p className="text-xs dark:text-slate-400 text-slate-600 mt-2 line-clamp-2 leading-relaxed">
                     {course.description}
                   </p>
                 </div>
 
-                <div className="pt-4 mt-3 border-t border-slate-800/80 flex items-center justify-between">
-                  <div className="flex items-center gap-1 text-xs text-amber-400 font-mono-code">
-                    <Star className="w-3.5 h-3.5 fill-amber-400" />
-                    <span>{course.rating}</span>
-                    <span className="text-slate-500">({course.reviewsCount})</span>
+                <div className="pt-4 mt-3 border-t dark:border-slate-800/80 border-slate-100 flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-xs text-amber-500 font-mono-code">
+                    <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                    <AnimatedCounter target={course.rating} decimals={1} suffix="" duration={1000} delay={100} />
+                    <span className="dark:text-slate-500 text-slate-400">
+                      (<AnimatedCounter target={course.reviewsCount} suffix=" reviews" duration={1200} delay={200} />)
+                    </span>
                   </div>
 
                   <button
                     onClick={() => onSelectCourse(course)}
-                    className="px-3 py-1.5 rounded-lg bg-cyan-500/15 hover:bg-cyan-500 text-cyan-400 hover:text-slate-950 text-xs font-bold transition-colors"
+                    className="px-3.5 py-1.5 rounded-lg dark:bg-cyan-500/15 bg-cyan-100 hover:bg-cyan-500 dark:text-cyan-400 text-cyan-800 hover:text-slate-950 text-xs font-bold transition-colors cursor-pointer"
                   >
                     View Program
                   </button>
@@ -412,14 +477,16 @@ export const HomeView: React.FC<HomeViewProps> = ({
       <section className="space-y-3">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-display font-bold text-base sm:text-lg text-white">
+            <h3 className="font-display font-bold text-base sm:text-lg dark:text-white text-slate-900">
               Robotics Store
             </h3>
-            <p className="text-xs text-slate-400">Authentic STEM hardware kits delivered across India</p>
+            <p className="text-xs dark:text-slate-400 text-slate-600">
+              Authentic STEM hardware kits • Over <AnimatedCounter target={1250} suffix="+" duration={1500} className="text-cyan-500 font-bold" /> kits delivered across India
+            </p>
           </div>
           <button
             onClick={() => onSelectTab('store')}
-            className="text-xs text-cyan-400 hover:underline font-mono-code flex items-center gap-1"
+            className="text-xs text-cyan-500 hover:underline font-mono-code flex items-center gap-1 cursor-pointer"
           >
             <span>Browse Store</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -430,7 +497,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
           {products.slice(0, 5).map((prod) => (
             <div
               key={prod.id}
-              className="rounded-2xl bg-slate-900/70 border border-slate-800 p-3 flex flex-col justify-between hover:border-slate-700 transition-all group"
+              className="rounded-2xl dark:bg-slate-900/70 bg-white border dark:border-slate-800 border-slate-200 p-3 flex flex-col justify-between hover:border-slate-600 dark:hover:border-slate-700 transition-all group shadow-2xs hover:shadow-sm"
             >
               <div>
                 <div
@@ -451,33 +518,33 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 </div>
 
                 <div className="mt-2.5">
-                  <div className="text-[10px] text-cyan-400 font-mono-code uppercase">{prod.category}</div>
+                  <div className="text-[10px] text-cyan-500 font-mono-code uppercase font-semibold">{prod.category}</div>
                   <h5
                     onClick={() => onSelectProduct(prod)}
-                    className="font-display font-semibold text-xs sm:text-sm text-white line-clamp-2 mt-0.5 hover:text-cyan-300 cursor-pointer"
+                    className="font-display font-semibold text-xs sm:text-sm dark:text-white text-slate-900 line-clamp-2 mt-0.5 hover:text-cyan-500 cursor-pointer"
                   >
                     {prod.name}
                   </h5>
                 </div>
               </div>
 
-              <div className="pt-2 mt-2 border-t border-slate-800">
+              <div className="pt-2 mt-2 border-t dark:border-slate-800 border-slate-100">
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-sm sm:text-base font-bold text-white font-mono-code">₹{prod.price}</span>
-                  <span className="text-[10px] text-slate-500 line-through font-mono-code">₹{prod.originalPrice}</span>
+                  <span className="text-sm sm:text-base font-bold dark:text-white text-slate-900 font-mono-code">₹{prod.price}</span>
+                  <span className="text-[10px] dark:text-slate-500 text-slate-400 line-through font-mono-code">₹{prod.originalPrice}</span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-1.5 mt-2">
                   <button
                     onClick={() => onAddToCart(prod)}
                     title="Add to Cart"
-                    className="py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[11px] font-medium flex items-center justify-center transition-colors"
+                    className="py-1.5 rounded-lg dark:bg-slate-800 bg-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 dark:text-slate-300 text-slate-700 text-[11px] font-medium flex items-center justify-center transition-colors cursor-pointer"
                   >
                     <ShoppingCart className="w-3.5 h-3.5" />
                   </button>
                   <button
                     onClick={() => onBuyNow(prod)}
-                    className="py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-[11px] font-bold flex items-center justify-center transition-colors"
+                    className="py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-[11px] font-bold flex items-center justify-center transition-colors cursor-pointer active:scale-95"
                   >
                     Buy
                   </button>
@@ -489,26 +556,26 @@ export const HomeView: React.FC<HomeViewProps> = ({
       </section>
 
       {/* 8. Flagship ROBOZEST Banner */}
-      <div className="rounded-3xl border border-amber-800/40 bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-950 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div>
-          <div className="text-xs font-mono-code text-amber-400 uppercase tracking-widest flex items-center gap-1.5">
+      <section className="rounded-3xl border border-amber-500/40 bg-gradient-to-r from-amber-950/50 via-slate-900 to-slate-950 text-white p-6 sm:p-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 shadow-lg">
+        <div className="max-w-xl">
+          <div className="text-xs font-mono-code text-amber-400 uppercase tracking-widest flex items-center gap-1.5 font-bold">
             <Award className="w-4 h-4" />
             <span>ANNUAL FLAGSHIP CHAMPIONSHIP</span>
           </div>
-          <h4 className="font-display font-extrabold text-lg sm:text-xl text-white mt-1">
+          <h4 className="font-display font-extrabold text-lg sm:text-xl text-white mt-1.5">
             ROBOZEST 2026 — Honoring Dr. APJ Abdul Kalam
           </h4>
-          <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">
-            National robotics arena challenges, autonomous maze solving, line tracking sprint, and innovation exhibition across zonal hubs.
+          <p className="text-xs sm:text-sm text-slate-300 mt-1.5 leading-relaxed">
+            National robotics arena challenges across <AnimatedCounter target={15} suffix="+" duration={1200} className="text-amber-400 font-bold" /> zonal hubs, autonomous maze solving, line tracking sprint, and innovation exhibition uniting over <AnimatedCounter target={5000} suffix="+" duration={1500} className="text-amber-400 font-bold" /> young inventors.
           </p>
         </div>
         <button
           onClick={() => onSelectExtendedView('workshops')}
-          className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs sm:text-sm shrink-0 shadow-lg shadow-amber-500/20 active:scale-95 transition-all"
+          className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs sm:text-sm shrink-0 shadow-lg shadow-amber-500/20 active:scale-95 transition-all cursor-pointer"
         >
           Explore ROBOZEST
         </button>
-      </div>
+      </section>
     </div>
   );
 };

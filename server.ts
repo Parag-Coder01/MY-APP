@@ -175,7 +175,10 @@ Always be encouraging, technically accurate, clear, and structured. Format your 
   // Vite middleware in dev mode vs static serving in production
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: {
+        middlewareMode: true,
+        hmr: false,
+      },
       appType: "spa",
     });
     app.use(vite.middlewares);

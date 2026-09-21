@@ -20,6 +20,9 @@ import { ProjectsView } from './components/ProjectsView';
 import { CertificatesView } from './components/CertificatesView';
 import { AboutView } from './components/AboutView';
 import { ContactView } from './components/ContactView';
+import { CurriculumView } from './components/CurriculumView';
+import { EBooksView } from './components/EBooksView';
+import { CareersView } from './components/CareersView';
 import { StudentDashboardModal } from './components/StudentDashboardModal';
 import { NotificationsModal } from './components/NotificationsModal';
 import { AdminDashboardModal } from './components/AdminDashboardModal';
@@ -27,6 +30,7 @@ import { ProfileView } from './components/ProfileView';
 import { MobileAppFrame } from './components/MobileAppFrame';
 import { PWAInstallPrompt } from './components/PWAInstallPrompt';
 import { OfflineBanner } from './components/OfflineBanner';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { ArrowLeft, Menu, Sparkles } from 'lucide-react';
 import {
   MainTab,
@@ -45,7 +49,9 @@ import {
   MOCK_NOTIFICATIONS,
 } from './data/mockData';
 
-export default function App() {
+function AppContent() {
+  const { isDark, toggleTheme } = useTheme();
+
   // Splash & Onboarding states
   const [showSplash, setShowSplash] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -77,6 +83,35 @@ export default function App() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
+
+  // Login & Logout management
+  const isLoggedIn = user.id !== 'guest';
+
+  const handleLogout = () => {
+    setUser({
+      id: 'guest',
+      name: 'Guest Explorer',
+      email: '',
+      phone: '',
+      role: 'student',
+      enrolledCoursesCount: 0,
+      completedProjectsCount: 0,
+      certificatesCount: 0,
+    });
+    setNotifications((prev) => [
+      {
+        id: 'logout-' + Date.now(),
+        title: 'Logged Out',
+        message: 'You have been safely signed out. Click Login to sign back in.',
+        time: 'Just now',
+        timestamp: 'Just now',
+        read: false,
+        type: 'system',
+        category: 'announcements',
+      },
+      ...prev,
+    ]);
+  };
 
   // Cart operations
   const handleAddToCart = (product: Product) => {
@@ -140,7 +175,7 @@ export default function App() {
       if (typeof navigator !== 'undefined' && navigator.vibrate) {
         navigator.vibrate(12);
       }
-    } catch (e) {
+    } catch {
       // Ignore haptic feedback errors
     }
     setExtendedView(null);
@@ -172,7 +207,13 @@ export default function App() {
 
   return (
     <MobileAppFrame onOpenInstallPrompt={() => setShowInstallPrompt(true)}>
-      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500 selection:text-slate-950 pb-28">
+      <div
+        className={`min-h-screen flex flex-col font-sans transition-colors duration-200 pb-28 ${
+          isDark
+            ? 'bg-slate-950 text-slate-100 selection:bg-cyan-500 selection:text-slate-950'
+            : 'bg-slate-50 text-slate-900 selection:bg-cyan-500 selection:text-white'
+        }`}
+      >
         <OfflineBanner />
 
         {/* 1. Splash Screen Animation */}
@@ -203,11 +244,14 @@ export default function App() {
           }}
         />
 
-        {/* 4. Top Header Bar */}
+        {/* 4. Top Header Bar (With Three-Bars Beside Official Logo, and Dark/Light Mode at Right Corner) */}
         <TopHeader
           user={user}
           cartCount={cartCount}
           unreadNotifsCount={unreadNotifsCount}
+          isDark={isDark}
+          onToggleTheme={toggleTheme}
+          onOpenMenu={() => setShowQuickMenu(true)}
           onOpenCart={() => setShowCartDrawer(true)}
           onOpenNotifs={() => setShowNotificationsModal(true)}
           onOpenRolePicker={() => setShowAuthModal(true)}
@@ -215,183 +259,227 @@ export default function App() {
           onOpenInstallPrompt={() => setShowInstallPrompt(true)}
         />
 
-      {/* Extended View Back Button Strip (if inside Workshops, Schools, Projects, etc.) */}
-      {extendedView && (
-        <div className="sticky top-[53px] z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-2">
-          <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <button
-              onClick={() => setExtendedView(null)}
-              className="flex items-center gap-2 text-xs font-mono-code text-cyan-400 hover:text-cyan-300 transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span>Back to Overview</span>
-            </button>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-mono-code uppercase text-slate-400">
-                Viewing: <strong className="text-slate-200">{extendedView}</strong>
-              </span>
+        {/* Extended View Back Button Strip */}
+        {extendedView && (
+          <div
+            className={`sticky top-[53px] z-30 backdrop-blur-md border-b px-4 py-2 ${
+              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white/90 border-slate-200'
+            }`}
+          >
+            <div className="max-w-7xl mx-auto flex items-center justify-between">
               <button
-                onClick={() => setShowQuickMenu(true)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white"
-                title="Open Ecosystem Menu"
+                onClick={() => setExtendedView(null)}
+                className="flex items-center gap-2 text-xs font-mono-code text-cyan-500 dark:text-cyan-400 hover:opacity-80 transition-opacity"
               >
-                <Menu className="w-4 h-4" />
+                <ArrowLeft className="w-4 h-4" />
+                <span>Back to Overview</span>
               </button>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono-code uppercase text-slate-400">
+                  Viewing: <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>{extendedView}</strong>
+                </span>
+                <button
+                  onClick={() => setShowQuickMenu(true)}
+                  className={`p-1.5 rounded-lg transition-colors ${
+                    isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                  title="Open Navigation Menu"
+                >
+                  <Menu className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Main Content Area */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-3.5 sm:px-6 pt-4 sm:pt-6 pb-20">
-        {/* Render Extended Views */}
-        {extendedView === 'workshops' && (
-          <WorkshopsView workshops={workshops} />
-        )}
-        {extendedView === 'schools' && (
-          <SchoolSectionView />
-        )}
-        {extendedView === 'projects' && (
-          <ProjectsView />
-        )}
-        {extendedView === 'certificates' && (
-          <CertificatesView user={user} />
-        )}
-        {extendedView === 'about' && (
-          <AboutView onContactClick={() => setExtendedView('contact')} />
-        )}
-        {extendedView === 'contact' && (
-          <ContactView />
         )}
 
-        {/* Render Primary Tabs when no Extended View is active */}
-        {!extendedView && (
-          <>
-            {currentTab === 'home' && (
-              <HomeView
-                user={user}
-                courses={courses}
-                products={products}
-                onSelectTab={handleSelectTab}
-                onSelectExtendedView={handleSelectExtendedView}
-                onSelectCourse={(course) => setSelectedCourse(course)}
-                onSelectProduct={(product) => setSelectedProduct(product)}
-                onAddToCart={handleAddToCart}
-                onBuyNow={handleBuyNow}
-                onOpenStudentDashboard={() => setShowStudentDashboard(true)}
-              />
-            )}
+        {/* Main Content Area */}
+        <main className="flex-1 w-full max-w-7xl mx-auto px-3.5 sm:px-6 pt-4 sm:pt-6 pb-20">
+          {/* Render Extended Views */}
+          {extendedView === 'curriculum' && (
+            <CurriculumView />
+          )}
+          {extendedView === 'ebooks' && (
+            <EBooksView />
+          )}
+          {extendedView === 'careers' && (
+            <CareersView />
+          )}
+          {extendedView === 'workshops' && (
+            <WorkshopsView workshops={workshops} />
+          )}
+          {extendedView === 'schools' && (
+            <SchoolSectionView />
+          )}
+          {extendedView === 'projects' && (
+            <ProjectsView />
+          )}
+          {extendedView === 'certificates' && (
+            <CertificatesView user={user} />
+          )}
+          {extendedView === 'about' && (
+            <AboutView onContactClick={() => setExtendedView('contact')} />
+          )}
+          {extendedView === 'contact' && (
+            <ContactView />
+          )}
 
-            {currentTab === 'learn' && (
-              <LearnView
-                courses={courses}
-                onSelectCourse={(course) => setSelectedCourse(course)}
-              />
-            )}
+          {/* Render Primary Tabs when no Extended View is active */}
+          {!extendedView && (
+            <>
+              {currentTab === 'home' && (
+                <HomeView
+                  user={user}
+                  courses={courses}
+                  products={products}
+                  onSelectTab={handleSelectTab}
+                  onSelectExtendedView={handleSelectExtendedView}
+                  onSelectCourse={(course) => setSelectedCourse(course)}
+                  onSelectProduct={(product) => setSelectedProduct(product)}
+                  onAddToCart={handleAddToCart}
+                  onBuyNow={handleBuyNow}
+                  onOpenStudentDashboard={() => setShowStudentDashboard(true)}
+                />
+              )}
 
-            {currentTab === 'store' && (
-              <StoreView
-                products={products}
-                onSelectProduct={(product) => setSelectedProduct(product)}
-                onAddToCart={handleAddToCart}
-                onBuyNow={handleBuyNow}
-              />
-            )}
+              {currentTab === 'learn' && (
+                <LearnView
+                  courses={courses}
+                  onSelectCourse={(course) => setSelectedCourse(course)}
+                />
+              )}
 
-            {currentTab === 'kms-ai' && (
-              <KmsAiView />
-            )}
+              {currentTab === 'store' && (
+                <StoreView
+                  products={products}
+                  onSelectProduct={(product) => setSelectedProduct(product)}
+                  onAddToCart={handleAddToCart}
+                  onBuyNow={handleBuyNow}
+                />
+              )}
 
-            {currentTab === 'profile' && (
-              <ProfileView
-                user={user}
-                courses={courses}
-                ordersCount={1}
-                onOpenRolePicker={() => setShowAuthModal(true)}
-                onOpenLoginModal={() => setShowAuthModal(true)}
-                onOpenCertificates={() => setExtendedView('certificates')}
-                onOpenStudentDashboard={() => setShowStudentDashboard(true)}
-                onOpenQuickMenu={() => setShowQuickMenu(true)}
-                onSelectExtendedView={handleSelectExtendedView}
-                onOpenInstallPrompt={() => setShowInstallPrompt(true)}
-              />
-            )}
-          </>
-        )}
-      </main>
+              {currentTab === 'kms-ai' && (
+                <KmsAiView />
+              )}
 
-      {/* 5. Bottom Navigation Bar */}
-      <BottomNavigation
-        currentTab={currentTab}
-        onSelectTab={handleSelectTab}
-        onOpenQuickMenu={() => setShowQuickMenu(true)}
-      />
+              {currentTab === 'profile' && (
+                <ProfileView
+                  user={user}
+                  courses={courses}
+                  ordersCount={1}
+                  onOpenRolePicker={() => setShowAuthModal(true)}
+                  onOpenLoginModal={() => setShowAuthModal(true)}
+                  onOpenCertificates={() => setExtendedView('certificates')}
+                  onOpenStudentDashboard={() => setShowStudentDashboard(true)}
+                  onOpenQuickMenu={() => setShowQuickMenu(true)}
+                  onSelectExtendedView={handleSelectExtendedView}
+                  onOpenInstallPrompt={() => setShowInstallPrompt(true)}
+                />
+              )}
+            </>
+          )}
+        </main>
 
-      {/* Modals & Drawers */}
-      <QuickMenuDrawer
-        isOpen={showQuickMenu}
-        onClose={() => setShowQuickMenu(false)}
-        onSelectExtendedView={handleSelectExtendedView}
-        onOpenInstallPrompt={() => setShowInstallPrompt(true)}
-      />
+        {/* 5. Bottom Navigation Bar */}
+        <BottomNavigation
+          currentTab={currentTab}
+          onSelectTab={handleSelectTab}
+          onOpenQuickMenu={() => setShowQuickMenu(true)}
+        />
 
-      <CartDrawer
-        isOpen={showCartDrawer}
-        onClose={() => setShowCartDrawer(false)}
-        items={cartItems}
-        onUpdateQuantity={handleUpdateCartQuantity}
-        onRemoveItem={handleRemoveCartItem}
-        onProceedToCheckout={() => setShowCheckoutModal(true)}
-      />
+        {/* Three Bars Navigation Menu Drawer */}
+        <QuickMenuDrawer
+          isOpen={showQuickMenu}
+          onClose={() => setShowQuickMenu(false)}
+          user={user}
+          isLoggedIn={isLoggedIn}
+          onLogin={() => {
+            setShowQuickMenu(false);
+            setShowAuthModal(true);
+          }}
+          onLogout={handleLogout}
+          onSelectExtendedView={handleSelectExtendedView}
+          onSelectTab={handleSelectTab}
+          isDark={isDark}
+          onToggleTheme={toggleTheme}
+          onOpenInstallPrompt={() => {
+            setShowQuickMenu(false);
+            setShowInstallPrompt(true);
+          }}
+        />
 
-      <CheckoutModal
-        isOpen={showCheckoutModal}
-        onClose={() => setShowCheckoutModal(false)}
-        cartItems={cartItems}
-        user={user}
-        onOrderSuccess={handleOrderSuccess}
-      />
+        {/* Cart Drawer */}
+        <CartDrawer
+          isOpen={showCartDrawer}
+          onClose={() => setShowCartDrawer(false)}
+          items={cartItems}
+          onUpdateQuantity={handleUpdateCartQuantity}
+          onRemoveItem={handleRemoveCartItem}
+          onProceedToCheckout={() => setShowCheckoutModal(true)}
+        />
 
-      <CourseDetailModal
-        course={selectedCourse}
-        onClose={() => setSelectedCourse(null)}
-        onEnrollOrContinue={handleEnrollOrContinueCourse}
-      />
+        {/* Checkout Modal */}
+        <CheckoutModal
+          isOpen={showCheckoutModal}
+          onClose={() => setShowCheckoutModal(false)}
+          cartItems={cartItems}
+          user={user}
+          onOrderSuccess={handleOrderSuccess}
+        />
 
-      <ProductDetailModal
-        product={selectedProduct}
-        onClose={() => setSelectedProduct(null)}
-        onAddToCart={handleAddToCart}
-        onBuyNow={handleBuyNow}
-      />
+        {/* Course Detail Modal */}
+        <CourseDetailModal
+          course={selectedCourse}
+          onClose={() => setSelectedCourse(null)}
+          onEnrollOrContinue={handleEnrollOrContinueCourse}
+        />
 
-      <StudentDashboardModal
-        isOpen={showStudentDashboard}
-        onClose={() => setShowStudentDashboard(false)}
-        user={user}
-        courses={courses}
-        workshops={workshops}
-        onSelectCourse={(c) => setSelectedCourse(c)}
-        onOpenCertificates={() => setExtendedView('certificates')}
-      />
+        {/* Product Detail Modal */}
+        <ProductDetailModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+          onAddToCart={handleAddToCart}
+          onBuyNow={handleBuyNow}
+        />
 
-      <NotificationsModal
-        isOpen={showNotificationsModal}
-        onClose={() => setShowNotificationsModal(false)}
-        notifications={notifications}
-        onMarkAllAsRead={handleMarkAllNotifsRead}
-      />
+        {/* Student Dashboard Modal */}
+        <StudentDashboardModal
+          isOpen={showStudentDashboard}
+          onClose={() => setShowStudentDashboard(false)}
+          user={user}
+          courses={courses}
+          workshops={workshops}
+          onSelectCourse={(c) => setSelectedCourse(c)}
+          onOpenCertificates={() => setExtendedView('certificates')}
+        />
 
-      <AdminDashboardModal
-        isOpen={showAdminDashboard}
-        onClose={() => setShowAdminDashboard(false)}
-      />
+        {/* Notifications Modal */}
+        <NotificationsModal
+          isOpen={showNotificationsModal}
+          onClose={() => setShowNotificationsModal(false)}
+          notifications={notifications}
+          onMarkAllAsRead={handleMarkAllNotifsRead}
+        />
 
-      <PWAInstallPrompt
-        isOpen={showInstallPrompt}
-        onClose={() => setShowInstallPrompt(false)}
-      />
-    </div>
-  </MobileAppFrame>
+        {/* Admin Dashboard Modal */}
+        <AdminDashboardModal
+          isOpen={showAdminDashboard}
+          onClose={() => setShowAdminDashboard(false)}
+        />
+
+        {/* PWA Mobile App Install Prompt Modal */}
+        <PWAInstallPrompt
+          isOpen={showInstallPrompt}
+          onClose={() => setShowInstallPrompt(false)}
+        />
+      </div>
+    </MobileAppFrame>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }

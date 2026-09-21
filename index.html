@@ -1,6 +1,19 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script>
+      // Filter benign Vite websocket disconnection logs in container sandbox preview
+      (function() {
+        const _origError = console.error;
+        console.error = function(...args) {
+          if (typeof args[0] === 'string' && (args[0].includes('[vite]') || args[0].includes('WebSocket') || args[0].includes('websocket'))) {
+            console.debug(...args);
+            return;
+          }
+          _origError.apply(console, args);
+        };
+      })();
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Kite Robotics — Empowering Innovation with Robotics, AI & IoT</title>

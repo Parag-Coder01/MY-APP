@@ -569,6 +569,150 @@ export const MOCK_USER = {
   certificatesCount: 3,
 };
 
+export const MOCK_EBOOKS = [
+  {
+    id: 'ebook-1',
+    title: 'The KITE Robotics Master Handbook',
+    subtitle: 'From Basic Breadboards to Autonomous Navigation',
+    level: 'Comprehensive',
+    pages: 184,
+    downloads: '14,200+',
+    author: 'KITE R&D Academic Team',
+    cover: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=600&q=80',
+    description: 'The definitive textbook used in KITE partner schools and ATL labs, covering kinematics, sensor interfaces, C++ algorithms, and hardware troubleshooting.',
+    topics: ['Mobile Robotics Kinematics', 'H-Bridge Motor Control', 'Ultrasonic Mapping', 'PID Line Following'],
+    fileSize: '14.8 MB',
+  },
+  {
+    id: 'ebook-2',
+    title: 'Arduino & ESP32 for Young Inventors',
+    subtitle: 'Hands-on Microcontroller Engineering with 35+ Circuits',
+    level: 'Beginner to Intermediate',
+    pages: 142,
+    downloads: '9,850+',
+    author: 'Er. Arindam Sen',
+    cover: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80',
+    description: 'Step-by-step visual circuits with pinout diagrams, breadboard wiring schematics, and clean annotated code snippets for school robotics labs.',
+    topics: ['GPIO & PWM Signals', 'Analog Sensors', 'I2C OLED Displays', 'WiFi IoT Telemetry'],
+    fileSize: '11.2 MB',
+  },
+  {
+    id: 'ebook-3',
+    title: 'AI & Machine Learning Visual Handbook',
+    subtitle: 'Computer Vision, Edge TPU & OpenCV for Autonomous Bots',
+    level: 'Advanced',
+    pages: 168,
+    downloads: '6,400+',
+    author: 'KITE Artificial Intelligence Division',
+    cover: 'https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&w=600&q=80',
+    description: 'Learn object classification, color lane tracking, gesture navigation, and deploy lightweight neural nets directly to microcontrollers.',
+    topics: ['OpenCV Basics', 'TensorFlow Lite for Micro', 'Face & Gesture Detection', 'Autonomous Object Tracking'],
+    fileSize: '18.4 MB',
+  },
+  {
+    id: 'ebook-4',
+    title: 'Atal Tinkering Lab Setup & Innovation Manual',
+    subtitle: 'Official Guidelines for ATL Mentors, Teachers & Principals',
+    level: 'Institutional',
+    pages: 120,
+    downloads: '8,100+',
+    author: 'KITE National ATL Directorate',
+    cover: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80',
+    description: 'Best-practice guide to operating a thriving ATL lab under NITI Aayog guidelines, safety protocols, equipment care, and student competition roadmaps.',
+    topics: ['Lab Layout & Safety', 'Equipment Catalog', 'Yearly Project Timelines', 'Competition Preparation'],
+    fileSize: '9.6 MB',
+  },
+];
+
+export const MOCK_CURRICULUM = [
+  {
+    gradeRange: 'Junior Explorers (Grades 1 to 5)',
+    stage: 'Foundational STEM',
+    overview: 'Nurturing mechanical curiosity, spatial reasoning, circuit intuition, and foundational visual block programming without intimidating syntax.',
+    modules: [
+      { name: 'Paper Circuits & Conductivity', weeks: '3 Weeks', kits: 'LED Paper Circuit Kit' },
+      { name: 'Simple Machines & Gear Ratios', weeks: '4 Weeks', kits: 'Mechanical Gearbox Explorer' },
+      { name: 'Visual Block Coding with Scratch', weeks: '5 Weeks', kits: 'Interactive Animation & Sound' },
+      { name: 'First Walking Bristlebots', weeks: '3 Weeks', kits: 'Vibro-Motor Bug Kit' },
+    ],
+  },
+  {
+    gradeRange: 'Middle School Innovators (Grades 6 to 8)',
+    stage: 'Intermediate Robotics & Arduino',
+    overview: 'Transitioning to physical breadboards, microcontrollers, sensor integration, logic gates, and autonomous rover navigation.',
+    modules: [
+      { name: 'Microcontroller Architecture & GPIO', weeks: '4 Weeks', kits: 'KITE Arduino Starter Box' },
+      { name: 'Analog vs Digital Sensors', weeks: '4 Weeks', kits: 'Sensor Expansion Shield' },
+      { name: 'Obstacle Avoiding Mobile Rover', weeks: '6 Weeks', kits: '2WD Smart Robot Chassis' },
+      { name: 'Sound, Light & Temperature Automation', weeks: '4 Weeks', kits: 'Environmental Sensing Pack' },
+    ],
+  },
+  {
+    gradeRange: 'Senior Pioneers (Grades 9 to 12)',
+    stage: 'Advanced Robotics, AI & IoT',
+    overview: 'Industrial-grade engineering: C++ embedded coding, differential kinematics, cloud IoT dashboards, computer vision, and national hackathon preparation.',
+    modules: [
+      { name: 'Embedded C++ & Hardware Interrupts', weeks: '5 Weeks', kits: 'ESP32 IoT Pro Board' },
+      { name: 'PID Line Tracking & Maze Solving', weeks: '6 Weeks', kits: 'High-Speed 4WD Arena Bot' },
+      { name: 'Computer Vision & AI Object Tracking', weeks: '6 Weeks', kits: 'AI Vision Camera Module' },
+      { name: 'Cloud Telemetry & Smart Agriculture', weeks: '5 Weeks', kits: 'IoT Field Station Kit' },
+    ],
+  },
+  {
+    gradeRange: 'College & Professional (Diploma, B.Tech & Educators)',
+    stage: 'Applied R&D & Industrial Automation',
+    overview: 'ROS (Robot Operating System), SLAM navigation, PCB design in KiCad, custom 3D kinematics, and patentable innovation.',
+    modules: [
+      { name: 'ROS2 Nodes & Laser SLAM Mapping', weeks: '8 Weeks', kits: 'Lidar Autonomous Mobile Platform' },
+      { name: 'Custom Two-Layer PCB Fabrication', weeks: '4 Weeks', kits: 'KiCad Hardware Design Labs' },
+      { name: 'Edge AI Neural Net Inference', weeks: '6 Weeks', kits: 'Coral TPU / Jetson Platform' },
+    ],
+  },
+];
+
+export const MOCK_CAREERS = [
+  {
+    id: 'car-1',
+    title: 'Senior Robotics STEM Trainer',
+    department: 'Academics & School Labs',
+    location: 'Kolkata / Delhi / Bengaluru (Hybrid)',
+    type: 'Full-time',
+    experience: '1 - 4 Years',
+    description: 'Train K-12 students and teachers in hands-on robotics, Arduino, ATL lab setups, and coach competitive teams for ROBOZEST.',
+    requirements: ['B.Tech in ECE / EE / Mech / CS', 'Passionate about teaching and hardware tinkering', 'Fluent in Arduino C++ and basic Python'],
+  },
+  {
+    id: 'car-2',
+    title: 'Embedded Hardware & Firmware Engineer',
+    department: 'R&D Product Development',
+    location: 'Sector 7 Innovation Hub, Kolkata',
+    type: 'Full-time',
+    experience: '2 - 5 Years',
+    description: 'Architect custom educational robotics kits, microcontroller boards (STM32, ESP32, RP2040), motor drivers, and production firmware.',
+    requirements: ['Experience with KiCad or Altium PCB design', 'Firmware development in C/C++', 'Hands-on debugging with logic analyzers'],
+  },
+  {
+    id: 'car-3',
+    title: 'Curriculum & Content Specialist (STEM / ATL)',
+    department: 'Instructional Design',
+    location: 'Remote / Hybrid',
+    type: 'Full-time / Contract',
+    experience: '1 - 3 Years',
+    description: 'Design engaging project manuals, e-books, visual step-by-step schematics, and challenge problem sets aligned with CBSE & NITI Aayog guidelines.',
+    requirements: ['Background in STEM education or technical writing', 'Familiarity with Canva / Illustrator / Fritzing', 'Love for storytelling in engineering'],
+  },
+  {
+    id: 'car-4',
+    title: 'Student Campus Ambassador & Lab Intern',
+    department: 'Outreach & Community',
+    location: 'Pan-India (Colleges & Universities)',
+    type: 'Internship (Stipend + Certificate)',
+    experience: 'Open to Engineering Students',
+    description: 'Represent KITE Robotics on your college campus, organize technical bootcamps, mentor local school students, and gain early access to prototype kits.',
+    requirements: ['Currently enrolled college student', 'Leadership experience in robotics clubs', 'Certificate of Excellence and performance stipends awarded'],
+  },
+];
+
 export const INITIAL_USER = MOCK_USER;
 export const MOCK_COURSES = INITIAL_COURSES;
 export const MOCK_PRODUCTS = INITIAL_PRODUCTS;

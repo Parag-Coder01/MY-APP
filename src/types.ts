@@ -195,4 +195,15 @@ export interface ChatMessage {
 }
 
 export type MainTab = 'home' | 'learn' | 'store' | 'kms-ai' | 'profile';
-export type ExtendedView = 'workshops' | 'schools' | 'projects' | 'about' | 'contact' | 'certificates' | 'admin' | null;
+export type ExtendedView =
+  | 'workshops'
+  | 'schools'
+  | 'projects'
+  | 'about'
+  | 'contact'
+  | 'certificates'
+  | 'admin'
+  | 'curriculum'
+  | 'ebooks'
+  | 'careers'
+  | null;
