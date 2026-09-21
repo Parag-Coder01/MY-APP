@@ -23,6 +23,7 @@ import { ContactView } from './components/ContactView';
 import { CurriculumView } from './components/CurriculumView';
 import { EBooksView } from './components/EBooksView';
 import { CareersView } from './components/CareersView';
+import { ITServicesView } from './components/ITServicesView';
 import { StudentDashboardModal } from './components/StudentDashboardModal';
 import { NotificationsModal } from './components/NotificationsModal';
 import { AdminDashboardModal } from './components/AdminDashboardModal';
@@ -321,6 +322,9 @@ function AppContent() {
           )}
           {extendedView === 'contact' && (
             <ContactView />
+          )}
+          {extendedView === 'it-services' && (
+            <ITServicesView onContactClick={() => setExtendedView('contact')} />
           )}
 
           {/* Render Primary Tabs when no Extended View is active */}

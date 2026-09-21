@@ -206,4 +206,5 @@ export type ExtendedView =
   | 'curriculum'
   | 'ebooks'
   | 'careers'
+  | 'it-services'
   | null;

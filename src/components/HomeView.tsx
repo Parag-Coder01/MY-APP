@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'motion/react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   Sparkles,
   ArrowRight,
@@ -20,6 +20,14 @@ import {
   ShieldCheck,
   TrendingUp,
   SlidersHorizontal,
+  Globe,
+  Smartphone,
+  Database,
+  GraduationCap,
+  Laptop,
+  X,
+  ExternalLink,
+  Code2,
 } from 'lucide-react';
 import { Course, Product, UserProfile, MainTab, ExtendedView } from '../types';
 import { COMPANY_INFO } from '../data/mockData';
@@ -50,6 +58,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
   onBuyNow,
   onOpenStudentDashboard,
 }) => {
+  const [showITServicesModal, setShowITServicesModal] = useState(false);
+
   const ecosystemCards = [
     {
       title: 'Robotics & AI',
@@ -245,9 +255,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
 
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-2.5">
+          {/* 1. Courses */}
           <button
             onClick={() => onSelectTab('learn')}
-            className="p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-slate-200 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95 shadow-sm hover:-translate-y-0.5"
+            className="p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-slate-200 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95 shadow-sm hover:-translate-y-0.5 cursor-pointer"
           >
             <div className="p-2.5 rounded-xl dark:bg-cyan-950/60 bg-cyan-100 text-cyan-600 dark:text-cyan-400 mb-2 group-hover:scale-110 transition-transform">
               <BookOpen className="w-5 h-5" />
@@ -255,9 +266,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <span className="text-xs font-semibold dark:text-slate-200 text-slate-800">Courses</span>
           </button>
 
+          {/* 2. Robotics Kits */}
           <button
             onClick={() => onSelectTab('store')}
-            className="p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-slate-200 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95 shadow-sm hover:-translate-y-0.5"
+            className="p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-slate-200 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95 shadow-sm hover:-translate-y-0.5 cursor-pointer"
           >
             <div className="p-2.5 rounded-xl dark:bg-blue-950/60 bg-blue-100 text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
               <ShoppingBag className="w-5 h-5" />
@@ -265,9 +277,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <span className="text-xs font-semibold dark:text-slate-200 text-slate-800">Robotics Kits</span>
           </button>
 
+          {/* 3. Workshops */}
           <button
             onClick={() => onSelectExtendedView('workshops')}
-            className="p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-slate-200 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95 shadow-sm hover:-translate-y-0.5"
+            className="p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-slate-200 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95 shadow-sm hover:-translate-y-0.5 cursor-pointer"
           >
             <div className="p-2.5 rounded-xl dark:bg-amber-950/60 bg-amber-100 text-amber-600 dark:text-amber-400 mb-2 group-hover:scale-110 transition-transform">
               <Calendar className="w-5 h-5" />
@@ -275,9 +288,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <span className="text-xs font-semibold dark:text-slate-200 text-slate-800">Workshops</span>
           </button>
 
+          {/* 4. KMS-AI */}
           <button
             onClick={() => onSelectTab('kms-ai')}
-            className="p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-slate-200 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95 shadow-sm hover:-translate-y-0.5 relative"
+            className="p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-slate-200 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95 shadow-sm hover:-translate-y-0.5 relative cursor-pointer"
           >
             <span className="absolute top-1.5 right-1.5 px-1 rounded text-[9px] font-mono-code bg-cyan-500 text-slate-950 font-bold">
               AI
@@ -288,24 +302,31 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <span className="text-xs font-semibold dark:text-slate-200 text-slate-800">KMS-AI</span>
           </button>
 
+          {/* 5. IT Services */}
+          <button
+            id="portal-it-services-btn"
+            onClick={() => setShowITServicesModal(true)}
+            className="p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-indigo-500/40 border-indigo-200 hover:border-indigo-500 flex flex-col items-center text-center transition-all group active:scale-95 shadow-sm hover:-translate-y-0.5 relative cursor-pointer ring-1 ring-indigo-500/20"
+            aria-label="Explore IT Services: Website, App, ERP, LMS"
+          >
+            <span className="absolute top-1.5 right-1.5 px-1 rounded text-[9px] font-mono-code bg-indigo-600 text-white font-bold animate-pulse">
+              NEW
+            </span>
+            <div className="p-2.5 rounded-xl dark:bg-indigo-950/70 bg-indigo-100 text-indigo-600 dark:text-indigo-400 mb-2 group-hover:scale-110 transition-transform">
+              <Laptop className="w-5 h-5" />
+            </div>
+            <span className="text-xs font-semibold dark:text-indigo-300 text-indigo-900">IT Services</span>
+          </button>
+
+          {/* 6. Schools & ATL */}
           <button
             onClick={() => onSelectExtendedView('schools')}
-            className="p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-slate-200 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95 shadow-sm hover:-translate-y-0.5"
+            className="p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-slate-200 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95 shadow-sm hover:-translate-y-0.5 cursor-pointer"
           >
             <div className="p-2.5 rounded-xl dark:bg-purple-950/60 bg-purple-100 text-purple-600 dark:text-purple-400 mb-2 group-hover:scale-110 transition-transform">
               <School className="w-5 h-5" />
             </div>
             <span className="text-xs font-semibold dark:text-slate-200 text-slate-800">Schools & ATL</span>
-          </button>
-
-          <button
-            onClick={() => onSelectExtendedView('contact')}
-            className="p-3.5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800 border-slate-200 hover:border-cyan-500/50 flex flex-col items-center text-center transition-all group active:scale-95 shadow-sm hover:-translate-y-0.5"
-          >
-            <div className="p-2.5 rounded-xl dark:bg-emerald-950/60 bg-emerald-100 text-emerald-600 dark:text-emerald-400 mb-2 group-hover:scale-110 transition-transform">
-              <PhoneCall className="w-5 h-5" />
-            </div>
-            <span className="text-xs font-semibold dark:text-slate-200 text-slate-800">Mentors</span>
           </button>
         </div>
       </section>
@@ -576,6 +597,271 @@ export const HomeView: React.FC<HomeViewProps> = ({
           Explore ROBOZEST
         </button>
       </section>
+
+      {/* 9. IT Services Modal (Triggered by Direct Portal Option) */}
+      <AnimatePresence>
+        {showITServicesModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowITServicesModal(false)}
+              className="absolute inset-0"
+            />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: 15 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 280 }}
+              className="relative z-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl dark:bg-slate-950 bg-white border dark:border-slate-800 border-slate-200 p-5 sm:p-7 shadow-2xl space-y-6"
+            >
+              {/* Modal Header */}
+              <div className="flex items-start justify-between gap-4 pb-4 border-b dark:border-slate-800 border-slate-200">
+                <div>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full dark:bg-indigo-950/80 bg-indigo-100 border dark:border-indigo-800/60 border-indigo-200 text-[11px] font-mono-code dark:text-indigo-300 text-indigo-700 font-bold mb-1.5">
+                    <Code2 className="w-3.5 h-3.5" />
+                    <span>KITE DIGITAL ENGINEERING & IT SOLUTIONS</span>
+                  </div>
+                  <h3 className="font-display font-extrabold text-xl sm:text-2xl dark:text-white text-slate-900">
+                    IT Services Suite
+                  </h3>
+                  <p className="text-xs sm:text-sm dark:text-slate-400 text-slate-600 mt-1">
+                    Specialized software engineering for educational institutions, Atal Tinkering Labs, and tech companies:
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setShowITServicesModal(false)}
+                  className="p-2 rounded-xl dark:bg-slate-900 bg-slate-100 dark:text-slate-400 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
+                  aria-label="Close modal"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* 4 IT Services Grid (Website, App, ERP, LMS) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* 1. Website */}
+                <div className="p-4 sm:p-5 rounded-2xl dark:bg-slate-900/90 bg-slate-50 border dark:border-slate-800 border-slate-200 hover:border-cyan-500/50 transition-all flex flex-col justify-between group">
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="p-2.5 rounded-xl dark:bg-cyan-950/70 bg-cyan-100 text-cyan-600 dark:text-cyan-400 group-hover:scale-105 transition-transform">
+                        <Globe className="w-5 h-5" />
+                      </div>
+                      <span className="text-[10px] font-mono-code font-bold px-2 py-0.5 rounded-full dark:bg-cyan-950 dark:text-cyan-300 text-cyan-800 border dark:border-cyan-800 border-cyan-200">
+                        Next.js & React
+                      </span>
+                    </div>
+
+                    <h4 className="font-display font-bold text-base dark:text-white text-slate-900">
+                      Website Development
+                    </h4>
+                    <p className="text-xs dark:text-slate-300 text-slate-600 mt-1 leading-relaxed">
+                      Custom, ultra-fast web portals, admission inquiry engines, and institutional platforms with SEO scores exceeding 95+.
+                    </p>
+
+                    <div className="mt-3 space-y-1.5 text-[11px] dark:text-slate-400 text-slate-600">
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span>Responsive UI for Mobile & Desktop</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span>Headless CMS for effortless updates</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span>Domain, SSL & Cloudflare protection</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setShowITServicesModal(false);
+                      onSelectExtendedView('it-services');
+                    }}
+                    className="mt-4 w-full py-2 px-3 rounded-xl bg-cyan-500/10 hover:bg-cyan-500 text-cyan-600 dark:text-cyan-400 hover:text-slate-950 text-xs font-bold font-mono-code flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                  >
+                    <span>Website Details & Quote</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                {/* 2. App */}
+                <div className="p-4 sm:p-5 rounded-2xl dark:bg-slate-900/90 bg-slate-50 border dark:border-slate-800 border-slate-200 hover:border-blue-500/50 transition-all flex flex-col justify-between group">
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="p-2.5 rounded-xl dark:bg-blue-950/70 bg-blue-100 text-blue-600 dark:text-blue-400 group-hover:scale-105 transition-transform">
+                        <Smartphone className="w-5 h-5" />
+                      </div>
+                      <span className="text-[10px] font-mono-code font-bold px-2 py-0.5 rounded-full dark:bg-blue-950 dark:text-blue-300 text-blue-800 border dark:border-blue-800 border-blue-200">
+                        iOS & Android
+                      </span>
+                    </div>
+
+                    <h4 className="font-display font-bold text-base dark:text-white text-slate-900">
+                      Mobile App Development
+                    </h4>
+                    <p className="text-xs dark:text-slate-300 text-slate-600 mt-1 leading-relaxed">
+                      Cross-platform mobile applications with real-time Bluetooth Low Energy (BLE) & Wi-Fi hardware controller drivers.
+                    </p>
+
+                    <div className="mt-3 space-y-1.5 text-[11px] dark:text-slate-400 text-slate-600">
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span>Flutter & React Native cross-platform</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span>Direct IoT & Robotics hardware telemetry</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span>App Store & Google Play Store publishing</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setShowITServicesModal(false);
+                      onSelectExtendedView('it-services');
+                    }}
+                    className="mt-4 w-full py-2 px-3 rounded-xl bg-blue-500/10 hover:bg-blue-500 text-blue-600 dark:text-blue-400 hover:text-slate-950 text-xs font-bold font-mono-code flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                  >
+                    <span>App Details & Quote</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                {/* 3. ERP */}
+                <div className="p-4 sm:p-5 rounded-2xl dark:bg-slate-900/90 bg-slate-50 border dark:border-slate-800 border-slate-200 hover:border-amber-500/50 transition-all flex flex-col justify-between group">
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="p-2.5 rounded-xl dark:bg-amber-950/70 bg-amber-100 text-amber-600 dark:text-amber-400 group-hover:scale-105 transition-transform">
+                        <Database className="w-5 h-5" />
+                      </div>
+                      <span className="text-[10px] font-mono-code font-bold px-2 py-0.5 rounded-full dark:bg-amber-950 dark:text-amber-300 text-amber-800 border dark:border-amber-800 border-amber-200">
+                        School & Lab Ops
+                      </span>
+                    </div>
+
+                    <h4 className="font-display font-bold text-base dark:text-white text-slate-900">
+                      ERP Systems
+                    </h4>
+                    <p className="text-xs dark:text-slate-300 text-slate-600 mt-1 leading-relaxed">
+                      Custom ERP automating Atal Tinkering Lab equipment inventory, barcode scanning, student admissions, and fee billing.
+                    </p>
+
+                    <div className="mt-3 space-y-1.5 text-[11px] dark:text-slate-400 text-slate-600">
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span>ATL Hardware Lab inventory & Barcodes</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span>Student & Faculty attendance registers</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span>Fee receipts, GST invoices & notifications</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setShowITServicesModal(false);
+                      onSelectExtendedView('it-services');
+                    }}
+                    className="mt-4 w-full py-2 px-3 rounded-xl bg-amber-500/10 hover:bg-amber-500 text-amber-600 dark:text-amber-400 hover:text-slate-950 text-xs font-bold font-mono-code flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                  >
+                    <span>ERP Details & Quote</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                {/* 4. LMS */}
+                <div className="p-4 sm:p-5 rounded-2xl dark:bg-slate-900/90 bg-slate-50 border dark:border-slate-800 border-slate-200 hover:border-emerald-500/50 transition-all flex flex-col justify-between group">
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="p-2.5 rounded-xl dark:bg-emerald-950/70 bg-emerald-100 text-emerald-600 dark:text-emerald-400 group-hover:scale-105 transition-transform">
+                        <GraduationCap className="w-5 h-5" />
+                      </div>
+                      <span className="text-[10px] font-mono-code font-bold px-2 py-0.5 rounded-full dark:bg-emerald-950 dark:text-emerald-300 text-emerald-800 border dark:border-emerald-800 border-emerald-200">
+                        E-Learning Platform
+                      </span>
+                    </div>
+
+                    <h4 className="font-display font-bold text-base dark:text-white text-slate-900">
+                      LMS (Learning Management)
+                    </h4>
+                    <p className="text-xs dark:text-slate-300 text-slate-600 mt-1 leading-relaxed">
+                      Interactive STEM learning management system featuring video lessons, circuit sandboxes, and cryptographic digital certificates.
+                    </p>
+
+                    <div className="mt-3 space-y-1.5 text-[11px] dark:text-slate-400 text-slate-600">
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span>Video lessons with adaptive CDN streaming</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span>Interactive coding & circuit assignments</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span>Automated QR verifiable certificate issuance</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setShowITServicesModal(false);
+                      onSelectExtendedView('it-services');
+                    }}
+                    className="mt-4 w-full py-2 px-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500 text-emerald-600 dark:text-emerald-400 hover:text-slate-950 text-xs font-bold font-mono-code flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                  >
+                    <span>LMS Details & Quote</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="pt-4 border-t dark:border-slate-800 border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="text-xs dark:text-slate-400 text-slate-600 flex items-center gap-2">
+                  <PhoneCall className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                  <span>Direct Tech Support: <a href={`tel:${COMPANY_INFO.phone}`} className="font-mono-code font-bold hover:underline">{COMPANY_INFO.phone}</a></span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setShowITServicesModal(false)}
+                    className="px-4 py-2 rounded-xl dark:bg-slate-900 bg-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 dark:text-slate-300 text-slate-700 text-xs font-semibold transition-colors cursor-pointer"
+                  >
+                    Close
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowITServicesModal(false);
+                      onSelectExtendedView('it-services');
+                    }}
+                    className="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold flex items-center gap-1.5 shadow-md shadow-cyan-500/20 active:scale-95 transition-all cursor-pointer"
+                  >
+                    <span>Open Full IT Services Portal</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

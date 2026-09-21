@@ -19,6 +19,7 @@ import {
   Shield,
   Sparkles,
   ExternalLink,
+  Laptop,
 } from 'lucide-react';
 import { ExtendedView, MainTab, UserProfile } from '../types';
 import { KiteLogo } from './KiteLogo';
@@ -267,6 +268,33 @@ export const QuickMenuDrawer: React.FC<QuickMenuDrawerProps> = ({
                     </div>
                     <div className="text-xs text-slate-400 mt-0.5">
                       Autonomous rovers, IoT & schematics
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:translate-x-0.5 transition-transform shrink-0" />
+              </button>
+              {/* IT Services */}
+              <button
+                onClick={() => handleNavigate(() => onSelectExtendedView('it-services'))}
+                className={`w-full p-3 rounded-2xl border flex items-center justify-between text-left transition-all group ${
+                  isDark
+                    ? 'bg-slate-900/60 hover:bg-slate-850 border-indigo-900/50 hover:border-indigo-500/80'
+                    : 'bg-indigo-50/60 hover:bg-indigo-50 border-indigo-200 hover:border-indigo-400'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-indigo-950/60 text-indigo-400 border border-indigo-800/40 group-hover:scale-105 transition-transform">
+                    <Laptop className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold group-hover:text-indigo-400 transition-colors flex items-center gap-2">
+                      <span>IT Services</span>
+                      <span className="text-[9px] font-mono-code font-bold px-1.5 py-0.5 rounded bg-indigo-500 text-white">
+                        NEW
+                      </span>
+                    </div>
+                    <div className="text-xs text-slate-400 mt-0.5">
+                      Website, App, ERP & LMS solutions
                     </div>
                   </div>
                 </div>
