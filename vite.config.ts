@@ -6,7 +6,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig(() => {
   return {
-    base: '/',
+    base: '/MY-APP/',
     plugins: [
       react(),
       tailwindcss(),
