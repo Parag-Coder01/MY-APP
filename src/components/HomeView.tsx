@@ -37,6 +37,7 @@ import {
 import { Course, Product, UserProfile, MainTab, ExtendedView } from '../types';
 import { COMPANY_INFO } from '../data/mockData';
 import { AnimatedCounter } from './AnimatedCounter';
+import { PartnerCoursesExpanded } from './PartnerCoursesExpanded';
 
 import heroRobotAi from '../assets/images/hero_robot_ai_1790142280343.jpg';
 import heroKitsParts from '../assets/images/hero_kits_parts_1790142293541.jpg';
@@ -316,6 +317,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
   onOpenStudentDashboard,
 }) => {
   const [showITServicesModal, setShowITServicesModal] = useState(false);
+  const [isCoursesExpanded, setIsCoursesExpanded] = useState(false);
 
   // 0. Auto-swiping Welcome Strip Slide (stays compact within the white strip region)
   const [activeWelcomeIndex, setActiveWelcomeIndex] = useState(0);
@@ -996,9 +998,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 <h3 className="font-display font-black text-base sm:text-xl lg:text-2xl text-white tracking-tight leading-snug">
                   School, College and Educational Institution
                 </h3>
-                {/* Meaningful, inspiring, and impactful description */}
-                <p className="text-xs sm:text-sm text-cyan-200/90 mt-1 line-clamp-2 leading-relaxed font-medium">
-                  Empowering academic excellence with turnkey robotics laboratories, experiential STEM curriculum, certified pedagogy & future-ready tech infrastructure.
+                {/* Meaningful, inspiring, and impactful description - fully visible inside box */}
+                <p className="text-xs sm:text-sm text-cyan-200/90 mt-1 leading-relaxed font-medium break-words">
+                  Empowering academic excellence with turnkey robotics labs, STEM curriculum, certified pedagogy & tech infrastructure.
                 </p>
               </div>
             </div>
@@ -1036,26 +1038,53 @@ export const HomeView: React.FC<HomeViewProps> = ({
               className="flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar py-2 px-1 flex-nowrap scroll-smooth touch-pan-x"
               style={{ WebkitOverflowScrolling: 'touch' }}
             >
-              {PARTNER_INSTITUTION_OPTIONS.map((item) => (
-                <div
-                  key={item.id}
-                  className="group relative shrink-0 flex items-center gap-2.5 sm:gap-3.5 py-2 px-3.5 sm:py-2.5 sm:px-5 rounded-full border border-cyan-500/40 bg-slate-950 hover:border-cyan-400 hover:bg-slate-900 transition-all duration-300 shadow-lg shadow-cyan-950/50 ring-1 ring-cyan-500/20 select-none cursor-pointer"
-                >
-                  {/* Real Image in the logo of each section/option - BIGGER & CLEAN */}
-                  <div className="relative w-11 h-11 sm:w-14 sm:h-14 rounded-full overflow-hidden shrink-0 border-2 border-cyan-400 shadow-md ring-2 ring-cyan-500/25 group-hover:scale-105 transition-all duration-300">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
+              {PARTNER_INSTITUTION_OPTIONS.map((item) => {
+                const isCourses = item.id === 'courses';
+                const isActive = isCourses && isCoursesExpanded;
 
-                  {/* Clean, attractive font typography */}
-                  <span className="font-display font-black text-xs sm:text-sm md:text-base text-white group-hover:text-cyan-300 transition-colors whitespace-nowrap tracking-tight pr-1">
-                    {item.title}
-                  </span>
-                </div>
-              ))}
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => {
+                      if (isCourses) {
+                        // Expand in-place, DO NOT redirect to another page
+                        setIsCoursesExpanded((prev) => !prev);
+                      } else if (item.id === 'it-services') {
+                        setShowITServicesModal(true);
+                      }
+                    }}
+                    className={`group relative shrink-0 flex items-center gap-2.5 sm:gap-3.5 py-2 px-3.5 sm:py-2.5 sm:px-5 rounded-full border transition-all duration-300 shadow-lg select-none cursor-pointer text-left ${
+                      isActive
+                        ? 'border-cyan-400 bg-cyan-950/90 shadow-cyan-500/30 ring-2 ring-cyan-400 scale-[1.02]'
+                        : 'border-cyan-500/40 bg-slate-950 hover:border-cyan-400 hover:bg-slate-900 shadow-cyan-950/50 ring-1 ring-cyan-500/20'
+                    }`}
+                  >
+                    {/* Real Image in the logo of each section/option - BIGGER & CLEAN */}
+                    <div className="relative w-11 h-11 sm:w-14 sm:h-14 rounded-full overflow-hidden shrink-0 border-2 border-cyan-400 shadow-md ring-2 ring-cyan-500/25 group-hover:scale-105 transition-all duration-300">
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    </div>
+
+                    {/* Clean, attractive font typography */}
+                    <span className="font-display font-black text-xs sm:text-sm md:text-base text-white group-hover:text-cyan-300 transition-colors whitespace-nowrap tracking-tight pr-1 flex items-center gap-2">
+                      <span>{item.title}</span>
+                      {isCourses && (
+                        <span className={`text-[10px] font-mono-code font-bold px-2 py-0.5 rounded-full transition-all ${
+                          isActive
+                            ? 'bg-cyan-400 text-slate-950 shadow-xs'
+                            : 'bg-slate-800 text-cyan-300 border border-slate-700'
+                        }`}>
+                          {isActive ? 'Hide ▲' : 'Explore ▼'}
+                        </span>
+                      )}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
 
             {/* Mobile swipe and scroll hint */}
@@ -1064,6 +1093,13 @@ export const HomeView: React.FC<HomeViewProps> = ({
               <span className="flex items-center gap-1">Swipe or tap arrows →</span>
             </div>
           </div>
+
+          {/* Smooth Expanded Box for Courses - DO NOT REDIRECT */}
+          <AnimatePresence>
+            {isCoursesExpanded && (
+              <PartnerCoursesExpanded onClose={() => setIsCoursesExpanded(false)} />
+            )}
+          </AnimatePresence>
         </div>
       </section>
 
