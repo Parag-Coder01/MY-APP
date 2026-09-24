@@ -127,6 +127,14 @@
 }
 
 /* Custom subtle circuit grid */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .dark .bg-grid-tech {
   background-size: 24px 24px;
   background-image: 

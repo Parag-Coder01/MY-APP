@@ -31,6 +31,8 @@ import {
   Code2,
   Rocket,
   Bot,
+  BookMarked,
+  Building2,
 } from 'lucide-react';
 import { Course, Product, UserProfile, MainTab, ExtendedView } from '../types';
 import { COMPANY_INFO } from '../data/mockData';
@@ -40,6 +42,10 @@ import heroRobotAi from '../assets/images/hero_robot_ai_1790142280343.jpg';
 import heroKitsParts from '../assets/images/hero_kits_parts_1790142293541.jpg';
 import heroItServices from '../assets/images/hero_it_services_1790142307996.jpg';
 import heroDroneTech from '../assets/images/hero_drone_tech_1790142317460.jpg';
+import partnerCoursesImg from '../assets/images/partner_stem_courses_1790221135909.jpg';
+import partnerBooksImg from '../assets/images/stem_curriculum_books_1790221111349.jpg';
+import partnerAdminImg from '../assets/images/school_admin_items_1790221123062.jpg';
+import schoolCollegeCampusImg from '../assets/images/school_college_campus_1790221588811.jpg';
 
 interface WelcomeStripSlide {
   id: string;
@@ -323,6 +329,45 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
   const currentWelcomeSlide = WELCOME_STRIP_SLIDES[activeWelcomeIndex];
 
+  // Options for What We Provide to Our Partners -> School, College and Educational Institution
+  const PARTNER_INSTITUTION_OPTIONS = [
+    {
+      id: 'courses',
+      title: 'Courses',
+      image: partnerCoursesImg,
+    },
+    {
+      id: 'stem-kits',
+      title: 'Stem Kits',
+      image: heroKitsParts,
+    },
+    {
+      id: 'it-services',
+      title: 'IT Services',
+      image: heroItServices,
+    },
+    {
+      id: 'books',
+      title: 'Books',
+      image: partnerBooksImg,
+    },
+    {
+      id: 'admin-items',
+      title: 'Administrative items',
+      image: partnerAdminImg,
+    },
+  ];
+
+  // Scroll ref & controls for What We Provide single horizontal line
+  const partnerScrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollPartner = (direction: 'left' | 'right') => {
+    if (partnerScrollRef.current) {
+      const scrollAmount = direction === 'left' ? -240 : 240;
+      partnerScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
   const handleWelcomeSlideAction = (slide: WelcomeStripSlide) => {
     if (slide.targetType === 'tab' && slide.targetTab) {
       onSelectTab(slide.targetTab);
@@ -409,81 +454,6 @@ export const HomeView: React.FC<HomeViewProps> = ({
     }
   };
 
-  const ecosystemCards = [
-    {
-      title: 'Robotics & AI',
-      desc: 'Autonomous rovers, computer vision & edge AI algorithms',
-      icon: <Cpu className="w-5 h-5 text-cyan-400" />,
-      action: () => onSelectTab('learn'),
-      badge: 'Core Program',
-      accentColor: 'group-hover:border-cyan-500/50',
-      iconBg: 'dark:bg-cyan-950/60 bg-cyan-100/80 text-cyan-600 dark:text-cyan-400',
-    },
-    {
-      title: 'STEM Education',
-      desc: 'Hands-on experiential learning kits for ages 8–18',
-      icon: <BookOpen className="w-5 h-5 text-blue-400" />,
-      action: () => onSelectTab('learn'),
-      badge: 'NEP 2020',
-      accentColor: 'group-hover:border-blue-500/50',
-      iconBg: 'dark:bg-blue-950/60 bg-blue-100/80 text-blue-600 dark:text-blue-400',
-    },
-    {
-      title: 'IoT & Automation',
-      desc: 'ESP32 microcontrollers, smart sensors & MQTT cloud systems',
-      icon: <Zap className="w-5 h-5 text-amber-400" />,
-      action: () => onSelectTab('learn'),
-      badge: 'Connected',
-      accentColor: 'group-hover:border-amber-500/50',
-      iconBg: 'dark:bg-amber-950/60 bg-amber-100/80 text-amber-600 dark:text-amber-400',
-    },
-    {
-      title: 'Workshops & Camps',
-      desc: 'ROBOZEST 2026 championships & weekend innovation intensives',
-      icon: <Calendar className="w-5 h-5 text-emerald-400" />,
-      action: () => onSelectExtendedView('workshops'),
-      badge: 'Events',
-      accentColor: 'group-hover:border-emerald-500/50',
-      iconBg: 'dark:bg-emerald-950/60 bg-emerald-100/80 text-emerald-600 dark:text-emerald-400',
-    },
-    {
-      title: '3D Prototyping',
-      desc: 'Mechanical CAD modeling, additive manufacturing & slicer lab',
-      icon: <Printer className="w-5 h-5 text-pink-400" />,
-      action: () => onSelectTab('learn'),
-      badge: 'Hardware',
-      accentColor: 'group-hover:border-pink-500/50',
-      iconBg: 'dark:bg-pink-950/60 bg-pink-100/80 text-pink-600 dark:text-pink-400',
-    },
-    {
-      title: 'R&D Innovation',
-      desc: 'Custom robotics hardware engineering for educational partners',
-      icon: <FlaskConical className="w-5 h-5 text-purple-400" />,
-      action: () => onSelectExtendedView('schools'),
-      badge: 'Research',
-      accentColor: 'group-hover:border-purple-500/50',
-      iconBg: 'dark:bg-purple-950/60 bg-purple-100/80 text-purple-600 dark:text-purple-400',
-    },
-    {
-      title: 'ATL Setup & Labs',
-      desc: 'Comprehensive Atal Tinkering Lab equipment, training & setup',
-      icon: <School className="w-5 h-5 text-amber-400" />,
-      action: () => onSelectExtendedView('schools'),
-      badge: 'Government Ready',
-      accentColor: 'group-hover:border-amber-500/50',
-      iconBg: 'dark:bg-amber-950/60 bg-amber-100/80 text-amber-600 dark:text-amber-400',
-    },
-    {
-      title: 'Mentor Network',
-      desc: 'Dedicated robotics faculty, mentor training & lab certification',
-      icon: <Award className="w-5 h-5 text-indigo-400" />,
-      action: () => onSelectExtendedView('contact'),
-      badge: 'Support',
-      accentColor: 'group-hover:border-indigo-500/50',
-      iconBg: 'dark:bg-indigo-950/60 bg-indigo-100/80 text-indigo-600 dark:text-indigo-400',
-    },
-  ];
-
   const quickPrompts = [
     { label: 'Fix Arduino sensor code', query: 'Help me debug Arduino C++ code for an ultrasonic sensor' },
     { label: 'ESP32 WiFi IoT setup', query: 'How to connect ESP32 to WiFi and send data over MQTT' },
@@ -533,8 +503,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
               className="flex flex-col items-start"
             >
               {/* Badge + 4 Interactive Slider Dots */}
-              <div className="flex items-center gap-2.5 mb-2 flex-wrap">
-                <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono-code font-bold uppercase tracking-wider border ${currentWelcomeSlide.badgeColor} backdrop-blur-sm`}>
+              <div className="flex items-center gap-2 sm:gap-2.5 mb-2 flex-wrap">
+                <span className={`px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-mono-code font-bold uppercase tracking-wider border ${currentWelcomeSlide.badgeColor} backdrop-blur-sm whitespace-nowrap`}>
                   {currentWelcomeSlide.badge}
                 </span>
 
@@ -689,26 +659,32 @@ export const HomeView: React.FC<HomeViewProps> = ({
           </div>
 
           {/* Dynamic metric stamps with delay & smooth progression */}
-          <div className="grid grid-cols-3 gap-3 pt-6 mt-7 border-t border-slate-800/80 text-center sm:text-left">
-            <div className="p-3 sm:p-3.5 rounded-2xl bg-slate-950/60 border border-slate-800/80 hover:border-cyan-500/30 transition-colors backdrop-blur-sm">
-              <div className="text-2xl sm:text-3xl font-display font-black text-cyan-400 tracking-tight">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3.5 pt-6 mt-7 border-t border-slate-800/80 text-center sm:text-left">
+            <div className="p-2 sm:p-3 rounded-2xl bg-slate-950/60 border border-slate-800/80 hover:border-cyan-500/30 transition-colors backdrop-blur-sm min-w-0 flex flex-col justify-center">
+              <div className="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-display font-black text-cyan-400 tracking-tight leading-none whitespace-nowrap">
                 <AnimatedCounter target={25000} suffix="+" duration={1600} delay={150} />
               </div>
-              <div className="text-[11px] text-slate-400 font-mono-code mt-0.5 font-medium">Students Mentored</div>
+              <div className="text-[10px] sm:text-[11px] text-slate-400 font-mono-code mt-1 font-medium leading-tight break-words">
+                Students Mentored
+              </div>
             </div>
 
-            <div className="p-3 sm:p-3.5 rounded-2xl bg-slate-950/60 border border-slate-800/80 hover:border-amber-500/30 transition-colors backdrop-blur-sm">
-              <div className="text-2xl sm:text-3xl font-display font-black text-amber-400 tracking-tight">
+            <div className="p-2 sm:p-3 rounded-2xl bg-slate-950/60 border border-slate-800/80 hover:border-amber-500/30 transition-colors backdrop-blur-sm min-w-0 flex flex-col justify-center">
+              <div className="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-display font-black text-amber-400 tracking-tight leading-none whitespace-nowrap">
                 <AnimatedCounter target={120} suffix="+" duration={1400} delay={300} />
               </div>
-              <div className="text-[11px] text-slate-400 font-mono-code mt-0.5 font-medium">Schools & Labs</div>
+              <div className="text-[10px] sm:text-[11px] text-slate-400 font-mono-code mt-1 font-medium leading-tight break-words">
+                Schools & Labs
+              </div>
             </div>
 
-            <div className="p-3 sm:p-3.5 rounded-2xl bg-slate-950/60 border border-slate-800/80 hover:border-emerald-500/30 transition-colors backdrop-blur-sm">
-              <div className="text-2xl sm:text-3xl font-display font-black text-emerald-400 tracking-tight">
+            <div className="p-2 sm:p-3 rounded-2xl bg-slate-950/60 border border-slate-800/80 hover:border-emerald-500/30 transition-colors backdrop-blur-sm min-w-0 flex flex-col justify-center">
+              <div className="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-display font-black text-emerald-400 tracking-tight leading-none whitespace-nowrap">
                 <AnimatedCounter target={45} suffix="+" duration={1300} delay={450} />
               </div>
-              <div className="text-[11px] text-slate-400 font-mono-code mt-0.5 font-medium">ATL Labs Setup</div>
+              <div className="text-[10px] sm:text-[11px] text-slate-400 font-mono-code mt-1 font-medium leading-tight break-words">
+                ATL Labs Setup
+              </div>
             </div>
           </div>
         </div>
@@ -809,7 +785,48 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </section>
 
-      {/* 4. Action Command Center & KMS-AI Hardware Copilot */}
+      {/* 4. KMS-AI Mentor & Code Foundry */}
+      <section className="space-y-4">
+        <div className="relative rounded-3xl overflow-hidden border dark:border-cyan-500/40 border-cyan-300 dark:bg-gradient-to-r dark:from-cyan-950/70 dark:via-slate-900 dark:to-blue-950/70 bg-gradient-to-r from-cyan-50 via-white to-blue-50 p-6 sm:p-8 shadow-xl transition-all">
+          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="space-y-2.5 max-w-xl">
+              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full dark:bg-cyan-500/20 bg-cyan-100 dark:text-cyan-300 text-cyan-800 text-[11px] font-mono-code font-bold border dark:border-cyan-500/30 border-cyan-300">
+                <Sparkles className="w-3.5 h-3.5 dark:text-cyan-400 text-cyan-600" />
+                <span>INTELLIGENT HARDWARE COPILOT</span>
+              </div>
+              <h3 className="font-display font-black text-xl sm:text-2xl lg:text-3xl dark:text-white text-slate-900 tracking-tight">
+                KMS-AI Mentor & Code Foundry
+              </h3>
+              <p className="dark:text-slate-300 text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Debug Arduino & ESP32 C++ firmware, calculate motor driver voltages, troubleshoot ultrasonic sensor pinouts, or generate circuit wiring diagrams instantly.
+              </p>
+
+              {/* Quick interactive prompt chips */}
+              <div className="pt-2 flex flex-wrap gap-2">
+                {quickPrompts.map((prompt, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => onSelectTab('kms-ai')}
+                    className="px-3 py-1.5 rounded-xl dark:bg-slate-900/90 bg-white border dark:border-cyan-800/50 border-slate-300 hover:border-cyan-400 text-[11px] font-medium dark:text-cyan-300 text-slate-800 hover:text-cyan-600 flex items-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer"
+                  >
+                    <span>{prompt.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button
+              onClick={() => onSelectTab('kms-ai')}
+              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-display font-black text-sm tracking-wide uppercase flex items-center justify-center gap-2 shadow-xl shadow-cyan-400/25 shrink-0 active:scale-95 transition-all cursor-pointer"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>Launch KMS-AI</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Dynamic Sliding Tab: Rozet Arena & Action Hub */}
       <section className="space-y-4">
         {/* Shifted Dynamic Multi-Channel Action Hub */}
         <div
@@ -936,273 +953,118 @@ export const HomeView: React.FC<HomeViewProps> = ({
             </div>
           </div>
         </div>
-
-        {/* And right under this: KMS-AI Hardware Copilot Spotlight */}
-        <div className="relative rounded-3xl overflow-hidden border dark:border-cyan-500/40 border-cyan-300 dark:bg-gradient-to-r dark:from-cyan-950/70 dark:via-slate-900 dark:to-blue-950/70 bg-gradient-to-r from-cyan-50 via-white to-blue-50 p-6 sm:p-8 shadow-xl transition-all">
-          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            <div className="space-y-2.5 max-w-xl">
-              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full dark:bg-cyan-500/20 bg-cyan-100 dark:text-cyan-300 text-cyan-800 text-[11px] font-mono-code font-bold border dark:border-cyan-500/30 border-cyan-300">
-                <Sparkles className="w-3.5 h-3.5 dark:text-cyan-400 text-cyan-600" />
-                <span>INTELLIGENT HARDWARE COPILOT</span>
-              </div>
-              <h3 className="font-display font-black text-xl sm:text-2xl lg:text-3xl dark:text-white text-slate-900 tracking-tight">
-                KMS-AI Mentor & Code Foundry
-              </h3>
-              <p className="dark:text-slate-300 text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Debug Arduino & ESP32 C++ firmware, calculate motor driver voltages, troubleshoot ultrasonic sensor pinouts, or generate circuit wiring diagrams instantly.
-              </p>
-
-              {/* Quick interactive prompt chips */}
-              <div className="pt-2 flex flex-wrap gap-2">
-                {quickPrompts.map((prompt, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => onSelectTab('kms-ai')}
-                    className="px-3 py-1.5 rounded-xl dark:bg-slate-900/90 bg-white border dark:border-cyan-800/50 border-slate-300 hover:border-cyan-400 text-[11px] font-medium dark:text-cyan-300 text-slate-800 hover:text-cyan-600 flex items-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer"
-                  >
-                    <span>{prompt.label}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <button
-              onClick={() => onSelectTab('kms-ai')}
-              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-display font-black text-sm tracking-wide uppercase flex items-center justify-center gap-2 shadow-xl shadow-cyan-400/25 shrink-0 active:scale-95 transition-all cursor-pointer"
-            >
-              <Sparkles className="w-4 h-4" />
-              <span>Launch KMS-AI</span>
-            </button>
-          </div>
-        </div>
       </section>
 
-      {/* 5. Explore Our Ecosystem */}
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="font-display font-black text-base sm:text-xl dark:text-white text-slate-900 tracking-tight">
-              The Kite Innovation Matrix
-            </h3>
-            <p className="text-xs dark:text-slate-400 text-slate-600 mt-0.5">Autonomous robotics, intelligent telemetry & turnkey Atal Tinkering Labs</p>
+      {/* 6. What We Provide to Our Partners */}
+      <section id="what-we-provide-section" className="space-y-4 sm:space-y-5 pt-1">
+        {/* Strong, Attractive Master Heading */}
+        <div className="relative">
+          <div className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1 rounded-full dark:bg-cyan-950/90 bg-cyan-100 border dark:border-cyan-500/50 border-cyan-300 text-[10px] sm:text-[11px] font-mono-code dark:text-cyan-300 text-cyan-900 font-bold uppercase tracking-wider mb-2 shadow-xs">
+            <Sparkles className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
+            <span className="whitespace-nowrap font-bold">PARTNERSHIP & INSTITUTIONAL ECOSYSTEM</span>
           </div>
-          <button
-            onClick={() => onSelectExtendedView('about')}
-            className="text-xs text-cyan-500 hover:text-cyan-400 font-mono-code font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-          >
-            <span>Ecosystem Blueprint</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-          {ecosystemCards.map((card, idx) => (
-            <button
-              key={idx}
-              onClick={card.action}
-              className={`p-4 sm:p-5 rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800/90 border-slate-200/90 hover:border-cyan-500/50 text-left transition-all group active:scale-[0.98] flex flex-col justify-between shadow-xs hover:shadow-lg hover:-translate-y-0.5 backdrop-blur-sm cursor-pointer`}
-            >
-              <div className="flex items-center justify-between mb-3.5">
-                <div className={`p-2.5 rounded-xl ${card.iconBg} group-hover:scale-110 transition-transform shadow-xs`}>
-                  {card.icon}
-                </div>
-                <span className="text-[10px] font-mono-code font-bold uppercase tracking-wider px-2 py-0.5 rounded-full dark:bg-slate-800/80 bg-slate-100 dark:text-cyan-300 text-cyan-800 border dark:border-slate-700/60 border-slate-200">
-                  {card.badge}
-                </span>
-              </div>
-              <div>
-                <h4 className="font-display font-black text-sm sm:text-base dark:text-white text-slate-900 group-hover:text-cyan-400 transition-colors tracking-tight">
-                  {card.title}
-                </h4>
-                <p className="text-xs dark:text-slate-400 text-slate-600 mt-1.5 line-clamp-2 leading-relaxed">
-                  {card.desc}
-                </p>
-              </div>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* 6. Featured Programs */}
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="font-display font-black text-base sm:text-xl dark:text-white text-slate-900 tracking-tight">
-              Masterclass Curricula & Deep-Tech Programs
-            </h3>
-            <p className="text-xs dark:text-slate-400 text-slate-600 mt-0.5">Project-driven mastery paths designed by veteran aerospace & robotics researchers</p>
-          </div>
-          <button
-            onClick={() => onSelectTab('learn')}
-            className="text-xs text-cyan-500 hover:text-cyan-400 font-mono-code font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-          >
-            <span>All Masterclasses</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {courses.slice(0, 3).map((course) => (
-            <div
-              key={course.id}
-              className="rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800/90 border-slate-200/90 overflow-hidden flex flex-col justify-between hover:border-cyan-500/50 transition-all group shadow-sm hover:shadow-xl hover:-translate-y-1"
-            >
-              {/* Course Thumbnail */}
-              <div className="relative h-44 w-full bg-slate-950 overflow-hidden">
-                <img
-                  src={course.image}
-                  alt={course.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent" />
-                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-slate-950/85 text-[10px] font-mono-code font-bold uppercase tracking-wider text-cyan-400 border border-slate-700/80 backdrop-blur-md">
-                  {course.category}
-                </div>
-                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[11px] font-semibold text-slate-200">
-                  <span className="px-2.5 py-0.5 rounded-md bg-slate-900/90 border border-slate-700/80 backdrop-blur-sm">
-                    {course.level}
-                  </span>
-                  <span className="text-cyan-300 font-mono-code">{course.duration}</span>
-                </div>
-              </div>
-
-              {/* Body */}
-              <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
-                <div>
-                  <h4 className="font-display font-bold text-sm sm:text-base dark:text-white text-slate-900 group-hover:text-cyan-400 transition-colors line-clamp-2">
-                    {course.title}
-                  </h4>
-                  <p className="text-xs dark:text-slate-400 text-slate-600 mt-2 line-clamp-2 leading-relaxed">
-                    {course.description}
-                  </p>
-                </div>
-
-                <div className="pt-4 mt-3 border-t dark:border-slate-800/80 border-slate-100 flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 text-xs text-amber-400 font-mono-code font-bold">
-                    <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                    <AnimatedCounter target={course.rating} decimals={1} suffix="" duration={1000} delay={100} />
-                    <span className="dark:text-slate-500 text-slate-400 font-normal">
-                      (<AnimatedCounter target={course.reviewsCount} suffix=" reviews" duration={1200} delay={200} />)
-                    </span>
-                  </div>
-
-                  <button
-                    onClick={() => onSelectCourse(course)}
-                    className="px-4 py-2 rounded-xl dark:bg-cyan-500/20 bg-cyan-100 hover:bg-cyan-500 dark:text-cyan-300 text-cyan-900 hover:text-slate-950 text-xs font-display font-black tracking-wide uppercase transition-all cursor-pointer shadow-xs active:scale-95"
-                  >
-                    View Curriculum
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 7. Robotics Store Showcase */}
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="font-display font-black text-base sm:text-xl dark:text-white text-slate-900 tracking-tight">
-              Certified Hardware Gear & Robotics Kits
-            </h3>
-            <p className="text-xs dark:text-slate-400 text-slate-600 mt-0.5">
-              Tested microcontrollers, sensor shields & chassis • Over <AnimatedCounter target={1250} suffix="+" duration={1500} className="text-cyan-400 font-bold" /> kits dispatched pan-India
-            </p>
-          </div>
-          <button
-            onClick={() => onSelectTab('store')}
-            className="text-xs text-cyan-500 hover:text-cyan-400 font-mono-code font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-          >
-            <span>Full Catalog</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
-          {products.slice(0, 5).map((prod) => (
-            <div
-              key={prod.id}
-              className="rounded-2xl dark:bg-slate-900/80 bg-white border dark:border-slate-800/90 border-slate-200/90 p-3 flex flex-col justify-between hover:border-cyan-500/50 transition-all group shadow-xs hover:shadow-md hover:-translate-y-0.5"
-            >
-              <div>
-                <div
-                  onClick={() => onSelectProduct(prod)}
-                  className="relative h-32 w-full rounded-xl overflow-hidden bg-slate-950 cursor-pointer"
-                >
-                  <img
-                    src={prod.image}
-                    alt={prod.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    referrerPolicy="no-referrer"
-                  />
-                  {prod.badge && (
-                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[9px] font-mono-code font-bold bg-cyan-400 text-slate-950 shadow-xs">
-                      {prod.badge}
-                    </span>
-                  )}
-                </div>
-
-                <div className="mt-2.5">
-                  <div className="text-[10px] text-cyan-500 font-mono-code uppercase font-bold tracking-wider">{prod.category}</div>
-                  <h5
-                    onClick={() => onSelectProduct(prod)}
-                    className="font-display font-bold text-xs sm:text-sm dark:text-white text-slate-900 line-clamp-2 mt-0.5 hover:text-cyan-400 cursor-pointer transition-colors"
-                  >
-                    {prod.name}
-                  </h5>
-                </div>
-              </div>
-
-              <div className="pt-2 mt-2 border-t dark:border-slate-800 border-slate-100">
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-sm sm:text-base font-extrabold dark:text-white text-slate-900 font-mono-code">₹{prod.price}</span>
-                  <span className="text-[10px] dark:text-slate-500 text-slate-400 line-through font-mono-code">₹{prod.originalPrice}</span>
-                </div>
-
-                <div className="grid grid-cols-2 gap-1.5 mt-2">
-                  <button
-                    onClick={() => onAddToCart(prod)}
-                    title="Add to Cart"
-                    className="py-1.5 rounded-lg dark:bg-slate-800/90 bg-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 dark:text-slate-300 text-slate-700 text-[11px] font-semibold flex items-center justify-center transition-colors cursor-pointer"
-                  >
-                    <ShoppingCart className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    onClick={() => onBuyNow(prod)}
-                    className="py-1.5 rounded-lg bg-gradient-to-r from-cyan-400 to-cyan-500 hover:from-cyan-300 hover:to-cyan-400 text-slate-950 text-[11px] font-display font-black uppercase tracking-wider flex items-center justify-center transition-all cursor-pointer active:scale-95 shadow-xs"
-                  >
-                    Buy
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 8. Flagship ROBOZEST Banner */}
-      <section className="relative rounded-3xl border border-amber-500/40 bg-gradient-to-r from-amber-950/60 via-slate-900 to-slate-950 text-white p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-xl overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-amber-500/10 blur-[90px] pointer-events-none" />
-        <div className="max-w-xl relative z-10">
-          <div className="text-xs font-mono-code text-amber-400 uppercase tracking-widest flex items-center gap-1.5 font-bold">
-            <Award className="w-4 h-4 text-amber-400" />
-            <span>ANNUAL NATIONAL CHAMPIONSHIP</span>
-          </div>
-          <h4 className="font-display font-black text-xl sm:text-2xl text-white mt-1.5 tracking-tight">
-            ROBOZEST 2026 — In Honor of Dr. APJ Abdul Kalam
-          </h4>
-          <p className="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed">
-            High-octane robotics battlegrounds across <AnimatedCounter target={15} suffix="+" duration={1200} className="text-amber-400 font-bold" /> zonal arenas, autonomous line-trackers, labyrinth escape navigators, and futuristic tech exhibitions uniting <AnimatedCounter target={5000} suffix="+" duration={1500} className="text-amber-400 font-bold" /> young inventors.
+          <h2 className="font-display font-black text-2xl sm:text-3xl lg:text-4xl dark:text-white text-slate-950 tracking-tight leading-tight">
+            What We Provide to{' '}
+            <span className="text-cyan-600 dark:text-cyan-400 font-black inline-block">
+              Our Partners
+            </span>
+          </h2>
+          <p className="text-xs sm:text-sm dark:text-slate-300 text-slate-700 font-medium mt-1 max-w-2xl leading-relaxed">
+            Turnkey academic ecosystems, hands-on experiential laboratories, cutting-edge hardware, and custom digital software solutions.
           </p>
         </div>
-        <button
-          onClick={() => onSelectExtendedView('workshops')}
-          className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-display font-black text-xs sm:text-sm tracking-wide uppercase shrink-0 shadow-lg shadow-amber-500/25 active:scale-95 transition-all cursor-pointer relative z-10"
-        >
-          Explore ROBOZEST
-        </button>
+
+        {/* Section: School, College and Educational Institution */}
+        <div className="rounded-3xl dark:bg-slate-900/90 bg-slate-900/95 border-2 dark:border-cyan-500/30 border-slate-800 p-4 sm:p-7 shadow-2xl backdrop-blur-md relative overflow-hidden space-y-4 sm:space-y-5 text-white">
+          {/* Subtle Ambient Radial Glow */}
+          <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-cyan-500/10 blur-[90px] pointer-events-none" />
+
+          {/* Section Sub-heading with Real Image in the Logo - BIGGER AND CLEAN */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 pb-4 border-b border-slate-800/80">
+            <div className="flex items-center gap-3.5 sm:gap-5">
+              {/* Real Campus Image as the Section Logo - BIGGER & CLEAN */}
+              <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-2xl sm:rounded-3xl overflow-hidden shrink-0 border-2 sm:border-3 border-cyan-400 shadow-xl ring-4 ring-cyan-500/20 bg-slate-950 group">
+                <img
+                  src={schoolCollegeCampusImg}
+                  alt="School, College and Educational Institution Campus"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 ring-1 ring-inset ring-white/15 rounded-2xl sm:rounded-3xl pointer-events-none" />
+              </div>
+              <div className="min-w-0">
+                <h3 className="font-display font-black text-base sm:text-xl lg:text-2xl text-white tracking-tight leading-snug">
+                  School, College and Educational Institution
+                </h3>
+                {/* Meaningful, inspiring, and impactful description */}
+                <p className="text-xs sm:text-sm text-cyan-200/90 mt-1 line-clamp-2 leading-relaxed font-medium">
+                  Empowering academic excellence with turnkey robotics laboratories, experiential STEM curriculum, certified pedagogy & future-ready tech infrastructure.
+                </p>
+              </div>
+            </div>
+
+            {/* Offerings count badge & horizontal slider navigation arrows */}
+            <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+              <span className="px-3.5 py-1 rounded-full text-[10px] font-mono-code font-bold uppercase tracking-wider bg-slate-800 text-cyan-300 border border-slate-700 shadow-xs whitespace-nowrap">
+                5 Core Offerings
+              </span>
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => scrollPartner('left')}
+                  className="p-1.5 rounded-full bg-slate-800 hover:bg-cyan-500 text-slate-300 hover:text-slate-950 border border-slate-700/80 transition-all active:scale-90 cursor-pointer shadow-xs"
+                  title="Scroll Left"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => scrollPartner('right')}
+                  className="p-1.5 rounded-full bg-slate-800 hover:bg-cyan-500 text-slate-300 hover:text-slate-950 border border-slate-700/80 transition-all active:scale-90 cursor-pointer shadow-xs"
+                  title="Scroll Right"
+                >
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Single Horizontal Line of Oval-Shaped Small Box Options - EXACT SAME HORIZONTAL LINE ON PC & MOBILE */}
+          <div className="relative pt-1">
+            <div
+              ref={partnerScrollRef}
+              className="flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar py-2 px-1 flex-nowrap scroll-smooth touch-pan-x"
+              style={{ WebkitOverflowScrolling: 'touch' }}
+            >
+              {PARTNER_INSTITUTION_OPTIONS.map((item) => (
+                <div
+                  key={item.id}
+                  className="group relative shrink-0 flex items-center gap-2.5 sm:gap-3.5 py-2 px-3.5 sm:py-2.5 sm:px-5 rounded-full border border-cyan-500/40 bg-slate-950 hover:border-cyan-400 hover:bg-slate-900 transition-all duration-300 shadow-lg shadow-cyan-950/50 ring-1 ring-cyan-500/20 select-none cursor-pointer"
+                >
+                  {/* Real Image in the logo of each section/option - BIGGER & CLEAN */}
+                  <div className="relative w-11 h-11 sm:w-14 sm:h-14 rounded-full overflow-hidden shrink-0 border-2 border-cyan-400 shadow-md ring-2 ring-cyan-500/25 group-hover:scale-105 transition-all duration-300">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                  </div>
+
+                  {/* Clean, attractive font typography */}
+                  <span className="font-display font-black text-xs sm:text-sm md:text-base text-white group-hover:text-cyan-300 transition-colors whitespace-nowrap tracking-tight pr-1">
+                    {item.title}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Mobile swipe and scroll hint */}
+            <div className="sm:hidden flex items-center justify-between gap-1 text-[10px] font-mono-code text-cyan-400/80 font-bold uppercase tracking-wider pt-2 px-1 border-t border-slate-800/60 mt-1">
+              <span>Single horizontal line</span>
+              <span className="flex items-center gap-1">Swipe or tap arrows →</span>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* 9. IT Services Modal (Triggered by Direct Portal Option) */}

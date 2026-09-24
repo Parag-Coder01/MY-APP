@@ -63,15 +63,15 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           : 'bg-white/95 border-slate-200 shadow-sm text-slate-900'
       }`}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between gap-2.5 sm:gap-3">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-1.5 sm:gap-3">
         {/* LEFT: Three bars (hamburger menu) section JUST BESIDE the Official Logo */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           {/* THREE BARS (HAMBURGER) BUTTON */}
           <button
             onClick={onOpenMenu}
             aria-label="Open Navigation Menu"
             title="Open Navigation Menu"
-            className={`p-2 rounded-xl border transition-all active:scale-95 flex items-center justify-center ${
+            className={`p-1.5 sm:p-2 rounded-xl border transition-all active:scale-95 flex items-center justify-center shrink-0 ${
               isDark
                 ? 'text-slate-300 hover:text-white bg-slate-900/90 border-slate-800 hover:border-cyan-500/50 hover:bg-slate-850'
                 : 'text-slate-700 hover:text-slate-950 bg-slate-100 border-slate-200 hover:border-cyan-500 hover:bg-slate-200'
@@ -81,7 +81,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           </button>
 
           {/* Official Kite Robotics Logo */}
-          <div className="cursor-pointer">
+          <div className="cursor-pointer shrink-0">
             <KiteLogo
               size="sm"
               themeMode={isDark ? 'dark' : 'light'}
@@ -100,7 +100,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
         </div>
 
         {/* RIGHT: Actions with Dark/Light Mode feature at the right corner */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
           {/* In-App Mobile Install Trigger */}
           {onOpenInstallPrompt && (
             <button

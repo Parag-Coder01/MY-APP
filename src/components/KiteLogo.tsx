@@ -212,19 +212,19 @@ export const KiteLogo: React.FC<KiteLogoProps> = ({
 
   // Default: Horizontal layout (Glyph + "KITE ROBOTICS" + optional tagline)
   return (
-    <div className={`flex items-center gap-2.5 sm:gap-3 select-none ${className}`}>
+    <div className={`flex items-center gap-2 sm:gap-3 select-none shrink-0 ${className}`}>
       {OfficialGlyph}
-      <div className="flex flex-col justify-center">
-        <div className="flex items-baseline gap-1.5 leading-none">
-          <span className={`font-display font-black tracking-tight ${titleSize} ${titleClass}`}>
+      <div className="flex flex-col justify-center shrink-0">
+        <div className="flex items-baseline gap-1 sm:gap-1.5 leading-none whitespace-nowrap">
+          <span className={`font-display font-black tracking-tight whitespace-nowrap ${titleSize} ${titleClass}`}>
             KITE
           </span>
-          <span className={`font-display font-bold uppercase tracking-wider text-cyan-500 dark:text-cyan-400 ${titleSize}`}>
+          <span className={`font-display font-bold uppercase tracking-wider text-cyan-500 dark:text-cyan-400 whitespace-nowrap ${titleSize}`}>
             ROBOTICS
           </span>
         </div>
         {showTagline && (
-          <div className={`font-mono-code font-medium tracking-wider uppercase mt-1 ${subSize} ${subClass}`}>
+          <div className={`hidden sm:block font-mono-code font-medium tracking-wider uppercase mt-1 ${subSize} ${subClass} whitespace-nowrap`}>
             Robotics <span className="text-orange-500">•</span> AI <span className="text-green-500">•</span> IoT
           </div>
         )}

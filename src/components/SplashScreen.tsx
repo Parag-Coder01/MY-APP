@@ -90,9 +90,9 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
           initial={{ scale: 0.8, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-md"
+          className="p-5 sm:p-6 rounded-3xl bg-slate-900/90 border border-cyan-500/30 shadow-[0_8px_32px_rgba(0,149,218,0.3)] backdrop-blur-md flex items-center justify-center"
         >
-          <KiteLogo size="xl" showTagline={false} />
+          <KiteLogo size="lg" variant="mark" />
         </motion.div>
 
         {/* Brand Name & Taglines */}
@@ -100,10 +100,11 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
-          className="text-center mt-6"
+          className="text-center mt-5 sm:mt-6 px-4"
         >
-          <div className="font-display font-bold text-2xl md:text-3xl tracking-wide text-slate-100">
-            KITE <span className="text-cyan-400">ROBOTICS</span>
+          <div className="font-display font-black text-2xl sm:text-3xl md:text-4xl tracking-tight text-white flex items-center justify-center gap-2 whitespace-nowrap">
+            <span className="text-white drop-shadow-[0_2px_12px_rgba(255,255,255,0.4)]">KITE</span>
+            <span className="text-cyan-400 drop-shadow-[0_0_15px_rgba(6,182,212,0.6)]">ROBOTICS</span>
           </div>
           <div className="flex items-center justify-center gap-2 mt-2 text-xs md:text-sm font-mono-code text-cyan-300 tracking-widest uppercase">
             <span>Robotics</span>
