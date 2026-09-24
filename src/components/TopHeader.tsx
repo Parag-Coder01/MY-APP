@@ -25,6 +25,8 @@ interface TopHeaderProps {
   onOpenRolePicker: () => void;
   onSearchClick: () => void;
   onOpenInstallPrompt?: () => void;
+  onOpenAuthModal?: (mode?: 'login' | 'signup') => void;
+  onOpenManageProfile?: () => void;
 }
 
 export const TopHeader: React.FC<TopHeaderProps> = ({
@@ -39,6 +41,8 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
   onOpenRolePicker,
   onSearchClick,
   onOpenInstallPrompt,
+  onOpenAuthModal,
+  onOpenManageProfile,
 }) => {
   const roleBadgeColor: Record<UserRole, { bg: string; text: string; border: string }> = {
     student: { bg: 'bg-cyan-950/60', text: 'text-cyan-400', border: 'border-cyan-800/50' },
@@ -170,6 +174,41 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
               </span>
             )}
           </button>
+
+          {/* User Profile / Login Avatar Trigger */}
+          {user.id !== 'guest' ? (
+            <button
+              onClick={onOpenManageProfile || onOpenRolePicker}
+              title={`Logged in as ${user.name} (${user.role}). Click to manage profile.`}
+              className={`p-1.5 rounded-xl border flex items-center gap-1.5 transition-all cursor-pointer ${
+                isDark
+                  ? 'bg-slate-900 border-slate-700 hover:border-cyan-500'
+                  : 'bg-slate-100 border-slate-300 hover:border-cyan-500'
+              }`}
+            >
+              {user.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  className="w-6 h-6 rounded-lg object-cover"
+                />
+              ) : (
+                <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 text-slate-950 font-bold text-xs flex items-center justify-center">
+                  {user.name.charAt(0)}
+                </div>
+              )}
+              <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+            </button>
+          ) : (
+            onOpenAuthModal && (
+              <button
+                onClick={() => onOpenAuthModal('login')}
+                className="px-2.5 py-1.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold font-mono-code transition-all shadow-sm flex items-center gap-1 cursor-pointer"
+              >
+                <span>Sign In</span>
+              </button>
+            )
+          )}
 
           {/* RIGHT CORNER: DARK AND LIGHT MODE UPGRADE FEATURE */}
           <button

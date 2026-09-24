@@ -39,6 +39,136 @@ const enquiriesList: Array<{
   createdAt: string;
 }> = [];
 
+// User Account Record Interface
+interface UserRecord {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  passwordHash: string;
+  role: 'student' | 'parent' | 'school' | 'educator' | 'customer' | 'other';
+  avatar?: string;
+  institution?: string;
+  grade?: string;
+  city?: string;
+  bio?: string;
+  enrolledCoursesCount: number;
+  completedProjectsCount: number;
+  certificatesCount: number;
+  createdAt: string;
+  lastLoginAt: string;
+}
+
+// In-memory registered users database with pre-configured demo users
+const usersDb: Map<string, UserRecord> = new Map([
+  [
+    'aarav@kiterobotics.in',
+    {
+      id: 'usr_student_aarav',
+      name: 'Aarav Sharma',
+      email: 'aarav@kiterobotics.in',
+      phone: '+91 95648 66985',
+      passwordHash: 'kite123',
+      role: 'student',
+      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+      institution: 'Delhi Public School / IIT STEM Club',
+      grade: 'Class 10 — Robotics Club Lead',
+      city: 'New Delhi',
+      bio: 'High school student passionate about Autonomous Rovers, ESP32 telemetry, and Edge AI.',
+      enrolledCoursesCount: 4,
+      completedProjectsCount: 12,
+      certificatesCount: 3,
+      createdAt: '2026-01-15T09:00:00.000Z',
+      lastLoginAt: new Date().toISOString(),
+    },
+  ],
+  [
+    'principal@dps-robotics.edu.in',
+    {
+      id: 'usr_school_sharma',
+      name: 'Dr. Rajesh K. Sharma',
+      email: 'principal@dps-robotics.edu.in',
+      phone: '+91 98765 43210',
+      passwordHash: 'kite123',
+      role: 'school',
+      institution: 'DPS International ATL Innovation Lab',
+      grade: 'ATL In-Charge & Vice Principal',
+      city: 'Bengaluru',
+      bio: 'Coordinating Atal Tinkering Labs across regional campuses with KITE Robotics NEP 2020 kits.',
+      enrolledCoursesCount: 8,
+      completedProjectsCount: 35,
+      certificatesCount: 15,
+      createdAt: '2026-02-10T10:30:00.000Z',
+      lastLoginAt: new Date().toISOString(),
+    },
+  ],
+  [
+    'priya.mentor@kiterobotics.in',
+    {
+      id: 'usr_educator_priya',
+      name: 'Priya Sen',
+      email: 'priya.mentor@kiterobotics.in',
+      phone: '+91 98112 23344',
+      passwordHash: 'kite123',
+      role: 'educator',
+      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
+      institution: 'National Robotics Mentors Forum & KITE Labs',
+      grade: 'Senior STEM Robotics Trainer',
+      city: 'Kolkata',
+      bio: 'Master Trainer for Arduino, ROS, Python IoT, and National RoboFest Judge.',
+      enrolledCoursesCount: 12,
+      completedProjectsCount: 48,
+      certificatesCount: 10,
+      createdAt: '2026-01-01T08:00:00.000Z',
+      lastLoginAt: new Date().toISOString(),
+    },
+  ],
+  [
+    'maker@iotlabs.org',
+    {
+      id: 'usr_maker_kabir',
+      name: 'Kabir Mehta',
+      email: 'maker@iotlabs.org',
+      phone: '+91 97110 02288',
+      passwordHash: 'kite123',
+      role: 'customer',
+      institution: 'Indie Makers & Hardware Hacker Space',
+      grade: 'IoT & Embedded Systems Engineer',
+      city: 'Pune',
+      bio: 'Prototyping custom BLE quadrupeds and smart agriculture nodes.',
+      enrolledCoursesCount: 6,
+      completedProjectsCount: 22,
+      certificatesCount: 4,
+      createdAt: '2026-03-01T14:20:00.000Z',
+      lastLoginAt: new Date().toISOString(),
+    },
+  ],
+]);
+
+// OTP Store for SMS/Email 2FA
+const otpStore = new Map<string, { code: string; expiresAt: number }>();
+
+// Active user sessions tokens
+const sessionTokens = new Map<string, string>(); // token -> userId
+
+function sanitizeUser(u: UserRecord) {
+  const { passwordHash: _, ...safe } = u;
+  return safe;
+}
+
+function findUserByIdentifier(identifier: string): UserRecord | undefined {
+  const clean = identifier.trim().toLowerCase();
+  for (const user of usersDb.values()) {
+    if (user.email.toLowerCase() === clean) return user;
+    const cleanPhone = user.phone.replace(/[^0-9]/g, '');
+    const searchPhone = clean.replace(/[^0-9]/g, '');
+    if (searchPhone.length >= 8 && cleanPhone.endsWith(searchPhone)) {
+      return user;
+    }
+  }
+  return undefined;
+}
+
 async function startServer() {
   const app = express();
   app.use(express.json({ limit: "15mb" }));
@@ -170,6 +300,359 @@ Always be encouraging, technically accurate, clear, and structured. Format your 
   // Get enquiries for admin preview
   app.get("/api/enquiries", (_req, res) => {
     res.json(enquiriesList);
+  });
+
+  // ==========================================
+  // AUTHENTICATION & USER PROFILE BACKEND APIS
+  // ==========================================
+
+  // 1. Get Pre-configured Demo Accounts for Instant Testing
+  app.get("/api/auth/demo-accounts", (_req, res) => {
+    const list = Array.from(usersDb.values()).map((u) => ({
+      name: u.name,
+      email: u.email,
+      phone: u.phone,
+      role: u.role,
+      institution: u.institution,
+      grade: u.grade,
+      avatar: u.avatar,
+      demoPassword: u.passwordHash,
+    }));
+    res.json({ success: true, accounts: list });
+  });
+
+  // 2. Create Account (Register)
+  app.post("/api/auth/register", (req, res) => {
+    try {
+      const {
+        name,
+        email,
+        phone,
+        password,
+        role,
+        institution,
+        grade,
+        city,
+      } = req.body;
+
+      if (!name || (!email && !phone)) {
+        return res.status(400).json({
+          success: false,
+          error: "Full name and email or phone number are required.",
+        });
+      }
+
+      if (password && password.length < 6) {
+        return res.status(400).json({
+          success: false,
+          error: "Password must be at least 6 characters long.",
+        });
+      }
+
+      // Check existing user
+      if (email && findUserByIdentifier(email)) {
+        return res.status(409).json({
+          success: false,
+          error: "An account with this email address already exists. Please log in.",
+        });
+      }
+
+      if (phone && findUserByIdentifier(phone)) {
+        return res.status(409).json({
+          success: false,
+          error: "An account with this mobile number already exists. Please log in.",
+        });
+      }
+
+      const userId = "usr_" + Math.random().toString(36).substring(2, 10);
+      const userKey = (email || `${phone.replace(/[^0-9]/g, '')}@kiterobotics.user`).toLowerCase();
+
+      const newUser: UserRecord = {
+        id: userId,
+        name: name.trim(),
+        email: email ? email.trim() : `${phone.replace(/[^0-9]/g, '')}@kiterobotics.user`,
+        phone: phone ? phone.trim() : "",
+        passwordHash: password || "kite123",
+        role: role || "student",
+        institution: institution || (role === "school" ? "ATL Innovation School" : "STEM Institute"),
+        grade: grade || (role === "student" ? "Standard STEM Learner" : "Instructor"),
+        city: city || "India",
+        enrolledCoursesCount: 1,
+        completedProjectsCount: 0,
+        certificatesCount: 0,
+        createdAt: new Date().toISOString(),
+        lastLoginAt: new Date().toISOString(),
+      };
+
+      usersDb.set(userKey, newUser);
+
+      // Generate session token
+      const token = `kite_sess_${userId}_${Date.now()}`;
+      sessionTokens.set(token, userId);
+
+      res.status(201).json({
+        success: true,
+        message: `Welcome to KITE ROBOTICS, ${newUser.name}! Your account has been created.`,
+        token,
+        user: sanitizeUser(newUser),
+      });
+    } catch (err: any) {
+      console.error("Registration error:", err);
+      res.status(500).json({ success: false, error: "Internal server error creating account." });
+    }
+  });
+
+  // 3. Login with Credentials or OTP
+  app.post("/api/auth/login", (req, res) => {
+    try {
+      const { identifier, password, phone, otp } = req.body;
+
+      // OTP Verification Login
+      if (phone && otp) {
+        const stored = otpStore.get(phone.trim());
+        const isMasterOtp = otp.trim() === "582419";
+        const isValidStoredOtp = stored && stored.code === otp.trim() && stored.expiresAt > Date.now();
+
+        if (!isMasterOtp && !isValidStoredOtp) {
+          return res.status(401).json({
+            success: false,
+            error: "Invalid or expired OTP. Please use code 582419 or request a new code.",
+          });
+        }
+
+        let user = findUserByIdentifier(phone);
+        if (!user) {
+          // Auto create account for OTP verified phone
+          const userId = "usr_" + Math.random().toString(36).substring(2, 10);
+          user = {
+            id: userId,
+            name: `Robotics Explorer (${phone.slice(-4)})`,
+            email: `${phone.replace(/[^0-9]/g, '')}@kiterobotics.user`,
+            phone: phone.trim(),
+            passwordHash: "kite123",
+            role: "student",
+            institution: "KITE Innovation Club",
+            grade: "STEM Maker",
+            city: "India",
+            enrolledCoursesCount: 1,
+            completedProjectsCount: 1,
+            certificatesCount: 0,
+            createdAt: new Date().toISOString(),
+            lastLoginAt: new Date().toISOString(),
+          };
+          usersDb.set(user.email.toLowerCase(), user);
+        } else {
+          user.lastLoginAt = new Date().toISOString();
+        }
+
+        const token = `kite_sess_${user.id}_${Date.now()}`;
+        sessionTokens.set(token, user.id);
+
+        return res.json({
+          success: true,
+          message: `Logged in successfully as ${user.name}`,
+          token,
+          user: sanitizeUser(user),
+        });
+      }
+
+      // Password Login
+      if (!identifier || !password) {
+        return res.status(400).json({
+          success: false,
+          error: "Email or phone and password are required.",
+        });
+      }
+
+      const user = findUserByIdentifier(identifier);
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          error: "No account found with this email or phone. Please create an account.",
+        });
+      }
+
+      // Check password (allows standard test password kite123 or match)
+      if (user.passwordHash !== password && password !== "kite123") {
+        return res.status(401).json({
+          success: false,
+          error: "Incorrect password. Default test password is 'kite123'.",
+        });
+      }
+
+      user.lastLoginAt = new Date().toISOString();
+      const token = `kite_sess_${user.id}_${Date.now()}`;
+      sessionTokens.set(token, user.id);
+
+      res.json({
+        success: true,
+        message: `Welcome back, ${user.name}!`,
+        token,
+        user: sanitizeUser(user),
+      });
+    } catch (err: any) {
+      console.error("Login error:", err);
+      res.status(500).json({ success: false, error: "Internal server error during login." });
+    }
+  });
+
+  // 4. Send OTP (Phone or Email)
+  app.post("/api/auth/send-otp", (req, res) => {
+    const { identifier } = req.body;
+    if (!identifier) {
+      return res.status(400).json({ success: false, error: "Identifier (phone or email) is required." });
+    }
+
+    const clean = identifier.trim();
+    // Default 582419 for instantaneous automated testing
+    const code = "582419";
+    otpStore.set(clean, {
+      code,
+      expiresAt: Date.now() + 5 * 60 * 1000, // 5 minutes
+    });
+
+    res.json({
+      success: true,
+      message: `A 6-digit OTP has been sent to ${clean}. (Demo Code: 582419)`,
+      demoOtp: "582419",
+    });
+  });
+
+  // 5. Verify OTP
+  app.post("/api/auth/verify-otp", (req, res) => {
+    const { identifier, code } = req.body;
+    if (!identifier || !code) {
+      return res.status(400).json({ success: false, error: "Identifier and OTP code are required." });
+    }
+
+    const clean = identifier.trim();
+    const stored = otpStore.get(clean);
+    const isMasterOtp = code.trim() === "582419";
+    const isValid = isMasterOtp || (stored && stored.code === code.trim() && stored.expiresAt > Date.now());
+
+    if (!isValid) {
+      return res.status(400).json({ success: false, error: "Invalid or expired OTP code." });
+    }
+
+    let user = findUserByIdentifier(clean);
+    if (!user) {
+      return res.json({
+        success: true,
+        verified: true,
+        needsRegistration: true,
+        message: "Phone verified! Please complete your name and role to register.",
+      });
+    }
+
+    user.lastLoginAt = new Date().toISOString();
+    const token = `kite_sess_${user.id}_${Date.now()}`;
+    sessionTokens.set(token, user.id);
+
+    res.json({
+      success: true,
+      verified: true,
+      token,
+      user: sanitizeUser(user),
+    });
+  });
+
+  // 6. Current User Session Check
+  app.get("/api/auth/me", (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ success: false, error: "Not authenticated" });
+    }
+
+    const token = authHeader.replace("Bearer ", "").trim();
+    const userId = sessionTokens.get(token);
+    if (!userId) {
+      // Return default first user for graceful demo fallback if token expired
+      const defaultUser = usersDb.get("aarav@kiterobotics.in")!;
+      return res.json({ success: true, user: sanitizeUser(defaultUser) });
+    }
+
+    const user = Array.from(usersDb.values()).find((u) => u.id === userId);
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User session expired." });
+    }
+
+    res.json({ success: true, user: sanitizeUser(user) });
+  });
+
+  // 7. Update User Profile
+  app.put("/api/auth/profile", (req, res) => {
+    try {
+      const {
+        id,
+        name,
+        email,
+        phone,
+        role,
+        institution,
+        grade,
+        city,
+        bio,
+        avatar,
+      } = req.body;
+
+      // Find user by ID or by email
+      let user = Array.from(usersDb.values()).find((u) => u.id === id);
+      if (!user && email) {
+        user = findUserByIdentifier(email);
+      }
+
+      if (!user) {
+        // Create user record if updating fresh
+        const newId = id || "usr_" + Math.random().toString(36).substring(2, 10);
+        user = {
+          id: newId,
+          name: name || "Robotics Innovator",
+          email: email || "innovator@kiterobotics.in",
+          phone: phone || "+91 95648 66985",
+          passwordHash: "kite123",
+          role: role || "student",
+          institution: institution || "Delhi STEM Hub",
+          grade: grade || "Level 1",
+          city: city || "India",
+          bio: bio || "",
+          avatar,
+          enrolledCoursesCount: 2,
+          completedProjectsCount: 1,
+          certificatesCount: 1,
+          createdAt: new Date().toISOString(),
+          lastLoginAt: new Date().toISOString(),
+        };
+        usersDb.set(user.email.toLowerCase(), user);
+      } else {
+        if (name !== undefined) user.name = name.trim();
+        if (role !== undefined) user.role = role;
+        if (institution !== undefined) user.institution = institution.trim();
+        if (grade !== undefined) user.grade = grade.trim();
+        if (city !== undefined) user.city = city.trim();
+        if (bio !== undefined) user.bio = bio.trim();
+        if (phone !== undefined) user.phone = phone.trim();
+        if (avatar !== undefined) user.avatar = avatar;
+      }
+
+      res.json({
+        success: true,
+        message: "Profile updated successfully.",
+        user: sanitizeUser(user),
+      });
+    } catch (err: any) {
+      console.error("Profile update error:", err);
+      res.status(500).json({ success: false, error: "Failed to update profile." });
+    }
+  });
+
+  // 8. Logout
+  app.post("/api/auth/logout", (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      const token = authHeader.replace("Bearer ", "").trim();
+      sessionTokens.delete(token);
+    }
+    res.json({ success: true, message: "Logged out safely." });
   });
 
   // Vite middleware in dev mode vs static serving in production

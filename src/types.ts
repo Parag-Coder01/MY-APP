@@ -207,4 +207,8 @@ export type ExtendedView =
   | 'ebooks'
   | 'careers'
   | 'it-services'
+  | 'drone-technology'
+  | 'login'
+  | 'register'
+  | 'manage-profile'
   | null;

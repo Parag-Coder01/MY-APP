@@ -203,14 +203,14 @@ export const ITServicesView: React.FC<ITServicesViewProps> = ({
             <span>KITE IT SOLUTIONS & DIGITAL ENGINEERING</span>
           </div>
 
-          <h1 className="font-display font-extrabold text-2xl sm:text-4xl dark:text-white text-slate-900 tracking-tight leading-tight">
+          <h1 className="font-display font-black text-2xl sm:text-4xl dark:text-white text-slate-900 tracking-tight leading-tight">
             Full-Spectrum IT Services: <br className="hidden sm:inline" />
-            <span className="bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-400 bg-clip-text text-transparent">
               Website, App, ERP & LMS
             </span>
           </h1>
 
-          <p className="dark:text-slate-300 text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
+          <p className="dark:text-slate-300 text-slate-600 text-sm sm:text-base mt-3 leading-relaxed font-normal">
             Engineering robust digital infrastructure for academic institutions, innovation hubs, and enterprises. From responsive web portals and native IoT hardware apps to custom ERPs and STEM Learning Management Systems.
           </p>
 
@@ -236,7 +236,7 @@ export const ITServicesView: React.FC<ITServicesViewProps> = ({
       <section className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 className="font-display font-bold text-lg sm:text-xl dark:text-white text-slate-900">
+            <h2 className="font-display font-semibold text-lg sm:text-xl dark:text-white text-slate-900">
               Our Core IT Services
             </h2>
             <p className="text-xs dark:text-slate-400 text-slate-600">
@@ -248,7 +248,7 @@ export const ITServicesView: React.FC<ITServicesViewProps> = ({
           <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-2xl dark:bg-slate-900/90 bg-slate-100 border dark:border-slate-800 border-slate-200">
             <button
               onClick={() => setActiveTab('all')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                 activeTab === 'all'
                   ? 'bg-cyan-500 text-slate-950 shadow-sm'
                   : 'dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white'
@@ -258,7 +258,7 @@ export const ITServicesView: React.FC<ITServicesViewProps> = ({
             </button>
             <button
               onClick={() => setActiveTab('website')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                 activeTab === 'website'
                   ? 'bg-cyan-500 text-slate-950 shadow-sm'
                   : 'dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white'
@@ -269,7 +269,7 @@ export const ITServicesView: React.FC<ITServicesViewProps> = ({
             </button>
             <button
               onClick={() => setActiveTab('app')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                 activeTab === 'app'
                   ? 'bg-cyan-500 text-slate-950 shadow-sm'
                   : 'dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white'
@@ -280,7 +280,7 @@ export const ITServicesView: React.FC<ITServicesViewProps> = ({
             </button>
             <button
               onClick={() => setActiveTab('erp')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                 activeTab === 'erp'
                   ? 'bg-cyan-500 text-slate-950 shadow-sm'
                   : 'dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white'
@@ -291,7 +291,7 @@ export const ITServicesView: React.FC<ITServicesViewProps> = ({
             </button>
             <button
               onClick={() => setActiveTab('lms')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                 activeTab === 'lms'
                   ? 'bg-cyan-500 text-slate-950 shadow-sm'
                   : 'dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white'
@@ -320,25 +320,25 @@ export const ITServicesView: React.FC<ITServicesViewProps> = ({
                   <div className="p-3 rounded-2xl dark:bg-slate-950 bg-slate-100 border dark:border-slate-800 border-slate-200 group-hover:scale-105 transition-transform">
                     {srv.icon}
                   </div>
-                  <span className="text-[11px] font-mono-code font-bold px-2.5 py-1 rounded-full dark:bg-slate-800 bg-slate-100 dark:text-cyan-300 text-cyan-800 border dark:border-slate-700 border-slate-200">
+                  <span className="text-[11px] font-mono-code font-medium px-2.5 py-1 rounded-full dark:bg-slate-800 bg-slate-100 dark:text-cyan-300 text-cyan-800 border dark:border-slate-700 border-slate-200">
                     {srv.badge}
                   </span>
                 </div>
 
-                <h3 className="font-display font-extrabold text-xl dark:text-white text-slate-900">
+                <h3 className="font-display font-semibold text-xl dark:text-white text-slate-900">
                   {srv.name}
                 </h3>
                 <div className="text-xs font-mono-code dark:text-cyan-400 text-cyan-600 mt-0.5">
                   {srv.tagline}
                 </div>
 
-                <p className="text-xs sm:text-sm dark:text-slate-300 text-slate-600 mt-2.5 leading-relaxed">
+                <p className="text-xs sm:text-sm dark:text-slate-300 text-slate-600 mt-2.5 leading-relaxed font-normal">
                   {srv.summary}
                 </p>
 
                 {/* Key Features */}
                 <div className="mt-5 space-y-2">
-                  <div className="text-[11px] font-mono-code uppercase tracking-wider dark:text-slate-400 text-slate-500 font-bold">
+                  <div className="text-[11px] font-mono-code uppercase tracking-wider dark:text-slate-400 text-slate-500 font-medium">
                     Key Capabilities
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -356,7 +356,7 @@ export const ITServicesView: React.FC<ITServicesViewProps> = ({
 
                 {/* Tech Stack Chips */}
                 <div className="mt-5 pt-4 border-t dark:border-slate-800 border-slate-100">
-                  <div className="text-[11px] font-mono-code uppercase tracking-wider dark:text-slate-400 text-slate-500 font-bold mb-2">
+                  <div className="text-[11px] font-mono-code uppercase tracking-wider dark:text-slate-400 text-slate-500 font-medium mb-2">
                     Technology Stack
                   </div>
                   <div className="flex flex-wrap gap-1.5">
@@ -376,7 +376,7 @@ export const ITServicesView: React.FC<ITServicesViewProps> = ({
               <div className="mt-6 pt-4 border-t dark:border-slate-800 border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2 text-xs font-mono-code dark:text-slate-400 text-slate-500">
                   <Clock className="w-4 h-4 text-cyan-500" />
-                  <span>Timeline: <strong className="dark:text-slate-200 text-slate-800">{srv.timeline}</strong></span>
+                  <span>Timeline: <strong className="dark:text-slate-200 text-slate-800 font-medium">{srv.timeline}</strong></span>
                 </div>
 
                 <button
@@ -385,7 +385,7 @@ export const ITServicesView: React.FC<ITServicesViewProps> = ({
                     const el = document.getElementById('it-quote-form');
                     if (el) el.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-sm cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-medium text-xs flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-sm cursor-pointer"
                 >
                   <span>Request Quote for {srv.name.split(' ')[0]}</span>
                   <ArrowRight className="w-3.5 h-3.5" />

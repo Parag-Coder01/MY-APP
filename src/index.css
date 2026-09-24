@@ -23,12 +23,95 @@
   color: #0f172a;
 }
 
+.font-calibri-bold-italic {
+  font-family: 'Calibri', 'Carlito', 'Segoe UI', system-ui, sans-serif;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: -0.01em;
+}
+
+.font-calibri-heavy-italic {
+  font-family: 'Calibri', 'Carlito', 'Segoe UI', system-ui, sans-serif;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: -0.01em;
+  -webkit-text-stroke: 0.4px currentColor;
+}
+
 .font-display {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-tagline {
+  font-family: 'Outfit', 'Urbanist', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-urbanist {
+  font-family: 'Urbanist', 'Outfit', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-outfit {
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: -0.015em;
+}
+
+.font-tech {
   font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: -0.015em;
 }
 
 .font-mono-code {
   font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -0.02em;
+}
+
+/* Premium ambient glass morphism and glow effects */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-panel-hover:hover {
+  border-color: rgba(6, 182, 212, 0.35);
+  box-shadow: 0 10px 30px -10px rgba(6, 182, 212, 0.2);
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 24px rgba(6, 182, 212, 0.45);
+}
+
+.text-glow-amber {
+  text-shadow: 0 0 24px rgba(245, 158, 11, 0.45);
+}
+
+@keyframes shimmerSweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+.animate-shimmer-sweep {
+  animation: shimmerSweep 3.5s infinite linear;
+}
+
+@keyframes horizontalShineSweep {
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+  }
+  35%, 100% {
+    transform: translateX(250%) skewX(-20deg);
+  }
+}
+
+.animate-horizontal-shine {
+  animation: horizontalShineSweep 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 /* Custom subtle circuit grid */

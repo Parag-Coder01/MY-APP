@@ -14,6 +14,7 @@ interface ProfileViewProps {
   onOpenQuickMenu: () => void;
   onSelectExtendedView: (view: ExtendedView) => void;
   onOpenInstallPrompt?: () => void;
+  onOpenManageProfile?: () => void;
 }
 
 export const ProfileView: React.FC<ProfileViewProps> = ({
@@ -27,6 +28,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   onOpenQuickMenu,
   onSelectExtendedView,
   onOpenInstallPrompt,
+  onOpenManageProfile,
 }) => {
   const [profileTab, setProfileTab] = useState<'overview' | 'courses' | 'orders' | 'settings'>('overview');
 
@@ -69,17 +71,26 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
           </div>
         </div>
 
-        <div className="flex sm:flex-col gap-2">
+        <div className="flex flex-wrap sm:flex-col gap-2">
+          {onOpenManageProfile && (
+            <button
+              onClick={onOpenManageProfile}
+              className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold flex items-center justify-center gap-1.5 shadow-md shadow-cyan-500/20 transition-all cursor-pointer"
+            >
+              <Settings className="w-3.5 h-3.5" />
+              <span>Manage Profile</span>
+            </button>
+          )}
           <button
             onClick={onOpenLoginModal}
-            className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 flex items-center justify-center gap-1.5 transition-colors"
+            className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
           >
             <Edit3 className="w-3.5 h-3.5" />
             <span>Switch Account</span>
           </button>
           <button
             onClick={onOpenStudentDashboard}
-            className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500 text-cyan-400 hover:text-slate-950 text-xs font-bold transition-all"
+            className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500 text-cyan-400 hover:text-slate-950 text-xs font-bold transition-all cursor-pointer"
           >
             Innovation Dossier
           </button>

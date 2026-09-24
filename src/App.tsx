@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { SplashScreen } from './components/SplashScreen';
 import { OnboardingModal } from './components/OnboardingModal';
 import { AuthModal } from './components/AuthModal';
+import { ManageProfileModal } from './components/ManageProfileModal';
 import { TopHeader } from './components/TopHeader';
 import { BottomNavigation } from './components/BottomNavigation';
 import { QuickMenuDrawer } from './components/QuickMenuDrawer';
@@ -61,8 +62,14 @@ function AppContent() {
   const [currentTab, setCurrentTab] = useState<MainTab>('home');
   const [extendedView, setExtendedView] = useState<ExtendedView | null>(null);
 
-  // User & Data states
-  const [user, setUser] = useState<UserProfile>(MOCK_USER);
+  // User & Data states with persistent local session
+  const [user, setUser] = useState<UserProfile>(() => {
+    try {
+      const saved = localStorage.getItem('kite_user_session');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return MOCK_USER;
+  });
   const [courses, setCourses] = useState<Course[]>(MOCK_COURSES);
   const [products] = useState<Product[]>(MOCK_PRODUCTS);
   const [workshops] = useState(MOCK_WORKSHOPS);
@@ -73,8 +80,10 @@ function AppContent() {
     { product: MOCK_PRODUCTS[0], quantity: 1 },
   ]);
 
-  // Modals
+  // Modals & Auth State
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authModalInitialMode, setAuthModalInitialMode] = useState<'login' | 'signup'>('login');
+  const [showManageProfileModal, setShowManageProfileModal] = useState(false);
   const [showQuickMenu, setShowQuickMenu] = useState(false);
   const [showCartDrawer, setShowCartDrawer] = useState(false);
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
@@ -88,8 +97,51 @@ function AppContent() {
   // Login & Logout management
   const isLoggedIn = user.id !== 'guest';
 
+  const handleLoginSuccess = (loggedUser: UserProfile) => {
+    setUser(loggedUser);
+    try {
+      localStorage.setItem('kite_user_session', JSON.stringify(loggedUser));
+    } catch {}
+    setShowAuthModal(false);
+    setExtendedView(null);
+    setNotifications((prev) => [
+      {
+        id: 'login-' + Date.now(),
+        title: `Welcome, ${loggedUser.name}!`,
+        message: `Successfully authenticated as ${loggedUser.role}. Your STEM curriculum and kits are synchronized.`,
+        time: 'Just now',
+        timestamp: 'Just now',
+        read: false,
+        type: 'system',
+        category: 'announcements',
+      },
+      ...prev,
+    ]);
+  };
+
+  const handleUpdateUser = (updated: UserProfile) => {
+    setUser(updated);
+    try {
+      localStorage.setItem('kite_user_session', JSON.stringify(updated));
+    } catch {}
+    setNotifications((prev) => [
+      {
+        id: 'prof-' + Date.now(),
+        title: 'Profile Updated',
+        message: 'Your personal, institutional, and role credentials have been saved.',
+        time: 'Just now',
+        timestamp: 'Just now',
+        read: false,
+        type: 'system',
+        category: 'announcements',
+      },
+      ...prev,
+    ]);
+  };
+
   const handleLogout = () => {
-    setUser({
+    fetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
+    const guestUser: UserProfile = {
       id: 'guest',
       name: 'Guest Explorer',
       email: '',
@@ -98,12 +150,16 @@ function AppContent() {
       enrolledCoursesCount: 0,
       completedProjectsCount: 0,
       certificatesCount: 0,
-    });
+    };
+    setUser(guestUser);
+    try {
+      localStorage.removeItem('kite_user_session');
+    } catch {}
     setNotifications((prev) => [
       {
         id: 'logout-' + Date.now(),
         title: 'Logged Out',
-        message: 'You have been safely signed out. Click Login to sign back in.',
+        message: 'You have been safely signed out. Click Sign In anytime to access your account.',
         time: 'Just now',
         timestamp: 'Just now',
         read: false,
@@ -255,7 +311,15 @@ function AppContent() {
           onOpenMenu={() => setShowQuickMenu(true)}
           onOpenCart={() => setShowCartDrawer(true)}
           onOpenNotifs={() => setShowNotificationsModal(true)}
-          onOpenRolePicker={() => setShowAuthModal(true)}
+          onOpenRolePicker={() => {
+            setAuthModalInitialMode('login');
+            setShowAuthModal(true);
+          }}
+          onOpenAuthModal={(mode) => {
+            setAuthModalInitialMode(mode || 'login');
+            setShowAuthModal(true);
+          }}
+          onOpenManageProfile={() => setShowManageProfileModal(true)}
           onSearchClick={() => handleSelectTab('learn')}
           onOpenInstallPrompt={() => setShowInstallPrompt(true)}
         />
@@ -296,6 +360,32 @@ function AppContent() {
         {/* Main Content Area */}
         <main className="flex-1 w-full max-w-7xl mx-auto px-3.5 sm:px-6 pt-4 sm:pt-6 pb-20">
           {/* Render Extended Views */}
+          {extendedView === 'login' && (
+            <AuthModal
+              isOpen={true}
+              onClose={() => setExtendedView(null)}
+              currentUser={user}
+              initialMode="login"
+              onLoginSuccess={handleLoginSuccess}
+            />
+          )}
+          {extendedView === 'register' && (
+            <AuthModal
+              isOpen={true}
+              onClose={() => setExtendedView(null)}
+              currentUser={user}
+              initialMode="signup"
+              onLoginSuccess={handleLoginSuccess}
+            />
+          )}
+          {extendedView === 'manage-profile' && (
+            <ManageProfileModal
+              isOpen={true}
+              onClose={() => setExtendedView(null)}
+              user={user}
+              onUpdateUser={handleUpdateUser}
+            />
+          )}
           {extendedView === 'curriculum' && (
             <CurriculumView />
           )}
@@ -325,6 +415,9 @@ function AppContent() {
           )}
           {extendedView === 'it-services' && (
             <ITServicesView onContactClick={() => setExtendedView('contact')} />
+          )}
+          {extendedView === 'drone-technology' && (
+            <WorkshopsView workshops={workshops} />
           )}
 
           {/* Render Primary Tabs when no Extended View is active */}
@@ -370,8 +463,15 @@ function AppContent() {
                   user={user}
                   courses={courses}
                   ordersCount={1}
-                  onOpenRolePicker={() => setShowAuthModal(true)}
-                  onOpenLoginModal={() => setShowAuthModal(true)}
+                  onOpenRolePicker={() => {
+                    setAuthModalInitialMode('login');
+                    setShowAuthModal(true);
+                  }}
+                  onOpenLoginModal={() => {
+                    setAuthModalInitialMode('login');
+                    setShowAuthModal(true);
+                  }}
+                  onOpenManageProfile={() => setShowManageProfileModal(true)}
                   onOpenCertificates={() => setExtendedView('certificates')}
                   onOpenStudentDashboard={() => setShowStudentDashboard(true)}
                   onOpenQuickMenu={() => setShowQuickMenu(true)}
@@ -396,11 +496,16 @@ function AppContent() {
           onClose={() => setShowQuickMenu(false)}
           user={user}
           isLoggedIn={isLoggedIn}
-          onLogin={() => {
+          onLogin={(mode) => {
             setShowQuickMenu(false);
+            setAuthModalInitialMode(mode || 'login');
             setShowAuthModal(true);
           }}
           onLogout={handleLogout}
+          onOpenManageProfile={() => {
+            setShowQuickMenu(false);
+            setShowManageProfileModal(true);
+          }}
           onSelectExtendedView={handleSelectExtendedView}
           onSelectTab={handleSelectTab}
           isDark={isDark}
@@ -408,6 +513,10 @@ function AppContent() {
           onOpenInstallPrompt={() => {
             setShowQuickMenu(false);
             setShowInstallPrompt(true);
+          }}
+          onOpenStudentDashboard={() => {
+            setShowQuickMenu(false);
+            setShowStudentDashboard(true);
           }}
         />
 
@@ -428,6 +537,23 @@ function AppContent() {
           cartItems={cartItems}
           user={user}
           onOrderSuccess={handleOrderSuccess}
+        />
+
+        {/* Authentication Modal (Sign In & Create Account) */}
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          currentUser={user}
+          initialMode={authModalInitialMode}
+          onLoginSuccess={handleLoginSuccess}
+        />
+
+        {/* Manage Profile & Credentials Modal */}
+        <ManageProfileModal
+          isOpen={showManageProfileModal}
+          onClose={() => setShowManageProfileModal(false)}
+          user={user}
+          onUpdateUser={handleUpdateUser}
         />
 
         {/* Course Detail Modal */}
