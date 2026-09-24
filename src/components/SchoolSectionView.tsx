@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { School, CheckCircle2, Send, Download, Sparkles, Cpu, Award, Users, BookOpen, Wrench, ShieldCheck, ArrowRight } from 'lucide-react';
 import { COMPANY_INFO } from '../data/mockData';
+import { generateAndDownloadKitePdf } from '../utils/pdfGenerator';
 
 export const SchoolSectionView: React.FC = () => {
   const [schoolName, setSchoolName] = useState('');
@@ -104,12 +105,13 @@ export const SchoolSectionView: React.FC = () => {
             <button
               onClick={() => {
                 setDownloadNotice(true);
-                setTimeout(() => setDownloadNotice(false), 3000);
+                generateAndDownloadKitePdf();
+                setTimeout(() => setDownloadNotice(false), 2000);
               }}
-              className="px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs sm:text-sm font-medium flex items-center gap-2 transition-colors relative"
+              className="px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs sm:text-sm font-medium flex items-center gap-2 transition-colors relative cursor-pointer"
             >
               <Download className="w-4 h-4 text-cyan-400" />
-              <span>{downloadNotice ? 'Downloading Brochure...' : 'Curriculum Brochure'}</span>
+              <span>{downloadNotice ? 'Downloading PDF...' : 'Hardware & Kits PDF'}</span>
             </button>
           </div>
         </div>

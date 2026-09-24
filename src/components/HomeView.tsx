@@ -38,6 +38,7 @@ import { Course, Product, UserProfile, MainTab, ExtendedView } from '../types';
 import { COMPANY_INFO } from '../data/mockData';
 import { AnimatedCounter } from './AnimatedCounter';
 import { PartnerCoursesExpanded } from './PartnerCoursesExpanded';
+import { StemKitsPdfViewer } from './StemKitsPdfViewer';
 
 import heroRobotAi from '../assets/images/hero_robot_ai_1790142280343.jpg';
 import heroKitsParts from '../assets/images/hero_kits_parts_1790142293541.jpg';
@@ -318,6 +319,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 }) => {
   const [showITServicesModal, setShowITServicesModal] = useState(false);
   const [isCoursesExpanded, setIsCoursesExpanded] = useState(false);
+  const [isStemKitsExpanded, setIsStemKitsExpanded] = useState(false);
 
   // 0. Auto-swiping Welcome Strip Slide (stays compact within the white strip region)
   const [activeWelcomeIndex, setActiveWelcomeIndex] = useState(0);
@@ -1040,7 +1042,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
             >
               {PARTNER_INSTITUTION_OPTIONS.map((item) => {
                 const isCourses = item.id === 'courses';
-                const isActive = isCourses && isCoursesExpanded;
+                const isStemKits = item.id === 'stem-kits';
+                const isExpandable = isCourses || isStemKits;
+                const isActive = (isCourses && isCoursesExpanded) || (isStemKits && isStemKitsExpanded);
 
                 return (
                   <button
@@ -1050,6 +1054,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
                       if (isCourses) {
                         // Expand in-place, DO NOT redirect to another page
                         setIsCoursesExpanded((prev) => !prev);
+                        setIsStemKitsExpanded(false);
+                      } else if (isStemKits) {
+                        // Expand in-place, display PDF content & download option
+                        setIsStemKitsExpanded((prev) => !prev);
+                        setIsCoursesExpanded(false);
                       } else if (item.id === 'it-services') {
                         setShowITServicesModal(true);
                       }
@@ -1072,13 +1081,13 @@ export const HomeView: React.FC<HomeViewProps> = ({
                     {/* Clean, attractive font typography */}
                     <span className="font-display font-black text-xs sm:text-sm md:text-base text-white group-hover:text-cyan-300 transition-colors whitespace-nowrap tracking-tight pr-1 flex items-center gap-2">
                       <span>{item.title}</span>
-                      {isCourses && (
+                      {isExpandable && (
                         <span className={`text-[10px] font-mono-code font-bold px-2 py-0.5 rounded-full transition-all ${
                           isActive
                             ? 'bg-cyan-400 text-slate-950 shadow-xs'
                             : 'bg-slate-800 text-cyan-300 border border-slate-700'
                         }`}>
-                          {isActive ? 'Hide ▲' : 'Explore ▼'}
+                          {isActive ? 'Hide ▲' : isCourses ? 'Explore ▼' : 'View PDF ▼'}
                         </span>
                       )}
                     </span>
@@ -1098,6 +1107,16 @@ export const HomeView: React.FC<HomeViewProps> = ({
           <AnimatePresence>
             {isCoursesExpanded && (
               <PartnerCoursesExpanded onClose={() => setIsCoursesExpanded(false)} />
+            )}
+          </AnimatePresence>
+
+          {/* Smooth Expanded Box for STEM Kits PDF Content & Downloader */}
+          <AnimatePresence>
+            {isStemKitsExpanded && (
+              <StemKitsPdfViewer
+                onClose={() => setIsStemKitsExpanded(false)}
+                onOpenContact={() => onSelectExtendedView('contact')}
+              />
             )}
           </AnimatePresence>
         </div>
