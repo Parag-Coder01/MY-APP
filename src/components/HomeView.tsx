@@ -39,6 +39,9 @@ import { COMPANY_INFO } from '../data/mockData';
 import { AnimatedCounter } from './AnimatedCounter';
 import { PartnerCoursesExpanded } from './PartnerCoursesExpanded';
 import { StemKitsPdfViewer } from './StemKitsPdfViewer';
+import { PartnerITServicesExpanded } from './PartnerITServicesExpanded';
+import { PartnerBooksExpanded } from './PartnerBooksExpanded';
+import { PartnerAdminItemsExpanded } from './PartnerAdminItemsExpanded';
 
 import heroRobotAi from '../assets/images/hero_robot_ai_1790142280343.jpg';
 import heroKitsParts from '../assets/images/hero_kits_parts_1790142293541.jpg';
@@ -320,6 +323,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
   const [showITServicesModal, setShowITServicesModal] = useState(false);
   const [isCoursesExpanded, setIsCoursesExpanded] = useState(false);
   const [isStemKitsExpanded, setIsStemKitsExpanded] = useState(false);
+  const [isITServicesExpanded, setIsITServicesExpanded] = useState(false);
+  const [isBooksExpanded, setIsBooksExpanded] = useState(false);
+  const [isAdminItemsExpanded, setIsAdminItemsExpanded] = useState(false);
 
   // 0. Auto-swiping Welcome Strip Slide (stays compact within the white strip region)
   const [activeWelcomeIndex, setActiveWelcomeIndex] = useState(0);
@@ -1043,8 +1049,16 @@ export const HomeView: React.FC<HomeViewProps> = ({
               {PARTNER_INSTITUTION_OPTIONS.map((item) => {
                 const isCourses = item.id === 'courses';
                 const isStemKits = item.id === 'stem-kits';
-                const isExpandable = isCourses || isStemKits;
-                const isActive = (isCourses && isCoursesExpanded) || (isStemKits && isStemKitsExpanded);
+                const isITServices = item.id === 'it-services';
+                const isBooks = item.id === 'books';
+                const isAdminItems = item.id === 'admin-items';
+                const isExpandable = isCourses || isStemKits || isITServices || isBooks || isAdminItems;
+                const isActive =
+                  (isCourses && isCoursesExpanded) ||
+                  (isStemKits && isStemKitsExpanded) ||
+                  (isITServices && isITServicesExpanded) ||
+                  (isBooks && isBooksExpanded) ||
+                  (isAdminItems && isAdminItemsExpanded);
 
                 return (
                   <button
@@ -1055,12 +1069,37 @@ export const HomeView: React.FC<HomeViewProps> = ({
                         // Expand in-place, DO NOT redirect to another page
                         setIsCoursesExpanded((prev) => !prev);
                         setIsStemKitsExpanded(false);
+                        setIsITServicesExpanded(false);
+                        setIsBooksExpanded(false);
+                        setIsAdminItemsExpanded(false);
                       } else if (isStemKits) {
                         // Expand in-place, display PDF content & download option
                         setIsStemKitsExpanded((prev) => !prev);
                         setIsCoursesExpanded(false);
-                      } else if (item.id === 'it-services') {
-                        setShowITServicesModal(true);
+                        setIsITServicesExpanded(false);
+                        setIsBooksExpanded(false);
+                        setIsAdminItemsExpanded(false);
+                      } else if (isITServices) {
+                        // Expand in-place, display Website, APP, LMS, ERP
+                        setIsITServicesExpanded((prev) => !prev);
+                        setIsCoursesExpanded(false);
+                        setIsStemKitsExpanded(false);
+                        setIsBooksExpanded(false);
+                        setIsAdminItemsExpanded(false);
+                      } else if (isBooks) {
+                        // Expand in-place, display AI & Robotics Book, AI/ML Guidebook, Assignments, Notes & D.P.P, E-Books, Formulae Sets
+                        setIsBooksExpanded((prev) => !prev);
+                        setIsCoursesExpanded(false);
+                        setIsStemKitsExpanded(false);
+                        setIsITServicesExpanded(false);
+                        setIsAdminItemsExpanded(false);
+                      } else if (isAdminItems) {
+                        // Expand in-place, display ID Cards, Tshirt, Merchandise, Batches
+                        setIsAdminItemsExpanded((prev) => !prev);
+                        setIsCoursesExpanded(false);
+                        setIsStemKitsExpanded(false);
+                        setIsITServicesExpanded(false);
+                        setIsBooksExpanded(false);
                       }
                     }}
                     className={`group relative shrink-0 flex items-center gap-2.5 sm:gap-3.5 py-2 px-3.5 sm:py-2.5 sm:px-5 rounded-full border transition-all duration-300 shadow-lg select-none cursor-pointer text-left ${
@@ -1081,13 +1120,28 @@ export const HomeView: React.FC<HomeViewProps> = ({
                     {/* Clean, attractive font typography */}
                     <span className="font-display font-black text-xs sm:text-sm md:text-base text-white group-hover:text-cyan-300 transition-colors whitespace-nowrap tracking-tight pr-1 flex items-center gap-2">
                       <span>{item.title}</span>
+                      {isITServices && (
+                        <span className="hidden lg:inline-block text-[10px] font-mono-code text-cyan-300/80 font-normal">
+                          (Website, APP, LMS, ERP)
+                        </span>
+                      )}
+                      {isBooks && (
+                        <span className="hidden lg:inline-block text-[10px] font-mono-code text-cyan-300/80 font-normal">
+                          (AI/Robotics, Guidebook, DPP, E-Books...)
+                        </span>
+                      )}
+                      {isAdminItems && (
+                        <span className="hidden lg:inline-block text-[10px] font-mono-code text-cyan-300/80 font-normal">
+                          (ID Cards, Tshirt, Merchandise, Batches)
+                        </span>
+                      )}
                       {isExpandable && (
                         <span className={`text-[10px] font-mono-code font-bold px-2 py-0.5 rounded-full transition-all ${
                           isActive
                             ? 'bg-cyan-400 text-slate-950 shadow-xs'
                             : 'bg-slate-800 text-cyan-300 border border-slate-700'
                         }`}>
-                          {isActive ? 'Hide ▲' : isCourses ? 'Explore ▼' : 'View PDF ▼'}
+                          {isActive ? 'Hide ▲' : isCourses ? 'Explore ▼' : isStemKits ? 'View PDF ▼' : isITServices ? 'Explore IT ▼' : isBooks ? 'View Books ▼' : 'View Items ▼'}
                         </span>
                       )}
                     </span>
@@ -1107,6 +1161,38 @@ export const HomeView: React.FC<HomeViewProps> = ({
           <AnimatePresence>
             {isCoursesExpanded && (
               <PartnerCoursesExpanded onClose={() => setIsCoursesExpanded(false)} />
+            )}
+          </AnimatePresence>
+
+          {/* Smooth Expanded Box for IT Services (Website, APP, LMS, ERP) - DO NOT REDIRECT */}
+          <AnimatePresence>
+            {isITServicesExpanded && (
+              <PartnerITServicesExpanded
+                onClose={() => setIsITServicesExpanded(false)}
+                onOpenITServicesView={() => onSelectExtendedView('it-services')}
+                onOpenContact={() => onSelectExtendedView('contact')}
+              />
+            )}
+          </AnimatePresence>
+
+          {/* Smooth Expanded Box for Books (AI & Robotics Book, AI/ML Guidebook, Assignments, Notes & D.P.P, E-Books, Formulae Sets) - DO NOT REDIRECT */}
+          <AnimatePresence>
+            {isBooksExpanded && (
+              <PartnerBooksExpanded
+                onClose={() => setIsBooksExpanded(false)}
+                onOpenStore={() => onSelectTab('store')}
+                onOpenContact={() => onSelectExtendedView('contact')}
+              />
+            )}
+          </AnimatePresence>
+
+          {/* Smooth Expanded Box for Administrative Items (ID Cards, Tshirt, Merchandise, Batches) - DO NOT REDIRECT */}
+          <AnimatePresence>
+            {isAdminItemsExpanded && (
+              <PartnerAdminItemsExpanded
+                onClose={() => setIsAdminItemsExpanded(false)}
+                onOpenContact={() => onSelectExtendedView('contact')}
+              />
             )}
           </AnimatePresence>
 

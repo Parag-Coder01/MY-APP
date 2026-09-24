@@ -22,7 +22,12 @@ import {
 } from 'lucide-react';
 import { COMPANY_INFO } from '../data/mockData';
 
-export type ITServiceType = 'all' | 'website' | 'app' | 'erp' | 'lms';
+import serviceWebsiteImg from '../assets/images/service_website_mockup_1790248603554.jpg';
+import serviceAppImg from '../assets/images/service_app_mockup_1790248617831.jpg';
+import serviceLmsImg from '../assets/images/service_lms_mockup_1790248632138.jpg';
+import serviceErpImg from '../assets/images/service_erp_mockup_1790248645800.jpg';
+
+export type ITServiceType = 'all' | 'website' | 'app' | 'lms' | 'erp';
 
 interface ITServicesViewProps {
   initialService?: ITServiceType;
@@ -51,6 +56,7 @@ export const ITServicesView: React.FC<ITServicesViewProps> = ({
       id: 'website',
       name: 'Website Development',
       tagline: 'Modern, High-Performance Web Portals & Platforms',
+      image: serviceWebsiteImg,
       icon: <Globe className="w-6 h-6 text-cyan-400" />,
       accentColor: 'from-cyan-500/20 via-slate-900 to-slate-950',
       borderColor: 'border-cyan-500/40',
@@ -78,6 +84,7 @@ export const ITServicesView: React.FC<ITServicesViewProps> = ({
       id: 'app',
       name: 'Mobile App Development',
       tagline: 'Cross-Platform iOS & Android Applications',
+      image: serviceAppImg,
       icon: <Smartphone className="w-6 h-6 text-blue-400" />,
       accentColor: 'from-blue-500/20 via-slate-900 to-slate-950',
       borderColor: 'border-blue-500/40',
@@ -102,36 +109,10 @@ export const ITServicesView: React.FC<ITServicesViewProps> = ({
       timeline: '4 to 6 Weeks',
     },
     {
-      id: 'erp',
-      name: 'ERP Systems',
-      tagline: 'Enterprise Resource Planning for Schools & Labs',
-      icon: <Database className="w-6 h-6 text-amber-400" />,
-      accentColor: 'from-amber-500/20 via-slate-900 to-slate-950',
-      borderColor: 'border-amber-500/40',
-      badge: 'Academic & Industrial',
-      summary:
-        'Unified institutional management software automating ATL Lab hardware inventory, student admissions, attendance, fees, and reporting.',
-      keyFeatures: [
-        'Atal Tinkering Lab (ATL) Component Inventory & Barcode Tracking',
-        'Student Enrollment, Class Timetable, and Biometric/RFID Attendance',
-        'Fee generation, automated payment reminders & GST receipt issuance',
-        'Staff management, payroll, and leave management system',
-        'Role-Based Access Control (Super Admin, Principal, Teacher, Student, Parent)',
-        'Executive visual analytics, PDF exports, and government compliance records',
-      ],
-      deliverables: [
-        'Turnkey Cloud Server Installation & Database Migration',
-        'Custom Role Configurator & Departmental Workflows',
-        'Comprehensive Staff & Administrator Hands-on Training',
-        'Automated Daily Cloud Backups & 99.9% Uptime Guarantee',
-      ],
-      techStack: ['PostgreSQL', 'Node.js', 'Express', 'Docker', 'Redis', 'Tailwind CSS'],
-      timeline: '4 to 8 Weeks',
-    },
-    {
       id: 'lms',
       name: 'LMS (Learning Management System)',
       tagline: 'Modern Experiential STEM & Robotics E-Learning',
+      image: serviceLmsImg,
       icon: <GraduationCap className="w-6 h-6 text-emerald-400" />,
       accentColor: 'from-emerald-500/20 via-slate-900 to-slate-950',
       borderColor: 'border-emerald-500/40',
@@ -154,6 +135,34 @@ export const ITServicesView: React.FC<ITServicesViewProps> = ({
       ],
       techStack: ['React', 'Next.js', 'PostgreSQL', 'WebSockets', 'SCORM', 'Cloudflare Stream'],
       timeline: '3 to 6 Weeks',
+    },
+    {
+      id: 'erp',
+      name: 'ERP Systems',
+      tagline: 'Enterprise Resource Planning for Schools & Labs',
+      image: serviceErpImg,
+      icon: <Database className="w-6 h-6 text-amber-400" />,
+      accentColor: 'from-amber-500/20 via-slate-900 to-slate-950',
+      borderColor: 'border-amber-500/40',
+      badge: 'Academic & Industrial',
+      summary:
+        'Unified institutional management software automating ATL Lab hardware inventory, student admissions, attendance, fees, and reporting.',
+      keyFeatures: [
+        'Atal Tinkering Lab (ATL) Component Inventory & Barcode Tracking',
+        'Student Enrollment, Class Timetable, and Biometric/RFID Attendance',
+        'Fee generation, automated payment reminders & GST receipt issuance',
+        'Staff management, payroll, and leave management system',
+        'Role-Based Access Control (Super Admin, Principal, Teacher, Student, Parent)',
+        'Executive visual analytics, PDF exports, and government compliance records',
+      ],
+      deliverables: [
+        'Turnkey Cloud Server Installation & Database Migration',
+        'Custom Role Configurator & Departmental Workflows',
+        'Comprehensive Staff & Administrator Hands-on Training',
+        'Automated Daily Cloud Backups & 99.9% Uptime Guarantee',
+      ],
+      techStack: ['PostgreSQL', 'Node.js', 'Express', 'Docker', 'Redis', 'Tailwind CSS'],
+      timeline: '4 to 8 Weeks',
     },
   ];
 
@@ -260,7 +269,7 @@ export const ITServicesView: React.FC<ITServicesViewProps> = ({
               onClick={() => setActiveTab('website')}
               className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                 activeTab === 'website'
-                  ? 'bg-cyan-500 text-slate-950 shadow-sm'
+                  ? 'bg-cyan-500 text-slate-950 font-bold shadow-sm'
                   : 'dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -271,34 +280,34 @@ export const ITServicesView: React.FC<ITServicesViewProps> = ({
               onClick={() => setActiveTab('app')}
               className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                 activeTab === 'app'
-                  ? 'bg-cyan-500 text-slate-950 shadow-sm'
+                  ? 'bg-cyan-500 text-slate-950 font-bold shadow-sm'
                   : 'dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <Smartphone className="w-3.5 h-3.5" />
-              <span>App</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('erp')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'erp'
-                  ? 'bg-cyan-500 text-slate-950 shadow-sm'
-                  : 'dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              <Database className="w-3.5 h-3.5" />
-              <span>ERP</span>
+              <span>APP</span>
             </button>
             <button
               onClick={() => setActiveTab('lms')}
               className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                 activeTab === 'lms'
-                  ? 'bg-cyan-500 text-slate-950 shadow-sm'
+                  ? 'bg-cyan-500 text-slate-950 font-bold shadow-sm'
                   : 'dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               <GraduationCap className="w-3.5 h-3.5" />
               <span>LMS</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('erp')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
+                activeTab === 'erp'
+                  ? 'bg-cyan-500 text-slate-950 font-bold shadow-sm'
+                  : 'dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <Database className="w-3.5 h-3.5" />
+              <span>ERP</span>
             </button>
           </div>
         </div>
@@ -312,22 +321,37 @@ export const ITServicesView: React.FC<ITServicesViewProps> = ({
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
-              className={`rounded-3xl border dark:border-slate-800 border-slate-200/90 dark:bg-slate-900/80 bg-white p-6 sm:p-7 flex flex-col justify-between shadow-sm hover:shadow-md transition-all group hover:border-slate-600 dark:hover:border-slate-700`}
+              className={`rounded-3xl border dark:border-slate-800 border-slate-200/90 dark:bg-slate-900/80 bg-white p-5 sm:p-7 flex flex-col justify-between shadow-sm hover:shadow-xl transition-all group hover:border-cyan-500/50 dark:hover:border-cyan-500/40`}
             >
               <div>
-                {/* Header */}
-                <div className="flex items-start justify-between gap-3 mb-4">
-                  <div className="p-3 rounded-2xl dark:bg-slate-950 bg-slate-100 border dark:border-slate-800 border-slate-200 group-hover:scale-105 transition-transform">
+                {/* Hero Preview Image & Floating Badge */}
+                <div className="relative w-full aspect-16/9 rounded-2xl overflow-hidden mb-4.5 bg-slate-950 border dark:border-slate-800 border-slate-200 shadow-inner group-hover:border-cyan-400/50 transition-colors">
+                  <img
+                    src={srv.image}
+                    alt={srv.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-80" />
+
+                  {/* Corner Icon & Timeline */}
+                  <div className="absolute top-2.5 left-2.5 p-2 rounded-xl bg-slate-900/90 backdrop-blur-md border border-white/10 shadow-md">
                     {srv.icon}
                   </div>
-                  <span className="text-[11px] font-mono-code font-medium px-2.5 py-1 rounded-full dark:bg-slate-800 bg-slate-100 dark:text-cyan-300 text-cyan-800 border dark:border-slate-700 border-slate-200">
+
+                  <div className="absolute bottom-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-slate-950/90 backdrop-blur-md border border-slate-700 text-xs font-mono-code font-bold text-cyan-300 shadow-md">
+                    {srv.timeline}
+                  </div>
+                </div>
+
+                {/* Header */}
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <h3 className="font-display font-black text-xl sm:text-2xl dark:text-white text-slate-900 group-hover:text-cyan-400 transition-colors">
+                    {srv.name}
+                  </h3>
+                  <span className="text-[11px] font-mono-code font-bold px-2.5 py-1 rounded-full dark:bg-slate-800 bg-slate-100 dark:text-cyan-300 text-cyan-800 border dark:border-slate-700 border-slate-200 shrink-0">
                     {srv.badge}
                   </span>
                 </div>
-
-                <h3 className="font-display font-semibold text-xl dark:text-white text-slate-900">
-                  {srv.name}
-                </h3>
                 <div className="text-xs font-mono-code dark:text-cyan-400 text-cyan-600 mt-0.5">
                   {srv.tagline}
                 </div>
