@@ -126,51 +126,51 @@ const HERO_TAGLINES: HeroTagline[] = [
   {
     text: 'BUILD YOUR OWN JARVIS (AI)',
     subtext: 'Next-gen voice, vision & autonomous robotics intelligence',
-    taglineGradient: 'from-cyan-300 via-sky-200 to-indigo-300',
-    futureGradient: 'from-cyan-300 via-sky-200 to-indigo-300',
-    glow: 'rgba(6, 182, 212, 0.45)',
-    glowColor: 'rgba(6, 182, 212, 0.8)',
-    dotColor: 'bg-cyan-400 shadow-[0_0_14px_rgba(6,182,212,1)]',
+    taglineGradient: 'from-[#00F5A0] via-[#00D9F5] to-[#38BDF8]',
+    futureGradient: 'from-[#00F5A0] via-[#00D9F5] to-[#38BDF8]',
+    glow: 'rgba(0, 245, 160, 0.45)',
+    glowColor: 'rgba(0, 245, 160, 0.85)',
+    dotColor: 'bg-[#00F5A0] shadow-[0_0_16px_rgba(0,245,160,1)]',
     badge: 'JARVIS AI',
   },
   {
     text: 'EMPOWERING YOUNG INNOVATORS',
     subtext: 'Hands-on experiential hardware & creative problem solving',
-    taglineGradient: 'from-emerald-300 via-teal-200 to-cyan-300',
-    futureGradient: 'from-emerald-300 via-teal-200 to-cyan-300',
-    glow: 'rgba(16, 185, 129, 0.45)',
-    glowColor: 'rgba(16, 185, 129, 0.8)',
-    dotColor: 'bg-emerald-400 shadow-[0_0_14px_rgba(16,185,129,1)]',
+    taglineGradient: 'from-[#10B981] via-[#06B6D4] to-[#3B82F6]',
+    futureGradient: 'from-[#10B981] via-[#06B6D4] to-[#3B82F6]',
+    glow: 'rgba(6, 182, 212, 0.45)',
+    glowColor: 'rgba(6, 182, 212, 0.85)',
+    dotColor: 'bg-[#06B6D4] shadow-[0_0_16px_rgba(6,182,212,1)]',
     badge: 'INNOVATORS',
   },
   {
     text: 'AI, ML, IOT, ROBOTICS AND BEYOND',
     subtext: 'Full-stack deep tech integrated hardware curriculum',
-    taglineGradient: 'from-sky-300 via-indigo-300 to-fuchsia-400',
-    futureGradient: 'from-sky-300 via-indigo-300 to-fuchsia-400',
-    glow: 'rgba(99, 102, 241, 0.45)',
-    glowColor: 'rgba(99, 102, 241, 0.8)',
-    dotColor: 'bg-indigo-400 shadow-[0_0_14px_rgba(99,102,241,1)]',
+    taglineGradient: 'from-[#38BDF8] via-[#818CF8] to-[#C084FC]',
+    futureGradient: 'from-[#38BDF8] via-[#818CF8] to-[#C084FC]',
+    glow: 'rgba(129, 140, 248, 0.45)',
+    glowColor: 'rgba(129, 140, 248, 0.85)',
+    dotColor: 'bg-[#818CF8] shadow-[0_0_16px_rgba(129,140,248,1)]',
     badge: 'DEEP TECH',
   },
   {
     text: 'IIT MENTORS',
     subtext: 'Masterclasses & direct technical guidance from premier faculty',
-    taglineGradient: 'from-amber-300 via-yellow-200 to-orange-400',
-    futureGradient: 'from-amber-300 via-yellow-200 to-orange-400',
+    taglineGradient: 'from-[#FBBF24] via-[#F59E0B] to-[#EF4444]',
+    futureGradient: 'from-[#FBBF24] via-[#F59E0B] to-[#EF4444]',
     glow: 'rgba(245, 158, 11, 0.45)',
-    glowColor: 'rgba(245, 158, 11, 0.8)',
-    dotColor: 'bg-amber-400 shadow-[0_0_14px_rgba(245,158,11,1)]',
+    glowColor: 'rgba(245, 158, 11, 0.85)',
+    dotColor: 'bg-[#F59E0B] shadow-[0_0_16px_rgba(245,158,11,1)]',
     badge: 'IIT FACULTY',
   },
   {
     text: 'CERTIFIED COURSES',
     subtext: 'Globally recognized industry-standard STEM & robotics credentials',
-    taglineGradient: 'from-rose-300 via-pink-200 to-amber-300',
-    futureGradient: 'from-rose-300 via-pink-200 to-amber-300',
+    taglineGradient: 'from-[#FB7185] via-[#F43F5E] to-[#F59E0B]',
+    futureGradient: 'from-[#FB7185] via-[#F43F5E] to-[#F59E0B]',
     glow: 'rgba(244, 63, 94, 0.45)',
-    glowColor: 'rgba(244, 63, 94, 0.8)',
-    dotColor: 'bg-rose-400 shadow-[0_0_14px_rgba(244,63,94,1)]',
+    glowColor: 'rgba(244, 63, 94, 0.85)',
+    dotColor: 'bg-[#F43F5E] shadow-[0_0_16px_rgba(244,63,94,1)]',
     badge: 'CERTIFIED',
   },
 ];
@@ -593,36 +593,36 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
           <h2 className="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-white tracking-tight leading-tight">
             Preparing You For{' '}
-            <span className="relative inline-block overflow-hidden align-baseline px-1.5 py-0.5">
+            <span className="relative inline-block overflow-hidden align-baseline px-2 py-0.5">
               <span
-                className={`font-calibri-heavy-italic bg-gradient-to-r ${currentTagline.futureGradient} bg-clip-text text-transparent transition-all duration-700 inline-block uppercase tracking-wider`}
+                className={`font-calibri-future font-black bg-gradient-to-r ${currentTagline.futureGradient} bg-clip-text text-transparent transition-all duration-700 inline-block uppercase tracking-wider`}
                 style={{
-                  filter: `drop-shadow(0 0 22px ${currentTagline.glowColor})`,
+                  filter: `drop-shadow(0 0 24px ${currentTagline.glowColor}) drop-shadow(0 4px 14px rgba(0,0,0,0.85))`,
                 }}
               >
                 THE FUTURE
               </span>
-              {/* Synchronized horizontal shine reflection */}
+              {/* Synchronized horizontal shine reflection with mix-blend-overlay so colors stay rich & vivid */}
               <span
                 aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent pointer-events-none animate-horizontal-shine"
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none animate-horizontal-shine mix-blend-overlay"
               />
             </span>
           </h2>
 
           {/* Dynamic Auto-Swiping Taglines with Calibri heavy italic font & synchronized horizontal shine */}
           <div className="mt-4 sm:mt-5 w-full">
-            <div className="relative w-full rounded-2xl border dark:border-slate-800 border-slate-700/70 dark:bg-slate-950/80 bg-slate-900/90 backdrop-blur-xl p-4 sm:p-5 shadow-2xl overflow-hidden group">
+            <div className="relative w-full rounded-2xl border dark:border-slate-800/90 border-slate-700/80 dark:bg-slate-950/90 bg-slate-900/95 backdrop-blur-xl p-4 sm:p-5 shadow-2xl overflow-hidden group">
               {/* Dynamic glowing ambient aura synced to tagline color */}
               <div
-                className="absolute inset-0 opacity-25 blur-2xl transition-all duration-700 pointer-events-none"
+                className="absolute inset-0 opacity-30 blur-3xl transition-all duration-700 pointer-events-none"
                 style={{ background: currentTagline.glow }}
               />
 
               {/* Glass surface top edge reflection highlight */}
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none" />
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent pointer-events-none" />
 
-              <div className="relative z-10 flex flex-col gap-2">
+              <div className="relative z-10 flex flex-col gap-2.5">
                 {/* Top metadata tier: Beacon, Category Badge & Subtext */}
                 <div className="flex items-center gap-2.5 flex-wrap">
                   <div className="relative flex items-center justify-center shrink-0">
@@ -630,7 +630,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                     <span className="absolute w-4 h-4 rounded-full border border-current opacity-40 animate-ping" />
                   </div>
 
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono-code font-bold uppercase tracking-wider bg-white/10 text-white/90 border border-white/15 backdrop-blur-sm">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono-code font-bold uppercase tracking-wider bg-white/10 text-white border border-white/20 backdrop-blur-sm shadow-xs">
                     {currentTagline.badge}
                   </span>
 
@@ -639,16 +639,19 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   </span>
                 </div>
 
-                {/* Main Tagline: Persistent container so shine NEVER unmounts and stays 100% in sync with THE FUTURE */}
-                <div className="relative overflow-hidden inline-block pr-2 py-0.5">
+                {/* Main Tagline: Bold Calibri Italic with high-contrast electric glow */}
+                <div className="relative overflow-hidden inline-block pr-2 py-1">
                   <AnimatePresence mode="wait">
                     <motion.h3
                       key={activeTaglineIndex}
-                      initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
+                      initial={{ opacity: 0, y: 8, filter: 'blur(3px)' }}
                       animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                      exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
-                      transition={{ duration: 0.32, ease: 'easeOut' }}
-                      className={`text-2xl sm:text-3xl md:text-4xl font-calibri-heavy-italic tracking-normal leading-snug uppercase bg-gradient-to-r ${currentTagline.taglineGradient} bg-clip-text text-transparent drop-shadow-md`}
+                      exit={{ opacity: 0, y: -8, filter: 'blur(3px)' }}
+                      transition={{ duration: 0.28, ease: 'easeOut' }}
+                      className={`text-2xl sm:text-3xl md:text-4xl font-calibri-heavy-italic font-black tracking-tight leading-snug uppercase bg-gradient-to-r ${currentTagline.taglineGradient} bg-clip-text text-transparent`}
+                      style={{
+                        filter: `drop-shadow(0 0 20px ${currentTagline.glowColor}) drop-shadow(0 3px 12px rgba(0,0,0,0.9))`,
+                      }}
                     >
                       {currentTagline.text}
                     </motion.h3>
@@ -657,7 +660,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   {/* Horizontal shine reflection: PERSISTENT, perfectly synchronized with THE FUTURE at all times */}
                   <span
                     aria-hidden="true"
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent pointer-events-none animate-horizontal-shine"
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none animate-horizontal-shine mix-blend-overlay"
                   />
                 </div>
               </div>
