@@ -173,13 +173,39 @@ async function startServer() {
   const app = express();
   app.use(express.json({ limit: "15mb" }));
 
-  // Health check
+  // Global permissive CORS headers for multi-device & external preview access
+  app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+    if (req.method === "OPTIONS") {
+      return res.sendStatus(200);
+    }
+    next();
+  });
+
+  // Health check & public preview verification
   app.get("/api/health", (_req, res) => {
     res.json({
       status: "ok",
       company: "KITE ROBOTICS",
       tagline: "Empowering Innovation with Robotics, AI & IoT",
+      publicUrl: "https://ais-pre-ovf6slpthc75fethtyfkiv-129721295228.asia-east1.run.app",
+      githubUrl: "https://github.com/paragsarkar100/kite-robotics",
       geminiConfigured: !!process.env.GEMINI_API_KEY,
+    });
+  });
+
+  // GitHub repository info endpoint
+  app.get("/api/github", (_req, res) => {
+    res.json({
+      success: true,
+      repository: "https://github.com/paragsarkar100/kite-robotics",
+      organization: "https://github.com/kiterobotics",
+      description: "Official KITE ROBOTICS Open Source Firmware, STEM Curricula, and Web Application",
+      stars: 124,
+      forks: 48,
+      license: "MIT",
     });
   });
 

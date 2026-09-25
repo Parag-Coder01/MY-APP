@@ -31,6 +31,8 @@ import { AdminDashboardModal } from './components/AdminDashboardModal';
 import { ProfileView } from './components/ProfileView';
 import { MobileAppFrame } from './components/MobileAppFrame';
 import { PWAInstallPrompt } from './components/PWAInstallPrompt';
+import { ShareAppModal } from './components/ShareAppModal';
+import { Footer } from './components/Footer';
 import { OfflineBanner } from './components/OfflineBanner';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { ArrowLeft, Menu, Sparkles } from 'lucide-react';
@@ -93,6 +95,7 @@ function AppContent() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   // Login & Logout management
   const isLoggedIn = user.id !== 'guest';
@@ -322,6 +325,7 @@ function AppContent() {
           onOpenManageProfile={() => setShowManageProfileModal(true)}
           onSearchClick={() => handleSelectTab('learn')}
           onOpenInstallPrompt={() => setShowInstallPrompt(true)}
+          onOpenShareModal={() => setShowShareModal(true)}
         />
 
         {/* Extended View Back Button Strip */}
@@ -481,6 +485,15 @@ function AppContent() {
               )}
             </>
           )}
+
+          {/* Global Comprehensive Footer */}
+          <Footer
+            onSelectTab={handleSelectTab}
+            onSelectExtendedView={handleSelectExtendedView}
+            onOpenShareModal={() => setShowShareModal(true)}
+            onOpenInstallPrompt={() => setShowInstallPrompt(true)}
+            isDark={isDark}
+          />
         </main>
 
         {/* 5. Bottom Navigation Bar */}
@@ -513,6 +526,10 @@ function AppContent() {
           onOpenInstallPrompt={() => {
             setShowQuickMenu(false);
             setShowInstallPrompt(true);
+          }}
+          onOpenShareModal={() => {
+            setShowQuickMenu(false);
+            setShowShareModal(true);
           }}
           onOpenStudentDashboard={() => {
             setShowQuickMenu(false);
@@ -600,6 +617,12 @@ function AppContent() {
         <PWAInstallPrompt
           isOpen={showInstallPrompt}
           onClose={() => setShowInstallPrompt(false)}
+        />
+
+        {/* Universal Share & Open on Any Mobile Device Modal */}
+        <ShareAppModal
+          isOpen={showShareModal}
+          onClose={() => setShowShareModal(false)}
         />
       </div>
     </MobileAppFrame>

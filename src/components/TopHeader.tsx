@@ -8,10 +8,13 @@ import {
   Search,
   PhoneCall,
   Smartphone,
+  Share2,
+  Github,
 } from 'lucide-react';
 import { UserProfile, UserRole } from '../types';
 import { KiteLogo } from './KiteLogo';
 import { COMPANY_INFO } from '../data/mockData';
+import { OFFICIAL_GITHUB_URL } from '../utils/shareUtils';
 
 interface TopHeaderProps {
   user: UserProfile;
@@ -25,6 +28,7 @@ interface TopHeaderProps {
   onOpenRolePicker: () => void;
   onSearchClick: () => void;
   onOpenInstallPrompt?: () => void;
+  onOpenShareModal?: () => void;
   onOpenAuthModal?: (mode?: 'login' | 'signup') => void;
   onOpenManageProfile?: () => void;
 }
@@ -41,6 +45,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
   onOpenRolePicker,
   onSearchClick,
   onOpenInstallPrompt,
+  onOpenShareModal,
   onOpenAuthModal,
   onOpenManageProfile,
 }) => {
@@ -106,13 +111,42 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
             <button
               onClick={onOpenInstallPrompt}
               aria-label="Install Mobile App"
-              className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-500 dark:text-cyan-400 hover:bg-cyan-500 hover:text-slate-950 text-xs font-mono-code font-bold transition-all shadow-sm"
+              className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-500 dark:text-cyan-400 hover:bg-cyan-500 hover:text-slate-950 text-xs font-mono-code font-bold transition-all shadow-sm cursor-pointer"
               title="Install Mobile App on Phone"
             >
               <Smartphone className="w-3.5 h-3.5" />
               <span className="hidden xs:inline">App</span>
             </button>
           )}
+
+          {/* Universal Share / Open on Phone Button */}
+          {onOpenShareModal && (
+            <button
+              onClick={onOpenShareModal}
+              aria-label="Open on Any Mobile / Share App"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-cyan-500 text-slate-950 hover:bg-cyan-400 text-xs font-mono-code font-bold transition-all shadow-md shadow-cyan-500/20 active:scale-95 cursor-pointer"
+              title="Open App on Phone / Share Universal Link"
+            >
+              <Share2 className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Share</span>
+            </button>
+          )}
+
+          {/* Official GitHub Repo Trigger */}
+          <a
+            href={OFFICIAL_GITHUB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open GitHub Repository"
+            title="Open KITE Robotics GitHub Repository"
+            className={`p-2 rounded-xl border transition-all active:scale-95 flex items-center justify-center cursor-pointer ${
+              isDark
+                ? 'text-slate-300 hover:text-white bg-slate-900/60 border-slate-800 hover:border-slate-700'
+                : 'text-slate-700 hover:text-slate-950 bg-slate-100 border-slate-200 hover:border-slate-300'
+            }`}
+          >
+            <Github className="w-4 h-4 text-cyan-400" />
+          </a>
 
           {/* Direct WhatsApp / Call Hotline */}
           <a

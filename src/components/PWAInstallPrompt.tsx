@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Smartphone, Download, Share, PlusSquare, X, CheckCircle2, QrCode } from 'lucide-react';
+import { Smartphone, Download, Share, PlusSquare, X, CheckCircle2, QrCode, Copy, Check } from 'lucide-react';
 import { usePWAInstall } from '../hooks/usePWAInstall';
+import { getPublicShareUrl, getQrCodeImageUrl, copyTextToClipboard } from '../utils/shareUtils';
 
 interface PWAInstallPromptProps {
   isOpen: boolean;
@@ -11,12 +12,21 @@ export const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({ isOpen, onCl
   const { isInstallable, isInstalled, isIOS, install } = usePWAInstall();
   const [installSuccess, setInstallSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState<'install' | 'qr'>('install');
+  const [copied, setCopied] = useState(false);
 
-  const currentUrl = typeof window !== 'undefined' ? window.location.href : 'https://www.kiterobotics.in';
-  // Generate a QR code using quickchart / standard QR image
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(currentUrl)}&bgcolor=020617&color=38bdf8&margin=10`;
+  // Normalize URL so external devices opening the QR code get the public preview rather than authenticated dev URL
+  const currentUrl = getPublicShareUrl();
+  const qrCodeUrl = getQrCodeImageUrl(currentUrl, 260);
 
   if (!isOpen) return null;
+
+  const handleCopy = async () => {
+    const ok = await copyTextToClipboard(currentUrl);
+    if (ok) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   const handleInstallClick = async () => {
     const success = await install();
@@ -197,9 +207,16 @@ export const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({ isOpen, onCl
                 className="w-48 h-48 rounded-xl object-contain mx-auto"
               />
             </div>
-            <div className="text-[11px] font-mono-code text-slate-400 truncate max-w-full px-2">
+            <div className="text-[11px] font-mono-code text-cyan-400 truncate max-w-full px-2">
               {currentUrl}
             </div>
+            <button
+              onClick={handleCopy}
+              className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-mono-code text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+            >
+              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copied ? 'Link Copied!' : 'Copy Universal Mobile Link'}</span>
+            </button>
           </div>
         )}
       </div>

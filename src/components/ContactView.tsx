@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { PhoneCall, Mail, Globe, MessageSquare, Send, CheckCircle2, MapPin, ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
+import { PhoneCall, Mail, Globe, MessageSquare, Send, CheckCircle2, MapPin, ChevronDown, ChevronUp, HelpCircle, Github, ExternalLink } from 'lucide-react';
 import { COMPANY_INFO } from '../data/mockData';
+import { OFFICIAL_GITHUB_URL } from '../utils/shareUtils';
 
 export const ContactView: React.FC = () => {
   const [senderName, setSenderName] = useState('');
@@ -237,6 +238,39 @@ export const ContactView: React.FC = () => {
               <div>Website: <a href="https://www.kiterobotics.in" target="_blank" rel="noreferrer" className="text-cyan-400 hover:underline">www.kiterobotics.in</a></div>
               <div>Hours: Mon - Sat: 9:30 AM - 6:30 PM IST</div>
             </div>
+          </div>
+
+          {/* GitHub Open-Source Hub */}
+          <div className="rounded-3xl bg-slate-900/90 border border-slate-800 p-6 space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="font-display font-bold text-base text-white flex items-center gap-2">
+                <Github className="w-4 h-4 text-cyan-400" />
+                <span>Open Source Repository</span>
+              </h3>
+              <span className="text-[10px] font-mono-code px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold">
+                Active
+              </span>
+            </div>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Explore open-source robotics firmware, wiring diagrams, Arduino sketches, and web application repositories:
+            </p>
+            <a
+              href={OFFICIAL_GITHUB_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 rounded-2xl bg-slate-950 border border-slate-800 hover:border-cyan-500/50 flex items-center justify-between group transition-all"
+            >
+              <div className="flex items-center gap-2.5">
+                <Github className="w-5 h-5 text-white group-hover:text-cyan-400 transition-colors" />
+                <div>
+                  <div className="text-xs font-mono-code font-bold text-white group-hover:text-cyan-400 transition-colors">
+                    paragsarkar100/kite-robotics
+                  </div>
+                  <div className="text-[10px] text-slate-500 font-mono-code">github.com/paragsarkar100/kite-robotics</div>
+                </div>
+              </div>
+              <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-cyan-400 transition-colors" />
+            </a>
           </div>
 
           <div className="rounded-3xl bg-slate-900/90 border border-slate-800 p-6 space-y-2.5">

@@ -26,10 +26,13 @@ import {
   UserCog,
   Award,
   CheckCircle2,
+  Share2,
+  Github,
 } from 'lucide-react';
 import { ExtendedView, MainTab, UserProfile } from '../types';
 import { KiteLogo } from './KiteLogo';
 import { COMPANY_INFO } from '../data/mockData';
+import { OFFICIAL_GITHUB_URL } from '../utils/shareUtils';
 
 interface QuickMenuDrawerProps {
   isOpen: boolean;
@@ -44,6 +47,7 @@ interface QuickMenuDrawerProps {
   isDark: boolean;
   onToggleTheme: () => void;
   onOpenInstallPrompt?: () => void;
+  onOpenShareModal?: () => void;
   onOpenStudentDashboard?: () => void;
 }
 
@@ -60,6 +64,7 @@ export const QuickMenuDrawer: React.FC<QuickMenuDrawerProps> = ({
   isDark,
   onToggleTheme,
   onOpenInstallPrompt,
+  onOpenShareModal,
   onOpenStudentDashboard,
 }) => {
   if (!isOpen) return null;
@@ -519,6 +524,71 @@ export const QuickMenuDrawer: React.FC<QuickMenuDrawerProps> = ({
               </button>
             </div>
 
+            {/* 4. Open-Source, GitHub & Multi-Device Access */}
+            <div className="space-y-1.5 pt-2">
+              <div className="text-[11px] font-mono-code uppercase tracking-wider text-slate-400 px-2 font-semibold">
+                Connectivity & Open-Source
+              </div>
+
+              {/* Share / Open on Any Device */}
+              {onOpenShareModal && (
+                <button
+                  onClick={() => handleNavigate(onOpenShareModal)}
+                  className={`w-full p-3 rounded-2xl border flex items-center justify-between text-left transition-all group cursor-pointer ${
+                    isDark
+                      ? 'bg-cyan-950/20 hover:bg-cyan-950/40 border-cyan-800/40 hover:border-cyan-500/70'
+                      : 'bg-cyan-50 hover:bg-cyan-100/70 border-cyan-200 hover:border-cyan-400'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 group-hover:scale-105 transition-transform">
+                      <Share2 className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-semibold text-cyan-400 flex items-center gap-1.5">
+                        <span>Open on Mobile & Share</span>
+                        <span className="text-[9px] font-mono-code font-bold px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">
+                          Universal
+                        </span>
+                      </div>
+                      <div className="text-xs text-slate-400 mt-0.5">
+                        QR Code, WhatsApp share & public link
+                      </div>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-cyan-400 group-hover:translate-x-0.5 transition-transform shrink-0" />
+                </button>
+              )}
+
+              {/* GitHub Official Repository */}
+              <a
+                href={OFFICIAL_GITHUB_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`w-full p-3 rounded-2xl border flex items-center justify-between text-left transition-all group ${
+                  isDark
+                    ? 'bg-slate-900/60 hover:bg-slate-850 border-slate-800 hover:border-slate-700'
+                    : 'bg-slate-50 hover:bg-slate-100 border-slate-200 hover:border-slate-300'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-slate-800 text-white border border-slate-700 group-hover:scale-105 transition-transform">
+                    <Github className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold dark:text-white text-slate-900 group-hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+                      <span>GitHub Repository</span>
+                      <ExternalLink className="w-3 h-3 text-slate-400" />
+                    </div>
+                    <div className="text-xs text-slate-400 mt-0.5">
+                      Source code, firmware & schematics
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:translate-x-0.5 transition-transform shrink-0" />
+              </a>
+            </div>
+
             {/* Additional Ecosystem shortcuts */}
             <div className="space-y-1.5 pt-2">
               <div className="text-[11px] font-mono-code uppercase tracking-wider text-slate-400 px-2 font-semibold">
@@ -561,15 +631,38 @@ export const QuickMenuDrawer: React.FC<QuickMenuDrawerProps> = ({
               <span>{COMPANY_INFO.phone}</span>
             </a>
 
-            {onOpenInstallPrompt && (
-              <button
-                onClick={() => handleNavigate(onOpenInstallPrompt)}
-                className="flex items-center gap-1 text-cyan-400 hover:underline"
+            <div className="flex items-center gap-2.5">
+              <a
+                href={OFFICIAL_GITHUB_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-400 hover:text-white transition-colors"
+                title="GitHub"
               >
-                <Smartphone className="w-3.5 h-3.5" />
-                <span>Install PWA</span>
-              </button>
-            )}
+                <Github className="w-4 h-4" />
+              </a>
+
+              {onOpenShareModal && (
+                <button
+                  onClick={() => handleNavigate(onOpenShareModal)}
+                  className="flex items-center gap-1 text-cyan-400 hover:underline cursor-pointer"
+                  title="Share App"
+                >
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>Share</span>
+                </button>
+              )}
+
+              {onOpenInstallPrompt && (
+                <button
+                  onClick={() => handleNavigate(onOpenInstallPrompt)}
+                  className="flex items-center gap-1 text-cyan-400 hover:underline cursor-pointer"
+                >
+                  <Smartphone className="w-3.5 h-3.5" />
+                  <span>App</span>
+                </button>
+              )}
+            </div>
           </div>
         </motion.div>
       </div>
