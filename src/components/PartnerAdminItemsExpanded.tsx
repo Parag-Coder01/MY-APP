@@ -40,9 +40,9 @@ export const ADMIN_ITEMS: AdminItem[] = [
       <svg viewBox="0 0 64 64" className="w-12 h-12 sm:w-14 sm:h-14" fill="none">
         <defs>
           <linearGradient id="idc-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#0E3B66" />
-            <stop offset="50%" stopColor="#072340" />
-            <stop offset="100%" stopColor="#031221" />
+            <stop offset="0%" stopColor="#0B2545" />
+            <stop offset="50%" stopColor="#071A31" />
+            <stop offset="100%" stopColor="#030C18" />
           </linearGradient>
           <linearGradient id="idc-border" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#38BDF8" />
@@ -59,65 +59,69 @@ export const ADMIN_ITEMS: AdminItem[] = [
             <stop offset="50%" stopColor="#F59E0B" />
             <stop offset="100%" stopColor="#D97706" />
           </linearGradient>
-          <linearGradient id="idc-glass" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.25" />
-            <stop offset="40%" stopColor="#38BDF8" stopOpacity="0.08" />
-            <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
-          </linearGradient>
           <filter id="idc-glow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feGaussianBlur stdDeviation="1.5" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
         </defs>
 
         {/* Woven Lanyard Ribbon at Top */}
-        <path d="M23 2L28 12H36L41 2" stroke="url(#idc-lanyard)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-        {/* Metallic Clip Fastener */}
-        <rect x="28" y="11" width="8" height="3.5" rx="1.2" fill="#E2E8F0" stroke="#94A3B8" strokeWidth="0.8" />
-        <rect x="30" y="14" width="4" height="4" rx="1" fill="#64748B" />
-        <circle cx="32" cy="16" r="1" fill="#38BDF8" />
+        <path d="M22 2L28 11H36L42 2" stroke="url(#idc-lanyard)" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
+        <rect x="27.5" y="10" width="9" height="3" rx="1" fill="#E2E8F0" stroke="#64748B" strokeWidth="0.7" />
+        <rect x="30" y="13" width="4" height="3.5" rx="0.8" fill="#475569" />
+        <circle cx="32" cy="15" r="1" fill="#38BDF8" />
 
         {/* Main Smart ID Card Outer Frame with Dimensional Bevel */}
-        <rect x="13" y="17" width="38" height="44" rx="5" fill="url(#idc-bg)" stroke="url(#idc-border)" strokeWidth="2.2" />
+        <rect x="13" y="16" width="38" height="45" rx="5" fill="url(#idc-bg)" stroke="url(#idc-border)" strokeWidth="2" />
 
-        {/* Top Header Strip with Holographic Insignia */}
-        <path d="M14 18H50V25.5H14V18Z" fill="#0284C7" fillOpacity="0.85" />
-        <rect x="14" y="25" width="36" height="1" fill="#38BDF8" />
-        {/* Holographic Security Shield */}
-        <circle cx="19" cy="21.8" r="2.4" fill="#00F0FF" />
-        <path d="M19 20L20.2 21.2L19.8 23L19 22.3L18.2 23L17.8 21.2Z" fill="#031221" />
-        <line x1="24" y1="21.8" x2="46" y2="21.8" stroke="#E0F2FE" strokeWidth="1.8" strokeLinecap="round" />
+        {/* Card Header Banner with Official KITE Brand Strip */}
+        <path d="M14 17H50V25H14V17Z" fill="#031E38" />
+        <line x1="14" y1="25" x2="50" y2="25" stroke="#00F0FF" strokeWidth="0.8" />
 
-        {/* High-Definition Student Photo Card Frame */}
-        <rect x="18" y="29" width="12" height="15" rx="2.5" fill="#0C4A6E" stroke="#38BDF8" strokeWidth="1.4" />
-        {/* Student Avatar Silhouette */}
-        <circle cx="24" cy="33.5" r="2.8" fill="#38BDF8" />
-        <path d="M20 42C20 38.8 21.8 37.2 24 37.2C26.2 37.2 28 38.8 28 42" fill="#22D3EE" />
-
-        {/* Gold Smart-Card Microchip Pad */}
-        <rect x="33" y="29" width="13" height="9" rx="1.8" fill="url(#idc-chip)" stroke="#FDE68A" strokeWidth="0.8" />
-        <line x1="33" y1="33.5" x2="46" y2="33.5" stroke="#92400E" strokeWidth="0.8" />
-        <line x1="39.5" y1="29" x2="39.5" y2="38" stroke="#92400E" strokeWidth="0.8" />
-
-        {/* Name & Credentials Lines */}
-        <line x1="33" y1="41" x2="47" y2="41" stroke="#FFFFFF" strokeWidth="1.8" strokeLinecap="round" />
-        <line x1="33" y1="44.5" x2="43" y2="44.5" stroke="#93C5FD" strokeWidth="1.4" strokeLinecap="round" />
-
-        {/* 2D QR Code Matrix Emblem */}
-        <rect x="18" y="47.5" width="9" height="9" rx="1.5" fill="#082F49" stroke="#38BDF8" strokeWidth="1" />
-        <rect x="20" y="49.5" width="2" height="2" fill="#00F0FF" />
-        <rect x="23" y="49.5" width="2" height="2" fill="#00F0FF" />
-        <rect x="20" y="52.5" width="2" height="2" fill="#00F0FF" />
-        <rect x="23.5" y="53" width="1.5" height="1.5" fill="#FFFFFF" />
-
-        {/* Radiating High-Tech NFC Wireless Waves */}
-        <g filter="url(#idc-glow)">
-          <path d="M34 52C36 49.5 39 49.5 41 52" stroke="#00F0FF" strokeWidth="1.8" strokeLinecap="round" />
-          <path d="M32 55C35.5 51.5 41.5 51.5 45 55" stroke="#38BDF8" strokeWidth="1.8" strokeLinecap="round" />
+        {/* REAL OFFICIAL KITE ROBOTICS LOGO (Split Orange/Green Diamond + Traces) */}
+        <g transform="translate(16, 18) scale(0.065)">
+          {/* Orange Left Half */}
+          <path d="M 50 2 L 6 48 L 50 94 Z" fill="#FF7A00" />
+          {/* Green Right Half */}
+          <path d="M 50 2 L 94 48 L 50 94 Z" fill="#2EA043" />
+          {/* Circuit Traces */}
+          <path d="M 44 26 L 44 14 L 35 14" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          <circle cx="33" cy="14" r="3.5" stroke="#FFFFFF" strokeWidth="2.5" fill="none" />
+          <path d="M 56 26 L 56 14 L 65 14" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          <circle cx="67" cy="14" r="3.5" stroke="#FFFFFF" strokeWidth="2.5" fill="none" />
         </g>
 
-        {/* Diagonal Glass Sheen Reflection */}
-        <path d="M14 18L38 18L14 46Z" fill="url(#idc-glass)" />
+        {/* KITE ROBOTICS Header Wordmark */}
+        <text x="24" y="22" fill="#FFFFFF" fontSize="4" fontWeight="900" fontFamily="sans-serif" letterSpacing="0.4">KITE</text>
+        <text x="36" y="22" fill="#38BDF8" fontSize="3.2" fontWeight="700" fontFamily="sans-serif">ROBOTICS</text>
+
+        {/* Student Avatar Photo Box */}
+        <rect x="17" y="28" width="12" height="15" rx="2" fill="#0C3456" stroke="#38BDF8" strokeWidth="1.2" />
+        <circle cx="23" cy="33" r="2.8" fill="#38BDF8" />
+        <path d="M19 41C19 37.8 20.8 36.5 23 36.5C25.2 36.5 27 37.8 27 41" fill="#00F0FF" />
+
+        {/* Real Gold Smart-Card Microchip with Contacts */}
+        <rect x="32" y="28" width="14" height="10" rx="1.5" fill="url(#idc-chip)" stroke="#FDE68A" strokeWidth="0.8" />
+        <line x1="32" y1="33" x2="46" y2="33" stroke="#78350F" strokeWidth="0.7" />
+        <line x1="39" y1="28" x2="39" y2="38" stroke="#78350F" strokeWidth="0.7" />
+        <circle cx="39" cy="33" r="1.2" fill="#78350F" />
+
+        {/* Student Credentials Lines */}
+        <line x1="32" y1="41" x2="46" y2="41" stroke="#FFFFFF" strokeWidth="1.6" strokeLinecap="round" />
+        <line x1="32" y1="44" x2="43" y2="44" stroke="#93C5FD" strokeWidth="1.2" strokeLinecap="round" />
+
+        {/* 2D QR Code Matrix */}
+        <rect x="17" y="46.5" width="10" height="10" rx="1.2" fill="#021526" stroke="#38BDF8" strokeWidth="1" />
+        <rect x="19" y="48.5" width="2" height="2" fill="#00F0FF" />
+        <rect x="23" y="48.5" width="2" height="2" fill="#00F0FF" />
+        <rect x="19" y="52.5" width="2" height="2" fill="#00F0FF" />
+        <rect x="23" y="52.5" width="2" height="2" fill="#FF7A00" />
+
+        {/* RFID Wireless Waves Emblem */}
+        <g filter="url(#idc-glow)">
+          <path d="M35 50C37.5 48 41.5 48 44 50" stroke="#00F0FF" strokeWidth="1.6" strokeLinecap="round" />
+          <path d="M33 53C37 49.5 43 49.5 47 53" stroke="#38BDF8" strokeWidth="1.6" strokeLinecap="round" />
+        </g>
       </svg>
     ),
   },
@@ -135,76 +139,69 @@ export const ADMIN_ITEMS: AdminItem[] = [
       <svg viewBox="0 0 64 64" className="w-12 h-12 sm:w-14 sm:h-14" fill="none">
         <defs>
           <linearGradient id="tsh-body" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#1E3A8A" />
-            <stop offset="50%" stopColor="#0F284E" />
-            <stop offset="100%" stopColor="#081A33" />
+            <stop offset="0%" stopColor="#172554" />
+            <stop offset="50%" stopColor="#0F172A" />
+            <stop offset="100%" stopColor="#080E1A" />
           </linearGradient>
           <linearGradient id="tsh-trim" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#00F0FF" />
             <stop offset="50%" stopColor="#38BDF8" />
-            <stop offset="100%" stopColor="#2563EB" />
-          </linearGradient>
-          <linearGradient id="tsh-crest" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FDE68A" />
-            <stop offset="100%" stopColor="#F59E0B" />
-          </linearGradient>
-          <linearGradient id="tsh-sheen" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.25" />
-            <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+            <stop offset="100%" stopColor="#0284C7" />
           </linearGradient>
           <filter id="tsh-glow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feGaussianBlur stdDeviation="1.5" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
         </defs>
 
-        {/* 3D Dynamic Athletic Jersey Body */}
+        {/* 3D Athletic Technical Lab Polo Body */}
         <path
-          d="M20 12L9 20L15 29L20 25.5V56C20 57.5 21.5 58.5 23 58.5H41C42.5 58.5 44 57.5 44 56V25.5L49 29L55 20L44 12L37 17.5C34.5 19 29.5 19 27 17.5L20 12Z"
+          d="M20 11L9 19L15 28L20 24.5V56C20 57.5 21.5 58.5 23 58.5H41C42.5 58.5 44 57.5 44 56V24.5L49 28L55 19L44 11L37 16.5C34.5 18 29.5 18 27 16.5L20 11Z"
           fill="url(#tsh-body)"
           stroke="url(#tsh-trim)"
-          strokeWidth="2.2"
+          strokeWidth="2"
           strokeLinejoin="round"
         />
 
-        {/* Contrast Sports Collar & Placket */}
-        <path d="M25 12L32 19L39 12" stroke="#00F0FF" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M32 19V28" stroke="#38BDF8" strokeWidth="2" strokeLinecap="round" />
-        <circle cx="32" cy="23" r="1.1" fill="#FFFFFF" />
+        {/* Technical Collar & Button Placket */}
+        <path d="M25 11L32 18L39 11" stroke="#00F0FF" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M32 18V28" stroke="#38BDF8" strokeWidth="2" strokeLinecap="round" />
+        <circle cx="32" cy="22" r="1.1" fill="#FFFFFF" />
+        <circle cx="32" cy="26" r="1.1" fill="#FFFFFF" />
 
-        {/* High-Voltage Sleeve Racing Bands */}
-        <path d="M11 23L15 20M13.5 26.5L17.5 23.5" stroke="#00F0FF" strokeWidth="2" strokeLinecap="round" />
-        <path d="M53 23L49 20M50.5 26.5L46.5 23.5" stroke="#00F0FF" strokeWidth="2" strokeLinecap="round" />
+        {/* Contrast Shoulder Racing Stripes */}
+        <path d="M12 21L15 19M14 24.5L17 22.5" stroke="#00F0FF" strokeWidth="1.8" strokeLinecap="round" />
+        <path d="M52 21L49 19M50 24.5L47 22.5" stroke="#FF7A00" strokeWidth="1.8" strokeLinecap="round" />
 
-        {/* Athletic Raglan Shoulder Seams */}
-        <path d="M20 12L28 22" stroke="#38BDF8" strokeWidth="1.4" strokeDasharray="3 2" />
-        <path d="M44 12L36 22" stroke="#38BDF8" strokeWidth="1.4" strokeDasharray="3 2" />
-
-        {/* Chest Team Swish / Aero Arc Stripe */}
-        <path d="M22 34C28 31 36 31 42 34" stroke="url(#tsh-trim)" strokeWidth="2" strokeLinecap="round" />
-
-        {/* Official Robotics Lab Shield Crest Badge */}
-        <g filter="url(#tsh-glow)">
-          <path d="M26 23L30 25.5V30.5L26 33L22 30.5V25.5L26 23Z" fill="#0C4A6E" stroke="#00F0FF" strokeWidth="1.4" />
-          {/* Inner Golden Lightning / Gear Star */}
-          <circle cx="26" cy="28" r="2.2" fill="url(#tsh-crest)" />
-          <path d="M26 25.5L26.8 27.5H28.5L27 28.5L27.6 30.5L26 29.5L24.4 30.5L25 28.5L23.5 27.5H25.2L26 25.5Z" fill="#FFFFFF" />
+        {/* REAL PROPER KITE ROBOTICS EMBROIDERED CHEST LOGO */}
+        <g transform="translate(24, 26) scale(0.08)" filter="url(#tsh-glow)">
+          {/* Logo Shield Crest Background */}
+          <rect x="-10" y="-10" width="120" height="120" rx="30" fill="#0A2540" stroke="#00F0FF" strokeWidth="6" />
+          {/* Real Orange Left Half */}
+          <path d="M 50 2 L 6 48 L 50 94 Z" fill="#FF7A00" />
+          {/* Real Green Right Half */}
+          <path d="M 50 2 L 94 48 L 50 94 Z" fill="#2EA043" />
+          {/* Circuit Traces */}
+          <path d="M 44 26 L 44 14 L 35 14" stroke="#FFFFFF" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          <circle cx="33" cy="14" r="4.5" stroke="#FFFFFF" strokeWidth="3.5" fill="none" />
+          <path d="M 56 26 L 56 14 L 65 14" stroke="#FFFFFF" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          <circle cx="67" cy="14" r="4.5" stroke="#FFFFFF" strokeWidth="3.5" fill="none" />
         </g>
 
-        {/* Tech Side Ventilation Perforations */}
-        <circle cx="23" cy="42" r="1" fill="#38BDF8" fillOpacity="0.7" />
-        <circle cx="23" cy="46" r="1" fill="#38BDF8" fillOpacity="0.7" />
-        <circle cx="23" cy="50" r="1" fill="#38BDF8" fillOpacity="0.7" />
-        <circle cx="41" cy="42" r="1" fill="#38BDF8" fillOpacity="0.7" />
-        <circle cx="41" cy="46" r="1" fill="#38BDF8" fillOpacity="0.7" />
-        <circle cx="41" cy="50" r="1" fill="#38BDF8" fillOpacity="0.7" />
+        {/* Right Sleeve KITE Badge */}
+        <circle cx="49" cy="22" r="2.2" fill="#0C4A6E" stroke="#2EA043" strokeWidth="1" />
+        <circle cx="49" cy="22" r="1.2" fill="#FF7A00" />
 
-        {/* Double-Stitched Bottom Hemline */}
-        <line x1="20" y1="54" x2="44" y2="54" stroke="#0284C7" strokeWidth="1.8" />
-        <line x1="20" y1="56" x2="44" y2="56" stroke="#00F0FF" strokeWidth="1" />
+        {/* Side Breathable Mesh Perforations */}
+        <circle cx="23" cy="42" r="1" fill="#38BDF8" fillOpacity="0.8" />
+        <circle cx="23" cy="46" r="1" fill="#38BDF8" fillOpacity="0.8" />
+        <circle cx="23" cy="50" r="1" fill="#38BDF8" fillOpacity="0.8" />
+        <circle cx="41" cy="42" r="1" fill="#38BDF8" fillOpacity="0.8" />
+        <circle cx="41" cy="46" r="1" fill="#38BDF8" fillOpacity="0.8" />
+        <circle cx="41" cy="50" r="1" fill="#38BDF8" fillOpacity="0.8" />
 
-        {/* Glossy Fabric Light Reflection */}
-        <path d="M22 14L32 19L27 38L22 34Z" fill="url(#tsh-sheen)" />
+        {/* Double Hemline */}
+        <line x1="21" y1="55" x2="43" y2="55" stroke="#00F0FF" strokeWidth="1.4" />
       </svg>
     ),
   },
@@ -223,8 +220,8 @@ export const ADMIN_ITEMS: AdminItem[] = [
         <defs>
           <linearGradient id="merch-bag" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#451A03" />
-            <stop offset="50%" stopColor="#291102" />
-            <stop offset="100%" stopColor="#140700" />
+            <stop offset="50%" stopColor="#271103" />
+            <stop offset="100%" stopColor="#120600" />
           </linearGradient>
           <linearGradient id="merch-gold" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#FDE68A" />
@@ -233,57 +230,61 @@ export const ADMIN_ITEMS: AdminItem[] = [
           </linearGradient>
           <linearGradient id="merch-flask" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#1E293B" />
-            <stop offset="50%" stopColor="#475569" />
+            <stop offset="50%" stopColor="#334155" />
             <stop offset="100%" stopColor="#0F172A" />
           </linearGradient>
           <filter id="merch-glow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feGaussianBlur stdDeviation="1.5" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
         </defs>
 
-        {/* 1. Heavy-Duty Tech Backpack / Hardware Kit Carrier */}
+        {/* 1. Heavy-Duty Tech Backpack Carrier */}
         <path
-          d="M13 22C13 14 17 11 26 11C35 11 39 14 39 22V54C39 56 37.5 57.5 35.5 57.5H16.5C14.5 57.5 13 56 13 54V22Z"
+          d="M13 21C13 14 17 11 26 11C35 11 39 14 39 21V54C39 56 37.5 57.5 35.5 57.5H16.5C14.5 57.5 13 56 13 54V21Z"
           fill="url(#merch-bag)"
           stroke="url(#merch-gold)"
           strokeWidth="2.2"
         />
 
-        {/* Reinforced Top Carrying Handle */}
-        <path d="M21 11V6C21 4.5 22.8 4 26 4C29.2 4 31 4.5 31 6V11" stroke="url(#merch-gold)" strokeWidth="2.4" strokeLinecap="round" />
-
-        {/* Top Zip Canopy */}
-        <path d="M14 20C17 17 35 17 38 20" stroke="#FBBF24" strokeWidth="1.8" strokeLinecap="round" />
+        {/* Reinforced Top Handle */}
+        <path d="M21 11V6C21 4.5 22.8 4 26 4C29.2 4 31 4.5 31 6V11" stroke="url(#merch-gold)" strokeWidth="2.2" strokeLinecap="round" />
 
         {/* Front Modular Robotics Hardware Pocket */}
-        <rect x="17" y="30" width="18" height="21" rx="3.5" fill="#1C0A00" stroke="#F59E0B" strokeWidth="1.6" />
-        {/* Cyber Neon Zipper */}
-        <line x1="20" y1="35" x2="32" y2="35" stroke="#FDE68A" strokeWidth="1.8" strokeLinecap="round" />
-        <rect x="24.5" y="33.5" width="3" height="3" rx="0.8" fill="#F59E0B" />
+        <rect x="17" y="29" width="18" height="22" rx="3.5" fill="#1C0A00" stroke="#F59E0B" strokeWidth="1.6" />
+        <line x1="20" y1="34" x2="32" y2="34" stroke="#FDE68A" strokeWidth="1.6" strokeLinecap="round" />
 
-        {/* Institutional Robotics Crest on Pocket */}
-        <circle cx="26" cy="43" r="3.6" fill="#78350F" stroke="#FDE68A" strokeWidth="1.2" />
-        <path d="M26 40.5L27 42.5H29L27.5 43.5L28 45.5L26 44.5L24 45.5L24.5 43.5L23 42.5H25L26 40.5Z" fill="#FDE68A" />
-
-        {/* 2. Insulated Stainless Steel Thermal Flask (Right Side) */}
-        <g filter="url(#merch-glow)">
-          {/* Flask Body */}
-          <rect x="42" y="24" width="10" height="28" rx="3" fill="url(#merch-flask)" stroke="url(#merch-gold)" strokeWidth="1.8" />
-          {/* Chrome Thermal Cap */}
-          <rect x="44" y="18" width="6" height="6" rx="1.5" fill="url(#merch-gold)" stroke="#FDE68A" strokeWidth="1" />
-          <circle cx="47" cy="21" r="1" fill="#FFFFFF" />
-          {/* Glowing Smart Temperature Ring */}
-          <line x1="42.5" y1="28" x2="51.5" y2="28" stroke="#00F0FF" strokeWidth="1.6" strokeLinecap="round" />
-          {/* Laser-Etched Insignia Rings */}
-          <circle cx="47" cy="38" r="2.2" stroke="#FDE68A" strokeWidth="1" />
-          <line x1="45" y1="45" x2="49" y2="45" stroke="#F59E0B" strokeWidth="1.2" strokeLinecap="round" />
+        {/* PROPER KITE ROBOTICS EMBOSSED LOGO EMBLEM ON POCKET */}
+        <g transform="translate(20, 37) scale(0.08)" filter="url(#merch-glow)">
+          <circle cx="50" cy="50" r="50" fill="#0F172A" stroke="#F59E0B" strokeWidth="6" />
+          {/* Orange Left Half */}
+          <path d="M 50 10 L 15 50 L 50 90 Z" fill="#FF7A00" />
+          {/* Green Right Half */}
+          <path d="M 50 10 L 85 50 L 50 90 Z" fill="#2EA043" />
+          {/* White Circuits */}
+          <circle cx="36" cy="30" r="4.5" fill="#FFFFFF" />
+          <circle cx="64" cy="30" r="4.5" fill="#FFFFFF" />
         </g>
 
-        {/* 3. Hardbound Engineering Lab Journal Spine at Left */}
+        {/* 2. Insulated Stainless Steel Thermal Flask (Right) */}
+        <g filter="url(#merch-glow)">
+          <rect x="42" y="23" width="10" height="29" rx="3" fill="url(#merch-flask)" stroke="url(#merch-gold)" strokeWidth="1.8" />
+          {/* Flask Cap */}
+          <rect x="44" y="17" width="6" height="6" rx="1.5" fill="url(#merch-gold)" stroke="#FDE68A" strokeWidth="0.8" />
+          <circle cx="47" cy="20" r="1" fill="#FFFFFF" />
+          {/* Glowing Smart Temp Ring */}
+          <line x1="42.5" y1="27" x2="51.5" y2="27" stroke="#00F0FF" strokeWidth="1.6" strokeLinecap="round" />
+          {/* Laser-Etched KITE Diamond Insignia */}
+          <g transform="translate(44, 33) scale(0.035)">
+            <path d="M 50 2 L 6 48 L 50 94 Z" fill="#FF7A00" />
+            <path d="M 50 2 L 94 48 L 50 94 Z" fill="#2EA043" />
+          </g>
+        </g>
+
+        {/* 3. Hardbound Engineering Lab Journal (Left) */}
         <rect x="8" y="27" width="4.5" height="24" rx="1.2" fill="#047857" stroke="#34D399" strokeWidth="1.2" />
-        <line x1="9.5" y1="32" x2="11.5" y2="32" stroke="#FDE68A" strokeWidth="1" />
-        <line x1="9.5" y1="37" x2="11.5" y2="37" stroke="#FDE68A" strokeWidth="1" />
+        <line x1="9.5" y1="31" x2="11.5" y2="31" stroke="#FDE68A" strokeWidth="1" />
+        <line x1="9.5" y1="36" x2="11.5" y2="36" stroke="#FDE68A" strokeWidth="1" />
       </svg>
     ),
   },
@@ -318,7 +319,7 @@ export const ADMIN_ITEMS: AdminItem[] = [
             <stop offset="100%" stopColor="#064E3B" />
           </linearGradient>
           <filter id="btc-glow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feGaussianBlur stdDeviation="1.5" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
         </defs>
@@ -339,14 +340,13 @@ export const ADMIN_ITEMS: AdminItem[] = [
           strokeLinejoin="round"
         />
 
-        {/* Gold Ribbon Fringes */}
+        {/* Ribbon Gold Metallic Trim */}
         <line x1="16" y1="57" x2="25" y2="52.5" stroke="#FDE68A" strokeWidth="1.5" />
         <line x1="48" y1="57" x2="39" y2="52.5" stroke="#FDE68A" strokeWidth="1.5" />
 
         {/* Outer Radiant 3D Gold Starburst Medallion */}
         <circle cx="32" cy="27" r="22" fill="url(#btc-gold-rim)" />
-        {/* Coin-Edged Ridged Teeth on Perimeter */}
-        <circle cx="32" cy="27" r="20" stroke="#FFFBEB" strokeWidth="1.2" strokeDasharray="2 2" />
+        <circle cx="32" cy="27" r="20" stroke="#FFFBEB" strokeWidth="1.2" strokeDasharray="2.5 2" />
 
         {/* Deep Jewel-Grade Emerald Hard Enamel Inlay */}
         <circle cx="32" cy="27" r="17.5" fill="url(#btc-enamel)" stroke="#FDE68A" strokeWidth="2" />
@@ -356,22 +356,20 @@ export const ADMIN_ITEMS: AdminItem[] = [
           <circle cx="32" cy="27" r="13" />
         </g>
 
-        {/* Center High-Relief Die-Struck Golden Star Emblem */}
-        <g filter="url(#btc-glow)">
-          <path
-            d="M32 15L34.8 22.8H43L36.4 27.6L38.9 35.5L32 30.8L25.1 35.5L27.6 27.6L21 22.8H29.2L32 15Z"
-            fill="url(#btc-gold-rim)"
-            stroke="#FFFBEB"
-            strokeWidth="1.2"
-            strokeLinejoin="round"
-          />
-
-          {/* Precision Robotics Core Hub */}
-          <circle cx="32" cy="27" r="3.8" fill="#065F46" stroke="#FDE68A" strokeWidth="1.2" />
-          <circle cx="32" cy="27" r="1.8" fill="#FFFBEB" />
+        {/* DEAD CENTER: REAL PROPER 3D KITE ROBOTICS EMBLEM */}
+        <g transform="translate(24, 18) scale(0.12)" filter="url(#btc-glow)">
+          {/* Orange Left Half */}
+          <path d="M 50 2 L 6 48 L 50 94 Z" fill="#FF7A00" stroke="#FFFBEB" strokeWidth="2" />
+          {/* Green Right Half */}
+          <path d="M 50 2 L 94 48 L 50 94 Z" fill="#2EA043" stroke="#FFFBEB" strokeWidth="2" />
+          {/* White Circuit Traces */}
+          <path d="M 44 26 L 44 14 L 35 14" stroke="#FFFFFF" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          <circle cx="33" cy="14" r="4.5" stroke="#FFFFFF" strokeWidth="3" fill="none" />
+          <path d="M 56 26 L 56 14 L 65 14" stroke="#FFFFFF" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          <circle cx="67" cy="14" r="4.5" stroke="#FFFFFF" strokeWidth="3" fill="none" />
         </g>
 
-        {/* Shimmering Diamond Sparkle Glints */}
+        {/* Diamond Sparkle Glints */}
         <path d="M43 17L44 19.5L46.5 20.5L44 21.5L43 24L42 21.5L39.5 20.5L42 19.5L43 17Z" fill="#FFFFFF" />
         <circle cx="21" cy="33" r="1" fill="#FFFFFF" />
       </svg>

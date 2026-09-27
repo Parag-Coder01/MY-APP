@@ -29,9 +29,7 @@ import { StudentDashboardModal } from './components/StudentDashboardModal';
 import { NotificationsModal } from './components/NotificationsModal';
 import { AdminDashboardModal } from './components/AdminDashboardModal';
 import { ProfileView } from './components/ProfileView';
-import { MobileAppFrame } from './components/MobileAppFrame';
 import { PWAInstallPrompt } from './components/PWAInstallPrompt';
-import { ShareAppModal } from './components/ShareAppModal';
 import { Footer } from './components/Footer';
 import { OfflineBanner } from './components/OfflineBanner';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
@@ -43,7 +41,6 @@ import {
   Product,
   CartItem,
   UserProfile,
-  UserRole,
 } from './types';
 import {
   MOCK_COURSES,
@@ -57,7 +54,7 @@ function AppContent() {
   const { isDark, toggleTheme } = useTheme();
 
   // Splash & Onboarding states
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   // Navigation states
@@ -72,6 +69,7 @@ function AppContent() {
     } catch {}
     return MOCK_USER;
   });
+
   const [courses, setCourses] = useState<Course[]>(MOCK_COURSES);
   const [products] = useState<Product[]>(MOCK_PRODUCTS);
   const [workshops] = useState(MOCK_WORKSHOPS);
@@ -92,10 +90,10 @@ function AppContent() {
   const [showStudentDashboard, setShowStudentDashboard] = useState(false);
   const [showNotificationsModal, setShowNotificationsModal] = useState(false);
   const [showAdminDashboard, setShowAdminDashboard] = useState(false);
+
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
-  const [showShareModal, setShowShareModal] = useState(false);
 
   // Login & Logout management
   const isLoggedIn = user.id !== 'guest';
@@ -109,205 +107,242 @@ function AppContent() {
     setExtendedView(null);
     setNotifications((prev) => [
       {
-        id: 'login-' + Date.now(),
+        id: `notif_${Date.now()}`,
         title: `Welcome, ${loggedUser.name}!`,
-        message: `Successfully authenticated as ${loggedUser.role}. Your STEM curriculum and kits are synchronized.`,
+        message: `Logged in successfully as ${loggedUser.role}.`,
         time: 'Just now',
-        timestamp: 'Just now',
         read: false,
-        type: 'system',
-        category: 'announcements',
-      },
-      ...prev,
-    ]);
-  };
-
-  const handleUpdateUser = (updated: UserProfile) => {
-    setUser(updated);
-    try {
-      localStorage.setItem('kite_user_session', JSON.stringify(updated));
-    } catch {}
-    setNotifications((prev) => [
-      {
-        id: 'prof-' + Date.now(),
-        title: 'Profile Updated',
-        message: 'Your personal, institutional, and role credentials have been saved.',
-        time: 'Just now',
-        timestamp: 'Just now',
-        read: false,
-        type: 'system',
-        category: 'announcements',
+        type: 'account',
       },
       ...prev,
     ]);
   };
 
   const handleLogout = () => {
-    fetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
-    const guestUser: UserProfile = {
-      id: 'guest',
-      name: 'Guest Explorer',
-      email: '',
-      phone: '',
-      role: 'student',
-      enrolledCoursesCount: 0,
-      completedProjectsCount: 0,
-      certificatesCount: 0,
-    };
-    setUser(guestUser);
+    setUser(MOCK_USER);
     try {
       localStorage.removeItem('kite_user_session');
     } catch {}
-    setNotifications((prev) => [
-      {
-        id: 'logout-' + Date.now(),
-        title: 'Logged Out',
-        message: 'You have been safely signed out. Click Sign In anytime to access your account.',
-        time: 'Just now',
-        timestamp: 'Just now',
-        read: false,
-        type: 'system',
-        category: 'announcements',
-      },
-      ...prev,
-    ]);
+    setShowQuickMenu(false);
+    setShowManageProfileModal(false);
+    setShowStudentDashboard(false);
+    setShowAdminDashboard(false);
+    setExtendedView(null);
+    setCurrentTab('home');
   };
 
   // Cart operations
-  const handleAddToCart = (product: Product) => {
+  const handleAddToCart = (product: Product, qty: number = 1) => {
     setCartItems((prev) => {
       const existing = prev.find((item) => item.product.id === product.id);
       if (existing) {
         return prev.map((item) =>
           item.product.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item, quantity: item.quantity + qty }
             : item
         );
       }
-      return [...prev, { product, quantity: 1 }];
+      return [...prev, { product, quantity: qty }];
+    });
+    setShowCartDrawer(true);
+  };
+
+  const handleUpdateCartQuantity = (productId: string, delta: number) => {
+    setCartItems((prev) => {
+      return prev
+        .map((item) => {
+          if (item.product.id === productId) {
+            const newQty = item.quantity + delta;
+            return newQty > 0 ? { ...item, quantity: newQty } : null;
+          }
+          return item;
+        })
+        .filter(Boolean) as CartItem[];
     });
   };
 
-  const handleUpdateCartQuantity = (productId: string, quantity: number) => {
-    if (quantity <= 0) {
-      handleRemoveCartItem(productId);
-      return;
-    }
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.product.id === productId ? { ...item, quantity } : item
-      )
-    );
-  };
-
-  const handleRemoveCartItem = (productId: string) => {
-    setCartItems((prev) => prev.filter((item) => item.product.id !== productId));
-  };
-
-  const handleBuyNow = (product: Product) => {
-    handleAddToCart(product);
-    setShowCheckoutModal(true);
-  };
-
-  const handleOrderSuccess = (orderId: string) => {
+  const handleClearCart = () => {
     setCartItems([]);
+  };
+
+  const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  const unreadNotifsCount = notifications.filter((n) => !n.read).length;
+
+  // Course enrollment
+  const handleEnrollCourse = (course: Course) => {
+    setCourses((prev) =>
+      prev.map((c) => (c.id === course.id ? { ...c, enrolled: true, progress: 5 } : c))
+    );
+    setSelectedCourse(null);
     setNotifications((prev) => [
       {
-        id: 'order-' + Date.now(),
-        title: 'Hardware Order Confirmed',
-        message: `Order #${orderId} has been confirmed and scheduled for dispatch.`,
+        id: `enr_${Date.now()}`,
+        title: 'Course Enrolled! 🚀',
+        message: `You are now enrolled in ${course.title}. Start lesson 1 now!`,
         time: 'Just now',
-        timestamp: 'Just now',
         read: false,
-        type: 'order',
-        category: 'orders',
+        type: 'course',
+      },
+      ...prev,
+    ]);
+    setShowStudentDashboard(true);
+  };
+
+  // Workshop Registration
+  const handleRegisterWorkshop = (workshopTitle: string) => {
+    setNotifications((prev) => [
+      {
+        id: `ws_${Date.now()}`,
+        title: 'Workshop Registration Confirmed 🎟️',
+        message: `You have successfully reserved your seat for ${workshopTitle}. Check your email for venue pass.`,
+        time: 'Just now',
+        read: false,
+        type: 'event',
       },
       ...prev,
     ]);
   };
 
-  const handleMarkAllNotifsRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+  // Direct checkout handler
+  const handleBuyNow = (product: Product) => {
+    handleAddToCart(product, 1);
+    setSelectedProduct(null);
+    setShowCartDrawer(false);
+    setShowCheckoutModal(true);
   };
 
+  // Handle Tab navigation
   const handleSelectTab = (tab: MainTab) => {
-    try {
-      if (typeof navigator !== 'undefined' && navigator.vibrate) {
-        navigator.vibrate(12);
-      }
-    } catch {
-      // Ignore haptic feedback errors
-    }
     setExtendedView(null);
     setCurrentTab(tab);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSelectExtendedView = (view: ExtendedView) => {
-    if (view === 'admin') {
-      setShowAdminDashboard(true);
-    } else {
-      setExtendedView(view);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    setExtendedView(view);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Render view router
+  const renderActiveView = () => {
+    if (extendedView) {
+      switch (extendedView) {
+        case 'workshops':
+          return <WorkshopsView onRegister={handleRegisterWorkshop} />;
+        case 'school-section':
+          return (
+            <SchoolSectionView
+              onOpenContact={() => handleSelectExtendedView('contact')}
+              onOpenStore={() => handleSelectTab('store')}
+            />
+          );
+        case 'curriculum':
+          return (
+            <CurriculumView
+              onSelectCourse={(courseId) => {
+                const target = courses.find((c) => c.id === courseId);
+                if (target) {
+                  setSelectedCourse(target);
+                } else {
+                  handleSelectTab('learn');
+                }
+              }}
+              onOpenContact={() => handleSelectExtendedView('contact')}
+            />
+          );
+        case 'ebooks':
+          return <EBooksView onOpenContact={() => handleSelectExtendedView('contact')} />;
+        case 'projects':
+          return <ProjectsView />;
+        case 'certificates':
+          return <CertificatesView />;
+        case 'about':
+          return <AboutView onSelectTab={handleSelectTab} />;
+        case 'contact':
+          return <ContactView />;
+        case 'careers':
+          return <CareersView />;
+        case 'it-services':
+          return <ITServicesView onOpenContact={() => handleSelectExtendedView('contact')} />;
+        default:
+          return null;
+      }
+    }
+
+    switch (currentTab) {
+      case 'home':
+        return (
+          <HomeView
+            onSelectTab={handleSelectTab}
+            onSelectExtendedView={handleSelectExtendedView}
+            onSelectCourse={setSelectedCourse}
+            onSelectProduct={setSelectedProduct}
+            onAddToCart={handleAddToCart}
+            onBuyNow={handleBuyNow}
+            onOpenAuthModal={(mode) => {
+              setAuthModalInitialMode(mode || 'login');
+              setShowAuthModal(true);
+            }}
+            courses={courses}
+            products={products}
+            user={user}
+            onOpenInstallPrompt={() => setShowInstallPrompt(true)}
+          />
+        );
+      case 'learn':
+        return (
+          <LearnView
+            courses={courses}
+            onSelectCourse={setSelectedCourse}
+            userRole={user.role}
+          />
+        );
+      case 'store':
+        return (
+          <StoreView
+            products={products}
+            onSelectProduct={setSelectedProduct}
+            onAddToCart={handleAddToCart}
+            onBuyNow={handleBuyNow}
+          />
+        );
+      case 'kms-ai':
+        return <KmsAiView userRole={user.role} />;
+      case 'profile':
+        return (
+          <ProfileView
+            user={user}
+            courses={courses}
+            ordersCount={totalCartCount}
+            onOpenRolePicker={() => {
+              setAuthModalInitialMode('login');
+              setShowAuthModal(true);
+            }}
+            onOpenLoginModal={() => {
+              setAuthModalInitialMode('login');
+              setShowAuthModal(true);
+            }}
+            onOpenCertificates={() => handleSelectExtendedView('certificates')}
+            onOpenStudentDashboard={() => setShowStudentDashboard(true)}
+            onOpenQuickMenu={() => setShowQuickMenu(true)}
+            onSelectExtendedView={handleSelectExtendedView}
+            onOpenInstallPrompt={() => setShowInstallPrompt(true)}
+            onOpenManageProfile={() => setShowManageProfileModal(true)}
+          />
+        );
+      default:
+        return null;
     }
   };
 
-  const handleEnrollOrContinueCourse = (course: Course) => {
-    setCourses((prev) =>
-      prev.map((c) =>
-        c.id === course.id
-          ? { ...c, progress: c.progress ? Math.min(100, c.progress + 15) : 10 }
-          : c
-      )
-    );
-  };
-
-  const unreadNotifsCount = notifications.filter((n) => !n.read).length;
-  const cartCount = cartItems.reduce((acc, it) => acc + it.quantity, 0);
-
   return (
-    <MobileAppFrame onOpenInstallPrompt={() => setShowInstallPrompt(true)}>
-      <div
-        className={`min-h-screen flex flex-col font-sans transition-colors duration-200 pb-28 ${
-          isDark
-            ? 'bg-slate-950 text-slate-100 selection:bg-cyan-500 selection:text-slate-950'
-            : 'bg-slate-50 text-slate-900 selection:bg-cyan-500 selection:text-white'
-        }`}
-      >
+      <div className="min-h-screen flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden max-w-[100vw] w-full">
         <OfflineBanner />
 
-        {/* 1. Splash Screen Animation */}
-        <AnimatePresence>
-          {showSplash && (
-            <SplashScreen onFinish={() => setShowSplash(false)} />
-          )}
-        </AnimatePresence>
-
-        {/* 2. Onboarding Modal Flow */}
-        <OnboardingModal
-          isOpen={showOnboarding}
-          onClose={() => setShowOnboarding(false)}
-          onGetStarted={() => setShowOnboarding(false)}
-          onOpenLogin={() => {
-            setShowOnboarding(false);
-            setShowAuthModal(true);
-          }}
-        />
-
-        {/* 3. Authentication & Role Switcher Modal */}
-        <AuthModal
-          isOpen={showAuthModal}
-          onClose={() => setShowAuthModal(false)}
-          currentUser={user}
-          onLoginSuccess={(updatedUser) => {
-            setUser(updatedUser);
-          }}
-        />
-
-        {/* 4. Top Header Bar (With Three-Bars Beside Official Logo, and Dark/Light Mode at Right Corner) */}
+        {/* 1. Global Fixed Top Header */}
         <TopHeader
           user={user}
-          cartCount={cartCount}
+          cartCount={totalCartCount}
           unreadNotifsCount={unreadNotifsCount}
           isDark={isDark}
           onToggleTheme={toggleTheme}
@@ -325,7 +360,6 @@ function AppContent() {
           onOpenManageProfile={() => setShowManageProfileModal(true)}
           onSearchClick={() => handleSelectTab('learn')}
           onOpenInstallPrompt={() => setShowInstallPrompt(true)}
-          onOpenShareModal={() => setShowShareModal(true)}
         />
 
         {/* Extended View Back Button Strip */}
@@ -338,159 +372,28 @@ function AppContent() {
             <div className="max-w-7xl mx-auto flex items-center justify-between">
               <button
                 onClick={() => setExtendedView(null)}
-                className="flex items-center gap-2 text-xs font-mono-code text-cyan-500 dark:text-cyan-400 hover:opacity-80 transition-opacity"
+                className="flex items-center gap-2 text-xs font-mono-code text-cyan-500 dark:text-cyan-400 hover:opacity-80 transition-opacity cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Back to Overview</span>
               </button>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-mono-code uppercase text-slate-400">
-                  Viewing: <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>{extendedView}</strong>
-                </span>
-                <button
-                  onClick={() => setShowQuickMenu(true)}
-                  className={`p-1.5 rounded-lg transition-colors ${
-                    isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                  title="Open Navigation Menu"
-                >
-                  <Menu className="w-4 h-4" />
-                </button>
-              </div>
+              <span className="text-[11px] font-mono-code uppercase tracking-wider text-slate-400">
+                {extendedView.replace('-', ' ')}
+              </span>
             </div>
           </div>
         )}
 
-        {/* Main Content Area */}
-        <main className="flex-1 w-full max-w-7xl mx-auto px-3.5 sm:px-6 pt-4 sm:pt-6 pb-20">
-          {/* Render Extended Views */}
-          {extendedView === 'login' && (
-            <AuthModal
-              isOpen={true}
-              onClose={() => setExtendedView(null)}
-              currentUser={user}
-              initialMode="login"
-              onLoginSuccess={handleLoginSuccess}
-            />
-          )}
-          {extendedView === 'register' && (
-            <AuthModal
-              isOpen={true}
-              onClose={() => setExtendedView(null)}
-              currentUser={user}
-              initialMode="signup"
-              onLoginSuccess={handleLoginSuccess}
-            />
-          )}
-          {extendedView === 'manage-profile' && (
-            <ManageProfileModal
-              isOpen={true}
-              onClose={() => setExtendedView(null)}
-              user={user}
-              onUpdateUser={handleUpdateUser}
-            />
-          )}
-          {extendedView === 'curriculum' && (
-            <CurriculumView />
-          )}
-          {extendedView === 'ebooks' && (
-            <EBooksView />
-          )}
-          {extendedView === 'careers' && (
-            <CareersView />
-          )}
-          {extendedView === 'workshops' && (
-            <WorkshopsView workshops={workshops} />
-          )}
-          {extendedView === 'schools' && (
-            <SchoolSectionView />
-          )}
-          {extendedView === 'projects' && (
-            <ProjectsView />
-          )}
-          {extendedView === 'certificates' && (
-            <CertificatesView user={user} />
-          )}
-          {extendedView === 'about' && (
-            <AboutView onContactClick={() => setExtendedView('contact')} />
-          )}
-          {extendedView === 'contact' && (
-            <ContactView />
-          )}
-          {extendedView === 'it-services' && (
-            <ITServicesView onContactClick={() => setExtendedView('contact')} />
-          )}
-          {extendedView === 'drone-technology' && (
-            <WorkshopsView workshops={workshops} />
-          )}
+        {/* Main Routed Page Content */}
+        <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 pt-4 pb-28">
+          {renderActiveView()}
 
-          {/* Render Primary Tabs when no Extended View is active */}
-          {!extendedView && (
-            <>
-              {currentTab === 'home' && (
-                <HomeView
-                  user={user}
-                  courses={courses}
-                  products={products}
-                  onSelectTab={handleSelectTab}
-                  onSelectExtendedView={handleSelectExtendedView}
-                  onSelectCourse={(course) => setSelectedCourse(course)}
-                  onSelectProduct={(product) => setSelectedProduct(product)}
-                  onAddToCart={handleAddToCart}
-                  onBuyNow={handleBuyNow}
-                  onOpenStudentDashboard={() => setShowStudentDashboard(true)}
-                />
-              )}
 
-              {currentTab === 'learn' && (
-                <LearnView
-                  courses={courses}
-                  onSelectCourse={(course) => setSelectedCourse(course)}
-                />
-              )}
-
-              {currentTab === 'store' && (
-                <StoreView
-                  products={products}
-                  onSelectProduct={(product) => setSelectedProduct(product)}
-                  onAddToCart={handleAddToCart}
-                  onBuyNow={handleBuyNow}
-                />
-              )}
-
-              {currentTab === 'kms-ai' && (
-                <KmsAiView />
-              )}
-
-              {currentTab === 'profile' && (
-                <ProfileView
-                  user={user}
-                  courses={courses}
-                  ordersCount={1}
-                  onOpenRolePicker={() => {
-                    setAuthModalInitialMode('login');
-                    setShowAuthModal(true);
-                  }}
-                  onOpenLoginModal={() => {
-                    setAuthModalInitialMode('login');
-                    setShowAuthModal(true);
-                  }}
-                  onOpenManageProfile={() => setShowManageProfileModal(true)}
-                  onOpenCertificates={() => setExtendedView('certificates')}
-                  onOpenStudentDashboard={() => setShowStudentDashboard(true)}
-                  onOpenQuickMenu={() => setShowQuickMenu(true)}
-                  onSelectExtendedView={handleSelectExtendedView}
-                  onOpenInstallPrompt={() => setShowInstallPrompt(true)}
-                />
-              )}
-            </>
-          )}
 
           {/* Global Comprehensive Footer */}
           <Footer
             onSelectTab={handleSelectTab}
             onSelectExtendedView={handleSelectExtendedView}
-            onOpenShareModal={() => setShowShareModal(true)}
             onOpenInstallPrompt={() => setShowInstallPrompt(true)}
             isDark={isDark}
           />
@@ -527,10 +430,6 @@ function AppContent() {
             setShowQuickMenu(false);
             setShowInstallPrompt(true);
           }}
-          onOpenShareModal={() => {
-            setShowQuickMenu(false);
-            setShowShareModal(true);
-          }}
           onOpenStudentDashboard={() => {
             setShowQuickMenu(false);
             setShowStudentDashboard(true);
@@ -543,60 +442,67 @@ function AppContent() {
           onClose={() => setShowCartDrawer(false)}
           items={cartItems}
           onUpdateQuantity={handleUpdateCartQuantity}
-          onRemoveItem={handleRemoveCartItem}
-          onProceedToCheckout={() => setShowCheckoutModal(true)}
+          onCheckout={() => {
+            setShowCartDrawer(false);
+            setShowCheckoutModal(true);
+          }}
         />
 
         {/* Checkout Modal */}
         <CheckoutModal
           isOpen={showCheckoutModal}
           onClose={() => setShowCheckoutModal(false)}
-          cartItems={cartItems}
+          items={cartItems}
           user={user}
-          onOrderSuccess={handleOrderSuccess}
+          onClearCart={handleClearCart}
         />
 
-        {/* Authentication Modal (Sign In & Create Account) */}
+        {/* Course Detail Modal */}
+        {selectedCourse && (
+          <CourseDetailModal
+            course={selectedCourse}
+            onClose={() => setSelectedCourse(null)}
+            onEnroll={handleEnrollCourse}
+          />
+        )}
+
+        {/* Product Detail Modal */}
+        {selectedProduct && (
+          <ProductDetailModal
+            product={selectedProduct}
+            onClose={() => setSelectedProduct(null)}
+            onAddToCart={(p) => handleAddToCart(p, 1)}
+            onBuyNow={handleBuyNow}
+          />
+        )}
+
+        {/* Auth Modal (Login / Sign Up) */}
         <AuthModal
           isOpen={showAuthModal}
-          onClose={() => setShowAuthModal(false)}
-          currentUser={user}
           initialMode={authModalInitialMode}
-          onLoginSuccess={handleLoginSuccess}
+          onClose={() => setShowAuthModal(false)}
+          onSuccess={handleLoginSuccess}
         />
 
-        {/* Manage Profile & Credentials Modal */}
+        {/* Manage Profile Modal */}
         <ManageProfileModal
           isOpen={showManageProfileModal}
           onClose={() => setShowManageProfileModal(false)}
           user={user}
-          onUpdateUser={handleUpdateUser}
+          onUpdateUser={(updated) => {
+            setUser(updated);
+            try {
+              localStorage.setItem('kite_user_session', JSON.stringify(updated));
+            } catch {}
+          }}
         />
 
-        {/* Course Detail Modal */}
-        <CourseDetailModal
-          course={selectedCourse}
-          onClose={() => setSelectedCourse(null)}
-          onEnrollOrContinue={handleEnrollOrContinueCourse}
-        />
-
-        {/* Product Detail Modal */}
-        <ProductDetailModal
-          product={selectedProduct}
-          onClose={() => setSelectedProduct(null)}
-          onAddToCart={handleAddToCart}
-          onBuyNow={handleBuyNow}
-        />
-
-        {/* Student Dashboard Modal */}
+        {/* Student LMS Dashboard Modal */}
         <StudentDashboardModal
           isOpen={showStudentDashboard}
           onClose={() => setShowStudentDashboard(false)}
           user={user}
           courses={courses}
-          workshops={workshops}
-          onSelectCourse={(c) => setSelectedCourse(c)}
-          onOpenCertificates={() => setExtendedView('certificates')}
         />
 
         {/* Notifications Modal */}
@@ -604,7 +510,12 @@ function AppContent() {
           isOpen={showNotificationsModal}
           onClose={() => setShowNotificationsModal(false)}
           notifications={notifications}
-          onMarkAllAsRead={handleMarkAllNotifsRead}
+          onMarkAllAsRead={() => {
+            setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+          }}
+          onClearNotification={(id) => {
+            setNotifications((prev) => prev.filter((n) => n.id !== id));
+          }}
         />
 
         {/* Admin Dashboard Modal */}
@@ -613,19 +524,35 @@ function AppContent() {
           onClose={() => setShowAdminDashboard(false)}
         />
 
+        {/* SplashScreen */}
+        <SplashScreen
+          isOpen={showSplash}
+          onFinish={() => {
+            setShowSplash(false);
+            const seen = localStorage.getItem('kite_seen_onboarding');
+            if (!seen) {
+              setShowOnboarding(true);
+            }
+          }}
+        />
+
+        {/* First time Onboarding Walkthrough */}
+        <OnboardingModal
+          isOpen={showOnboarding}
+          onClose={() => {
+            setShowOnboarding(false);
+            try {
+              localStorage.setItem('kite_seen_onboarding', 'true');
+            } catch {}
+          }}
+        />
+
         {/* PWA Mobile App Install Prompt Modal */}
         <PWAInstallPrompt
           isOpen={showInstallPrompt}
           onClose={() => setShowInstallPrompt(false)}
         />
-
-        {/* Universal Share & Open on Any Mobile Device Modal */}
-        <ShareAppModal
-          isOpen={showShareModal}
-          onClose={() => setShowShareModal(false)}
-        />
       </div>
-    </MobileAppFrame>
   );
 }
 

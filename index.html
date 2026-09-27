@@ -2,16 +2,40 @@
 <html lang="en">
   <head>
     <script>
-      // Filter benign Vite websocket disconnection logs in container sandbox preview
+      // Suppress Vite websocket and dev server warning logs in AI Studio preview environment
       (function() {
-        const _origError = console.error;
-        console.error = function(...args) {
-          if (typeof args[0] === 'string' && (args[0].includes('[vite]') || args[0].includes('WebSocket') || args[0].includes('websocket'))) {
-            console.debug(...args);
-            return;
-          }
-          _origError.apply(console, args);
+        var suppress = function(args) {
+          if (!args || !args[0]) return false;
+          var str = typeof args[0] === 'string' ? args[0] : (args[0].message || String(args[0]));
+          return str.includes('[vite]') || str.includes('WebSocket') || str.includes('websocket') || str.includes('ws://') || str.includes('wss://');
         };
+
+        var origError = console.error;
+        console.error = function() {
+          if (suppress(arguments)) return;
+          origError.apply(console, arguments);
+        };
+
+        var origWarn = console.warn;
+        console.warn = function() {
+          if (suppress(arguments)) return;
+          origWarn.apply(console, arguments);
+        };
+
+        var origLog = console.log;
+        console.log = function() {
+          if (suppress(arguments)) return;
+          origLog.apply(console, arguments);
+        };
+
+        window.addEventListener('unhandledrejection', function(event) {
+          if (event && event.reason) {
+            var msg = event.reason.message || String(event.reason);
+            if (msg.includes('[vite]') || msg.includes('WebSocket') || msg.includes('websocket')) {
+              event.preventDefault();
+            }
+          }
+        });
       })();
     </script>
     <meta charset="UTF-8" />
@@ -38,4 +62,3 @@
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

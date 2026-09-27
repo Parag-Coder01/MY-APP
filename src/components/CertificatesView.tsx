@@ -1,132 +1,148 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Award, ShieldCheck, Download, Share2, QrCode, ExternalLink, CheckCircle2, X } from 'lucide-react';
-import { Certificate, UserProfile } from '../types';
+import { Award, ShieldCheck, Download, QrCode, ExternalLink, CheckCircle2, X } from 'lucide-react';
+import { Certificate } from '../types';
 import { MOCK_CERTIFICATES } from '../data/mockData';
-import { KiteLogo } from './KiteLogo';
+import { generateCertificatePdf } from '../utils/pdfGenerator';
 
-interface CertificatesViewProps {
-  user: UserProfile;
-}
-
-export const CertificatesView: React.FC<CertificatesViewProps> = ({ user }) => {
+export const CertificatesView: React.FC = () => {
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [verificationResult, setVerificationResult] = useState<string | null>(null);
 
-  const showToast = (msg: string) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 3000);
+  const filteredCerts = MOCK_CERTIFICATES.filter(
+    (c) =>
+      c.studentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      c.certificateId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      c.courseName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleVerifyId = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    setIsVerifying(true);
+    setTimeout(() => {
+      setIsVerifying(false);
+      const match = MOCK_CERTIFICATES.find(
+        (c) => c.certificateId.toLowerCase() === searchQuery.trim().toLowerCase()
+      );
+      if (match) {
+        setSelectedCert(match);
+        setVerificationResult('VALID');
+      } else {
+        setVerificationResult('NOT_FOUND');
+      }
+    }, 700);
   };
 
   const handleDownload = (cert: Certificate) => {
-    showToast(`Downloading official high-resolution certificate (${cert.certificateId})`);
-  };
-
-  const handleShare = (cert: Certificate) => {
-    const verifyUrl = cert.verificationUrl || `https://www.kiterobotics.in/verify/${cert.certificateId}`;
-    if (typeof navigator !== 'undefined' && navigator.share) {
-      navigator.share({
-        title: `${cert.title} - KITE Robotics`,
-        text: `I just earned an official certification in ${cert.title} from KITE ROBOTICS! Certificate ID: ${cert.certificateId}`,
-        url: verifyUrl,
-      }).catch(() => {});
-    } else {
-      if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(verifyUrl).catch(() => {});
-      }
-      showToast("Certificate verification link copied to clipboard!");
-    }
+    generateCertificatePdf(cert);
   };
 
   return (
-    <div className="space-y-6 pb-12 relative">
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-cyan-500 text-slate-950 px-4 py-2.5 rounded-xl font-bold text-xs shadow-xl animate-bounce">
-          {toastMessage}
+    <div className="space-y-8 pb-16">
+      {/* Header Banner */}
+      <div className="relative rounded-3xl bg-gradient-to-br from-cyan-950/60 via-slate-900 to-slate-950 border border-slate-800 p-6 sm:p-8 overflow-hidden shadow-2xl">
+        <div className="absolute top-0 right-0 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative z-10 max-w-2xl space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono-code">
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>Cryptographic Credential Verification Engine</span>
+          </div>
+          <h1 className="font-display font-black text-2xl sm:text-3xl text-white">
+            Verify & Download Student Certifications
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            All diplomas, summer internships, and robotics workshop certificates issued by KITE Robotics are cryptographically verified and anchored with a unique Serial Certificate ID.
+          </p>
+
+          {/* Quick Search Verification Input */}
+          <form onSubmit={handleVerifyId} className="flex flex-col sm:flex-row gap-2 pt-2">
+            <input
+              type="text"
+              placeholder="Enter Certificate ID (e.g. KITE-2026-AI-8841)..."
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setVerificationResult(null);
+              }}
+              className="flex-1 px-4 py-3 rounded-2xl bg-slate-950 border border-slate-800 text-white placeholder-slate-500 text-xs font-mono-code focus:outline-none focus:border-cyan-500 transition-colors"
+            />
+            <button
+              type="submit"
+              disabled={isVerifying}
+              className="px-6 py-3 rounded-2xl bg-cyan-500 text-slate-950 font-mono-code font-bold text-xs hover:bg-cyan-400 transition-colors shadow-lg shadow-cyan-500/20 active:scale-95 disabled:opacity-50 cursor-pointer"
+            >
+              {isVerifying ? 'Verifying...' : 'Verify Now'}
+            </button>
+          </form>
+
+          {verificationResult === 'NOT_FOUND' && (
+            <p className="text-xs text-rose-400 font-mono-code">
+              ⚠️ No certificate record matching "{searchQuery}" was found. Please check the spelling.
+            </p>
+          )}
         </div>
-      )}
-      {/* Header */}
-      <div>
-        <div className="text-xs font-mono-code text-cyan-400 uppercase tracking-widest flex items-center gap-1.5">
-          <Award className="w-4 h-4" />
-          <span>Verifiable Digital Credentials</span>
-        </div>
-        <h2 className="font-display font-black text-2xl sm:text-3xl text-white mt-1">
-          Certificates & Honors
-        </h2>
-        <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl">
-          Tamper-proof certifications recognizing practical robotics competence, embedded coding labs, and ROBOZEST achievements.
-        </p>
       </div>
 
-      {/* Certificates Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {MOCK_CERTIFICATES.map((cert) => (
-          <div
-            key={cert.id}
-            className="rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-cyan-800/60 transition-all p-5 flex flex-col justify-between shadow-xl group"
-          >
-            {/* Certificate Header Banner */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-2.5 rounded-2xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-                  <Award className="w-6 h-6" />
+      {/* Certificate Archive List */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="font-display font-bold text-base sm:text-lg text-white">
+            Recently Issued & Sample Certifications
+          </h2>
+          <span className="text-xs font-mono-code text-slate-400">
+            Showing {filteredCerts.length} credentials
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {filteredCerts.map((cert) => (
+            <div
+              key={cert.id}
+              className="p-5 rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/50 transition-all flex flex-col justify-between space-y-4"
+            >
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[10px] font-mono-code px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-bold">
+                    {cert.certificateId}
+                  </span>
+                  <span className="text-[10px] font-mono-code text-slate-500">
+                    Issued: {cert.issueDate}
+                  </span>
                 </div>
-                <span className="text-[10px] font-mono-code px-2 py-0.5 rounded bg-slate-950 text-slate-400 border border-slate-800">
-                  {cert.type.toUpperCase()}
-                </span>
+                <h3 className="font-display font-bold text-base text-white">
+                  {cert.studentName}
+                </h3>
+                <p className="text-xs text-slate-300 font-mono-code">
+                  Course: {cert.courseName}
+                </p>
+                <div className="flex items-center gap-2 text-[11px] text-slate-400">
+                  <Award className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Grade / Distinction: <strong className="text-white">{cert.grade}</strong></span>
+                </div>
               </div>
 
-              <h3 className="font-display font-bold text-base text-white group-hover:text-cyan-400 transition-colors">
-                {cert.title}
-              </h3>
-
-              <div className="text-xs text-slate-400 mt-1 font-mono-code">
-                Awarded to: <span className="text-slate-200 font-semibold">{cert.studentName}</span>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800/90 mt-4 space-y-1.5 text-xs font-mono-code">
-                <div className="flex justify-between text-slate-400">
-                  <span>Issued</span>
-                  <span className="text-slate-200">{cert.issueDate}</span>
-                </div>
-                <div className="flex justify-between text-slate-400">
-                  <span>Certificate ID</span>
-                  <span className="text-cyan-400 font-bold">{cert.certificateId}</span>
-                </div>
-                <div className="flex items-center gap-1 text-[11px] text-emerald-400 pt-1 border-t border-slate-800/60">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  <span>Officially Verified on Blockchain</span>
-                </div>
+              <div className="flex items-center gap-2 pt-2 border-t border-slate-800">
+                <button
+                  onClick={() => setSelectedCert(cert)}
+                  className="flex-1 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500 text-cyan-400 hover:text-slate-950 font-mono-code text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <Award className="w-3.5 h-3.5" />
+                  <span>Inspect Credentials</span>
+                </button>
+                <button
+                  onClick={() => handleDownload(cert)}
+                  className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white cursor-pointer"
+                  title="Download PDF"
+                >
+                  <Download className="w-4 h-4" />
+                </button>
               </div>
             </div>
-
-            {/* Actions */}
-            <div className="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <button
-                onClick={() => setSelectedCert(cert)}
-                className="flex-1 py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 font-medium transition-colors"
-              >
-                Inspect
-              </button>
-              <button
-                onClick={() => handleDownload(cert)}
-                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white"
-                title="Download PDF"
-              >
-                <Download className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => handleShare(cert)}
-                className="p-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500 text-cyan-400 hover:text-slate-950"
-                title="Share Verification Link"
-              >
-                <Share2 className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* Certificate Modal Showcase Preview */}
@@ -139,71 +155,57 @@ export const CertificatesView: React.FC<CertificatesViewProps> = ({ user }) => {
           >
             <button
               onClick={() => setSelectedCert(null)}
-              className="absolute top-4 right-4 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="absolute top-4 right-4 p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
 
-            {/* Certificate Paper Style Display */}
-            <div className="border-4 border-double border-cyan-800/60 rounded-2xl p-6 sm:p-8 bg-slate-950 text-center space-y-4 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 blur-3xl pointer-events-none" />
-
-              <KiteLogo size="md" className="justify-center mx-auto" />
-
-              <div className="text-xs font-mono-code text-cyan-400 uppercase tracking-widest pt-2">
-                Certificate of Practical Excellence
+            {/* Official Diploma Mock Preview */}
+            <div className="border-4 border-double border-cyan-500/40 rounded-2xl p-6 bg-gradient-to-b from-slate-950 to-slate-900 text-center space-y-4 shadow-inner relative">
+              <div className="flex items-center justify-center gap-2 text-cyan-400 font-mono-code text-xs uppercase tracking-widest font-bold">
+                <ShieldCheck className="w-4 h-4" />
+                <span>Verified KITE Robotics Credential</span>
               </div>
 
-              <div className="text-xs text-slate-400">
-                This is proudly presented to
-              </div>
+              <h2 className="font-display font-black text-xl sm:text-2xl text-white tracking-wide uppercase">
+                Certificate of Completion
+              </h2>
 
-              <div className="font-display font-extrabold text-2xl sm:text-3xl text-white tracking-wide">
+              <p className="text-xs text-slate-400 italic">This is proudly presented to</p>
+              <div className="font-display font-black text-2xl sm:text-3xl text-cyan-400 tracking-wider">
                 {selectedCert.studentName}
               </div>
-
-              <div className="text-xs text-slate-300 max-w-md mx-auto">
-                for demonstrating exceptional technical mastery and completing all hardware modules for
+              <p className="text-xs text-slate-300 max-w-md mx-auto leading-relaxed">
+                For successfully demonstrating engineering rigor, hands-on circuitry, and final capstone project execution in
+              </p>
+              <div className="font-mono-code font-bold text-sm sm:text-base text-white bg-slate-900/80 py-1.5 px-4 rounded-xl border border-slate-800 inline-block">
+                {selectedCert.courseName}
               </div>
 
-              <div className="font-display font-bold text-lg sm:text-xl text-cyan-300">
-                "{selectedCert.title}"
-              </div>
-
-              {/* Bottom Stamp & Signatures */}
-              <div className="pt-6 border-t border-slate-800/80 grid grid-cols-3 gap-4 text-xs font-mono-code items-end">
-                <div className="text-left">
-                  <div className="text-slate-400 text-[10px]">Issued Date</div>
-                  <div className="text-slate-200 font-semibold">{selectedCert.issueDate}</div>
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-800 text-left text-xs font-mono-code">
+                <div>
+                  <div className="text-[10px] text-slate-500">SERIAL ID</div>
+                  <div className="text-cyan-400 font-bold">{selectedCert.certificateId}</div>
+                  <div className="text-[10px] text-slate-500 mt-1">ISSUE DATE</div>
+                  <div className="text-slate-300">{selectedCert.issueDate}</div>
                 </div>
-
-                <div className="flex flex-col items-center">
-                  <div className="w-12 h-12 rounded-xl bg-slate-900 border border-cyan-800/50 flex items-center justify-center text-cyan-400">
-                    <QrCode className="w-7 h-7" />
-                  </div>
-                  <div className="text-[9px] text-slate-500 mt-1">{selectedCert.certificateId}</div>
-                </div>
-
                 <div className="text-right">
-                  <div className="text-slate-400 text-[10px]">Authorized Mentor</div>
-                  <div className="text-slate-200 font-semibold">KITE Academic Council</div>
+                  <div className="text-[10px] text-slate-500">FINAL EVALUATION</div>
+                  <div className="text-emerald-400 font-bold">{selectedCert.grade}</div>
+                  <div className="text-[10px] text-slate-500 mt-1">STATUS</div>
+                  <div className="text-emerald-400 flex items-center justify-end gap-1">
+                    <CheckCircle2 className="w-3 h-3" />
+                    <span>Cryptographically Valid</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Download / Share Actions */}
-            <div className="mt-5 flex items-center justify-between gap-3">
-              <button
-                onClick={() => handleShare(selectedCert)}
-                className="flex-1 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 flex items-center justify-center gap-2"
-              >
-                <Share2 className="w-4 h-4 text-cyan-400" />
-                <span>Share Credential Link</span>
-              </button>
-
+            {/* Download Action */}
+            <div className="mt-5 flex items-center justify-end gap-3">
               <button
                 onClick={() => handleDownload(selectedCert)}
-                className="flex-1 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20"
+                className="w-full py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 cursor-pointer"
               >
                 <Download className="w-4 h-4" />
                 <span>Download High-Res PDF</span>

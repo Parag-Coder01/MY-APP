@@ -1,237 +1,160 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { PhoneCall, Mail, Globe, MessageSquare, Send, CheckCircle2, MapPin, ChevronDown, ChevronUp, HelpCircle, Github, ExternalLink } from 'lucide-react';
+import { PhoneCall, Mail, Globe, MessageSquare, Send, CheckCircle2, MapPin, ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
 import { COMPANY_INFO } from '../data/mockData';
-import { OFFICIAL_GITHUB_URL } from '../utils/shareUtils';
 
 export const ContactView: React.FC = () => {
-  const [senderName, setSenderName] = useState('');
-  const [senderContact, setSenderContact] = useState('');
-  const [subject, setSubject] = useState('Hardware Inquiry');
-  const [msg, setMsg] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    subject: 'School Lab (ATL) Setup',
+    message: '',
+  });
   const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [faqOpen, setFaqOpen] = useState<number | null>(0);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setTimeout(() => {
+      setSubmitted(false);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: 'School Lab (ATL) Setup',
+        message: '',
+      });
+    }, 4000);
+  };
 
   const faqs = [
     {
-      q: 'How do schools get started with an Atal Tinkering Lab (ATL)?',
-      a: 'KITE ROBOTICS provides complete turnkey assistance, from NITI Aayog compliance documentation and hardware layout design to teacher training and annual maintenance.',
+      q: 'How can our school partner with KITE Robotics for an Atal Tinkering Lab (ATL)?',
+      a: 'We provide end-to-end support for Atal Tinkering Lab setup, including lab interior design, procurement of NITI Aayog compliant equipment, hands-on STEM curriculum books, and certified teacher training workshops.',
     },
     {
-      q: 'Are hardware kits included with the online robotics courses?',
-      a: 'Yes! When you enroll in our masterclasses, the verified physical hardware kit (Arduino, sensors, chassis, motors) is couriered directly to your doorstep anywhere in India.',
+      q: 'Do you offer customized robotics kits for college competitions or robo-wars?',
+      a: 'Yes! We engineer custom aluminum and carbon-fiber chassis, high-torque planetary gear motors, high-discharge LiPo battery modules, and heavy-duty motor drivers tested for national-level combat and line-follower challenges.',
     },
     {
-      q: 'How can students register for the ROBOZEST championship?',
-      a: 'Registration can be completed directly within this app under the Workshops & Events tab or via your school robotics coordinator.',
+      q: 'What turn-around time can we expect for custom educational ERP & LMS portals?',
+      a: 'Depending on feature scope, our enterprise engineering team delivers a production-ready, cloud-hosted School ERP or Learning Management System within 3 to 6 weeks, complete with automated student report cards and fee management.',
     },
     {
-      q: 'What age group are KITE Robotics programs suitable for?',
-      a: 'Our curricula are segmented for ages 8 to 18+ (Class 3 to College/Makers), ranging from visual block robotics to advanced C++ firmware, IoT, and Computer Vision.',
+      q: 'Can students verify their internship and workshop certificates online?',
+      a: 'Absolutely. Every certificate issued by KITE Robotics comes with a tamper-proof cryptographic QR code and unique Serial ID that can be verified 24/7 on our Certificates Portal.',
     },
   ];
 
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    try {
-      await fetch('/api/enquiry', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          schoolName: 'Direct Portal Query',
-          coordinatorName: senderName,
-          phone: senderContact,
-          email: senderContact.includes('@') ? senderContact : 'phone-contact@kiterobotics.in',
-          city: 'Direct Query',
-          studentCount: '1',
-          message: `Subject: ${subject} | ${msg}`,
-        }),
-      });
-      setSubmitted(true);
-    } catch {
-      setSubmitted(true);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   return (
-    <div className="space-y-8 pb-12">
-      {/* Header */}
-      <div>
-        <div className="text-xs font-mono-code text-cyan-400 uppercase tracking-widest flex items-center gap-1.5">
-          <PhoneCall className="w-4 h-4" />
-          <span>Engineering Support & Relations</span>
-        </div>
-        <h2 className="font-display font-black text-2xl sm:text-3xl text-white mt-1">
-          Contact KITE ROBOTICS
-        </h2>
-        <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl">
-          Connect directly with our lab engineers, curriculum designers, and institutional directors.
-        </p>
-      </div>
-
-      {/* 3 Direct Quick Action Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <a
-          href={`tel:${COMPANY_INFO.phone.replace(/\s+/g, '')}`}
-          className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/50 flex flex-col justify-between transition-all group"
-        >
-          <div className="p-3 rounded-xl bg-cyan-950/60 text-cyan-400 border border-cyan-800/40 w-fit mb-3">
-            <PhoneCall className="w-5 h-5" />
+    <div className="space-y-10 pb-16">
+      {/* Hero Banner */}
+      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-900 via-cyan-950/40 to-slate-950 border border-slate-800 p-6 sm:p-10 shadow-2xl">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+        
+        <div className="relative z-10 max-w-2xl space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono-code">
+            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+            Direct Headquarters Hotline & Technical Hub
           </div>
-          <div>
-            <div className="text-xs text-slate-400 font-mono-code">Hotline & Support</div>
-            <div className="font-display font-bold text-base text-white group-hover:text-cyan-400 transition-colors mt-0.5">
-              {COMPANY_INFO.phone}
-            </div>
-            <div className="text-[11px] text-cyan-400 mt-1 font-mono-code">Tap to call directly →</div>
-          </div>
-        </a>
-
-        <a
-          href={`mailto:${COMPANY_INFO.email}`}
-          className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/50 flex flex-col justify-between transition-all group"
-        >
-          <div className="p-3 rounded-xl bg-blue-950/60 text-blue-400 border border-blue-800/40 w-fit mb-3">
-            <Mail className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="text-xs text-slate-400 font-mono-code">Official Inquiries</div>
-            <div className="font-display font-bold text-base text-white group-hover:text-cyan-400 transition-colors mt-0.5">
-              {COMPANY_INFO.email}
-            </div>
-            <div className="text-[11px] text-blue-400 mt-1 font-mono-code">Tap to email →</div>
-          </div>
-        </a>
-
-        <a
-          href={`https://wa.me/919564866985?text=Hi%20KITE%20Robotics,%20I%20would%20like%20to%20know%20more%20about%20your%20programs`}
-          target="_blank"
-          rel="noreferrer"
-          className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/50 flex flex-col justify-between transition-all group"
-        >
-          <div className="p-3 rounded-xl bg-emerald-950/60 text-emerald-400 border border-emerald-800/40 w-fit mb-3">
-            <MessageSquare className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="text-xs text-slate-400 font-mono-code">WhatsApp Instant Support</div>
-            <div className="font-display font-bold text-base text-white group-hover:text-cyan-400 transition-colors mt-0.5">
-              +91 95648 66985
-            </div>
-            <div className="text-[11px] text-emerald-400 mt-1 font-mono-code">Chat on WhatsApp →</div>
-          </div>
-        </a>
-      </div>
-
-      {/* Message Form & Hubs Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Contact Form */}
-        <div className="lg:col-span-7 rounded-3xl bg-slate-900/90 border border-slate-800 p-6 sm:p-7 shadow-xl">
-          <h3 className="font-display font-bold text-lg text-white mb-1">
-            Send an Engineering Query
-          </h3>
-          <p className="text-xs text-slate-400 mb-5">
-            Leave your query and our team will get back to you promptly.
+          <h1 className="font-display font-black text-2xl sm:text-4xl text-white tracking-tight">
+            Connect with KITE Robotics
+          </h1>
+          <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+            Whether you want to install an AI & Robotics Lab at your institution, order bulk STEM DIY hardware kits, or build a bespoke enterprise software portal, our technical team is ready to assist you.
           </p>
-
-          {submitted ? (
-            <div className="p-6 rounded-2xl bg-slate-950 border border-emerald-800/40 text-center space-y-3">
-              <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
-              <h4 className="font-display font-bold text-base text-white">Message Dispatched!</h4>
-              <p className="text-xs text-slate-300">
-                Thank you, {senderName}. Our technical support coordinator has received your message and will respond shortly.
-              </p>
-              <button
-                onClick={() => setSubmitted(false)}
-                className="px-4 py-2 rounded-xl bg-slate-800 text-xs text-slate-200"
-              >
-                Send Another Message
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleSendMessage} className="space-y-3.5">
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Your Name</label>
-                <input
-                  type="text"
-                  required
-                  value={senderName}
-                  onChange={(e) => setSenderName(e.target.value)}
-                  placeholder="e.g. Aarav Sharma"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:border-cyan-400 focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Phone Number or Email</label>
-                <input
-                  type="text"
-                  required
-                  value={senderContact}
-                  onChange={(e) => setSenderContact(e.target.value)}
-                  placeholder="e.g. 9876543210 or name@domain.com"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:border-cyan-400 focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Inquiry Category</label>
-                <select
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:border-cyan-400 focus:outline-none cursor-pointer"
-                >
-                  <option value="Hardware Inquiry">Hardware Inquiry & Kits</option>
-                  <option value="School ATL Setup">School ATL & Lab Setup</option>
-                  <option value="ROBOZEST 2026">ROBOZEST 2026 Participation</option>
-                  <option value="Student Courses">Course Curriculum & Learning</option>
-                  <option value="General Support">General Support</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Your Message / Query</label>
-                <textarea
-                  rows={3}
-                  required
-                  value={msg}
-                  onChange={(e) => setMsg(e.target.value)}
-                  placeholder="Describe your robotics questions, hardware requirements, or school details..."
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:border-cyan-400 focus:outline-none"
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={submitting}
-                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/25 active:scale-95 transition-all"
-              >
-                {submitting ? (
-                  <span>Sending Message...</span>
-                ) : (
-                  <>
-                    <Send className="w-4 h-4" />
-                    <span>Send Message to KITE Robotics</span>
-                  </>
-                )}
-              </button>
-            </form>
-          )}
         </div>
+      </div>
 
-        {/* Pan-India Office Details */}
+      {/* Main Grid: Contact Channels & Form */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Left Column: Direct Communication Cards */}
         <div className="lg:col-span-5 space-y-4">
-          <div className="rounded-3xl bg-slate-900/90 border border-slate-800 p-6 space-y-3">
-            <h3 className="font-display font-bold text-base text-white flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-cyan-400" />
-              <span>Headquarters & Innovation Hub</span>
-            </h3>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              KITE ROBOTICS Corporate Labs<br />
-              Electronics Complex, Sector V<br />
+          <div className="font-display font-bold text-lg text-white">
+            Direct Official Channels
+          </div>
+
+          {/* Hotline Card */}
+          <div className="rounded-3xl bg-slate-900/90 border border-slate-800 p-5 space-y-3 hover:border-cyan-500/40 transition-all">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                <PhoneCall className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-[11px] font-mono-code text-cyan-400 font-semibold uppercase tracking-wider">
+                  Technical Hotline & Admissions
+                </div>
+                <div className="font-mono-code font-bold text-base text-white">
+                  {COMPANY_INFO.phone}
+                </div>
+              </div>
+            </div>
+            <p className="text-xs text-slate-400">
+              Direct line to our senior lab engineers and admissions coordinators. Available 9:30 AM to 6:30 PM IST.
+            </p>
+            <div className="flex items-center gap-2 pt-1">
+              <a
+                href={`tel:${COMPANY_INFO.phone.replace(/\s+/g, '')}`}
+                className="flex-1 py-2 rounded-xl bg-cyan-500 text-slate-950 font-mono-code text-xs font-bold text-center hover:bg-cyan-400 transition-colors shadow-sm"
+              >
+                Call Now
+              </a>
+              <a
+                href={`https://wa.me/${COMPANY_INFO.whatsapp}?text=${encodeURIComponent("Hello KITE Robotics, I would like to inquire about robotics courses and lab setup.")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 py-2 rounded-xl bg-emerald-600 text-white font-mono-code text-xs font-bold text-center hover:bg-emerald-500 transition-colors"
+              >
+                WhatsApp Chat
+              </a>
+            </div>
+          </div>
+
+          {/* Email Card */}
+          <div className="rounded-3xl bg-slate-900/90 border border-slate-800 p-5 space-y-3 hover:border-cyan-500/40 transition-all">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
+                <Mail className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-[11px] font-mono-code text-blue-400 font-semibold uppercase tracking-wider">
+                  Official Email Inbox
+                </div>
+                <div className="font-mono-code font-bold text-sm text-white">
+                  {COMPANY_INFO.email}
+                </div>
+              </div>
+            </div>
+            <p className="text-xs text-slate-400">
+              For official institutional proposals, tenders, invoices, and curriculum partnerships.
+            </p>
+            <a
+              href={`mailto:${COMPANY_INFO.email}`}
+              className="inline-block w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-400 font-mono-code text-xs font-bold text-center transition-colors"
+            >
+              Compose Email
+            </a>
+          </div>
+
+          {/* Campus Location Card */}
+          <div className="rounded-3xl bg-slate-900/90 border border-slate-800 p-5 space-y-2">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                <MapPin className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-[11px] font-mono-code text-amber-400 font-semibold uppercase tracking-wider">
+                  Corporate HQ & Robotics R&D Lab
+                </div>
+                <div className="font-display font-bold text-sm text-white">
+                  KITE Robotics Center
+                </div>
+              </div>
+            </div>
+            <p className="text-xs text-slate-300 leading-relaxed pt-1">
+              {COMPANY_INFO.address}, Salt Lake Sector V, Electronics Complex,<br />
               Kolkata, West Bengal – 700091, India
             </p>
             <div className="pt-2 border-t border-slate-800 text-xs font-mono-code text-slate-400 space-y-1">
@@ -239,78 +162,161 @@ export const ContactView: React.FC = () => {
               <div>Hours: Mon - Sat: 9:30 AM - 6:30 PM IST</div>
             </div>
           </div>
+        </div>
 
-          {/* GitHub Open-Source Hub */}
-          <div className="rounded-3xl bg-slate-900/90 border border-slate-800 p-6 space-y-3">
-            <div className="flex items-center justify-between">
-              <h3 className="font-display font-bold text-base text-white flex items-center gap-2">
-                <Github className="w-4 h-4 text-cyan-400" />
-                <span>Open Source Repository</span>
-              </h3>
-              <span className="text-[10px] font-mono-code px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold">
-                Active
-              </span>
+        {/* Right Column: Inquiry Submission Form */}
+        <div className="lg:col-span-7">
+          <div className="rounded-3xl bg-slate-900 border border-slate-800 p-6 sm:p-8 shadow-xl relative overflow-hidden">
+            <div className="space-y-2 mb-6">
+              <h2 className="font-display font-bold text-xl text-white flex items-center gap-2">
+                <MessageSquare className="w-5 h-5 text-cyan-400" />
+                <span>Send Us an Inquiry / Partnership Request</span>
+              </h2>
+              <p className="text-xs text-slate-400">
+                Fill out the form below and an engineering coordinator will respond within 4 business hours.
+              </p>
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Explore open-source robotics firmware, wiring diagrams, Arduino sketches, and web application repositories:
-            </p>
-            <a
-              href={OFFICIAL_GITHUB_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-3 rounded-2xl bg-slate-950 border border-slate-800 hover:border-cyan-500/50 flex items-center justify-between group transition-all"
-            >
-              <div className="flex items-center gap-2.5">
-                <Github className="w-5 h-5 text-white group-hover:text-cyan-400 transition-colors" />
-                <div>
-                  <div className="text-xs font-mono-code font-bold text-white group-hover:text-cyan-400 transition-colors">
-                    paragsarkar100/kite-robotics
+
+            {submitted ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="p-8 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 text-center space-y-3"
+              >
+                <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto" />
+                <h3 className="font-display font-bold text-lg text-white">
+                  Inquiry Received Successfully!
+                </h3>
+                <p className="text-xs text-slate-300 max-w-md mx-auto">
+                  Thank you for reaching out to KITE Robotics. Our operations lead has been notified and will contact you via WhatsApp and phone shortly.
+                </p>
+              </motion.div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-mono-code text-slate-300">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      placeholder="e.g. Dr. Rajesh Sharma"
+                      className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-500 transition-colors"
+                    />
                   </div>
-                  <div className="text-[10px] text-slate-500 font-mono-code">github.com/paragsarkar100/kite-robotics</div>
-                </div>
-              </div>
-              <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-cyan-400 transition-colors" />
-            </a>
-          </div>
 
-          <div className="rounded-3xl bg-slate-900/90 border border-slate-800 p-6 space-y-2.5">
-            <h4 className="font-display font-bold text-xs sm:text-sm text-white">
-              Zonal Coordinators
-            </h4>
-            <div className="text-xs text-slate-400 space-y-2 font-mono-code">
-              <div>📍 <strong>Mumbai:</strong> Western Zone ATL Support</div>
-              <div>📍 <strong>Chennai:</strong> Southern Hardware Testing Center</div>
-              <div>📍 <strong>Hyderabad:</strong> AI & Embedded Systems Lab</div>
-              <div>📍 <strong>Bihar:</strong> State STEM Outreach Hub</div>
-            </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-mono-code text-slate-300">
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      placeholder="rajesh@institution.edu"
+                      className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-500 transition-colors"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-mono-code text-slate-300">
+                      WhatsApp / Phone Number *
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      placeholder="+91 98765 43210"
+                      className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-500 transition-colors"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-mono-code text-slate-300">
+                      Area of Interest
+                    </label>
+                    <select
+                      value={formData.subject}
+                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                      className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-cyan-500 transition-colors cursor-pointer"
+                    >
+                      <option>School Lab (ATL) Setup</option>
+                      <option>Robotics Hardware Kits Bulk Order</option>
+                      <option>Student Course Enrollment</option>
+                      <option>Enterprise IT & ERP Services</option>
+                      <option>Workshop / Faculty Training</option>
+                      <option>General Support & Inquiries</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-mono-code text-slate-300">
+                    Your Requirements & Details *
+                  </label>
+                  <textarea
+                    required
+                    rows={4}
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    placeholder="Tell us about your institution, estimated number of students, or software requirements..."
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-500 transition-colors resize-none"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-mono-code font-bold text-xs uppercase tracking-wider transition-all shadow-lg shadow-cyan-500/20 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <Send className="w-4 h-4" />
+                  <span>Transmit Official Inquiry</span>
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Frequently Asked Questions */}
-      <div className="rounded-3xl bg-slate-900/90 border border-slate-800 p-6 space-y-3">
-        <h3 className="font-display font-bold text-lg text-white flex items-center gap-2">
+      {/* Frequently Asked Questions Accordion */}
+      <div className="rounded-3xl bg-slate-900 border border-slate-800 p-6 sm:p-8 space-y-6">
+        <div className="flex items-center gap-2">
           <HelpCircle className="w-5 h-5 text-cyan-400" />
-          <span>Frequently Asked Questions</span>
-        </h3>
+          <h2 className="font-display font-bold text-lg text-white">
+            Frequently Asked Questions
+          </h2>
+        </div>
 
-        <div className="space-y-2 pt-2">
+        <div className="divide-y divide-slate-800">
           {faqs.map((faq, idx) => (
-            <div
-              key={idx}
-              className="rounded-2xl bg-slate-950 border border-slate-800/80 overflow-hidden"
-            >
+            <div key={idx} className="py-4">
               <button
-                onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                className="w-full px-4 py-3 text-left flex items-center justify-between text-xs sm:text-sm font-semibold text-white hover:text-cyan-400 transition-colors"
+                onClick={() => setFaqOpen(faqOpen === idx ? null : idx)}
+                className="w-full flex items-center justify-between text-left gap-4 cursor-pointer"
               >
-                <span>{faq.q}</span>
-                {openFaq === idx ? <ChevronUp className="w-4 h-4 text-slate-400 shrink-0" /> : <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />}
+                <span className="font-display font-semibold text-sm text-slate-200 hover:text-cyan-400 transition-colors">
+                  {faq.q}
+                </span>
+                {faqOpen === idx ? (
+                  <ChevronUp className="w-4 h-4 text-cyan-400 shrink-0" />
+                ) : (
+                  <ChevronDown className="w-4 h-4 text-slate-500 shrink-0" />
+                )}
               </button>
-              {openFaq === idx && (
-                <div className="px-4 pb-3 pt-1 text-xs text-slate-300 leading-relaxed border-t border-slate-800/60">
+              {faqOpen === idx && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  className="mt-2 text-xs text-slate-400 leading-relaxed pr-6"
+                >
                   {faq.a}
-                </div>
+                </motion.div>
               )}
             </div>
           ))}

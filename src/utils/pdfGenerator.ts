@@ -266,3 +266,84 @@ export function generateAndDownloadKitePdf() {
   // Save the PDF
   doc.save('KITE-Robotics-Kits-and-Components-Specification.pdf');
 }
+
+export function generateCertificatePdf(cert: any) {
+  const doc = new jsPDF({
+    orientation: 'landscape',
+    unit: 'mm',
+    format: 'a4',
+  });
+
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+
+  // Dark Navy Border Background
+  doc.setFillColor(7, 13, 26);
+  doc.rect(0, 0, pageWidth, pageHeight, 'F');
+
+  // Decorative border
+  doc.setDrawColor(6, 182, 212);
+  doc.setLineWidth(1.5);
+  doc.roundedRect(10, 10, pageWidth - 20, pageHeight - 20, 4, 4, 'D');
+
+  doc.setDrawColor(249, 115, 22);
+  doc.setLineWidth(0.5);
+  doc.roundedRect(13, 13, pageWidth - 26, pageHeight - 26, 3, 3, 'D');
+
+  // Header
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(22);
+  doc.setTextColor(255, 255, 255);
+  doc.text('KITE ROBOTICS', pageWidth / 2, 30, { align: 'center' });
+
+  doc.setFontSize(10);
+  doc.setTextColor(34, 211, 238);
+  doc.text('EMPOWERING INNOVATION WITH ROBOTICS, AI & IOT', pageWidth / 2, 37, { align: 'center' });
+
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(249, 115, 22);
+  doc.text('CERTIFICATE OF ACCOMPLISHMENT', pageWidth / 2, 54, { align: 'center' });
+
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(203, 213, 225);
+  doc.text('This is to certify that', pageWidth / 2, 66, { align: 'center' });
+
+  // Recipient
+  doc.setFontSize(26);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(255, 255, 255);
+  doc.text(cert.studentName || 'Student Name', pageWidth / 2, 82, { align: 'center' });
+
+  // Content
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(203, 213, 225);
+  doc.text('has successfully completed the curriculum and demonstrated excellence in', pageWidth / 2, 94, { align: 'center' });
+
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(34, 211, 238);
+  doc.text(cert.title || cert.courseName || 'Advanced Robotics Program', pageWidth / 2, 106, { align: 'center' });
+
+  // Details
+  const detailsY = 135;
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(148, 163, 184);
+
+  // Left
+  doc.text(`Certificate ID: ${cert.certificateId || 'KITE-2026'}`, 25, detailsY);
+  doc.text(`Issue Date: ${cert.issueDate || '2026'}`, 25, detailsY + 8);
+  if (cert.score || cert.grade) {
+    doc.text(`Grade/Score: ${cert.score || cert.grade}`, 25, detailsY + 16);
+  }
+
+  // Right
+  doc.text(`Instructor: ${cert.instructor || 'Lead Robotics Mentor'}`, pageWidth - 25, detailsY, { align: 'right' });
+  doc.text('Authorized by KITE Robotics Academic Board', pageWidth - 25, detailsY + 8, { align: 'right' });
+  doc.text('Verification: www.kiterobotics.in', pageWidth - 25, detailsY + 16, { align: 'right' });
+
+  doc.save(`${cert.certificateId || 'Certificate'}.pdf`);
+}

@@ -1,27 +1,46 @@
-import React, { useState } from 'react';
-import { motion } from 'motion/react';
-import { X, CheckCircle2, ShieldCheck, Truck, CreditCard, Smartphone, Banknote, Building2, Package, ArrowRight, Copy, Check } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import {
+  X,
+  CheckCircle2,
+  ShieldCheck,
+  Truck,
+  CreditCard,
+  Smartphone,
+  Banknote,
+  Building2,
+  Package,
+  ArrowRight,
+  Copy,
+  Check,
+} from 'lucide-react';
 import { CartItem, UserProfile } from '../types';
 
 interface CheckoutModalProps {
   isOpen: boolean;
   onClose: () => void;
-  cartItems: CartItem[];
-  user: UserProfile;
-  onOrderSuccess: (orderId: string) => void;
+  cartItems?: CartItem[];
+  items?: CartItem[];
+  user?: UserProfile;
+  onClearCart?: () => void;
+  onOrderSuccess?: (orderId: string) => void;
 }
 
 export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   isOpen,
   onClose,
   cartItems,
+  items,
   user,
+  onClearCart,
   onOrderSuccess,
 }) => {
+  const actualItems = cartItems || items || [];
   const [step, setStep] = useState<'details' | 'success'>('details');
-  const [name, setName] = useState(user.name);
-  const [phone, setPhone] = useState(user.phone || '9564866985');
-  const [email, setEmail] = useState(user.email);
+
+  const [name, setName] = useState(user?.name || 'KITE Student / Innovator');
+  const [phone, setPhone] = useState(user?.phone || '9564866985');
+  const [email, setEmail] = useState(user?.email || 'contact@kiterobotics.in');
   const [address, setAddress] = useState('Tech Innovation Hub, B-42 Electronics Complex');
   const [city, setCity] = useState('Kolkata');
   const [state, setState] = useState('West Bengal');
@@ -30,10 +49,17 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [orderId, setOrderId] = useState('');
   const [copied, setCopied] = useState(false);
 
+  // Sync state if user prop changes
+  useEffect(() => {
+    if (user?.name) setName(user.name);
+    if (user?.phone) setPhone(user.phone);
+    if (user?.email) setEmail(user.email);
+  }, [user]);
+
   if (!isOpen) return null;
 
-  const subtotal = cartItems.reduce((acc, it) => acc + it.product.price * it.quantity, 0);
-  const shipping = subtotal > 999 || cartItems.length === 0 ? 0 : 99;
+  const subtotal = actualItems.reduce((acc, it) => acc + (it.product?.price || 0) * it.quantity, 0);
+  const shipping = subtotal > 999 || actualItems.length === 0 ? 0 : 99;
   const discount = Math.round(subtotal * 0.1);
   const total = subtotal - discount + shipping;
 
@@ -42,7 +68,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     const generatedId = `KR-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
     setOrderId(generatedId);
     setStep('success');
-    onOrderSuccess(generatedId);
+    if (onClearCart) onClearCart();
+    if (onOrderSuccess) onOrderSuccess(generatedId);
   };
 
   const copyOrderId = () => {
@@ -68,123 +95,147 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         {/* Header */}
         <div className="p-5 border-b border-slate-800 bg-slate-950 flex items-center justify-between">
           <div>
-            <h3 className="font-display font-bold text-lg text-white">
-              {step === 'details' ? 'Secure Hardware Checkout' : 'Order Placed Successfully!'}
-            </h3>
-            <p className="text-xs text-slate-400 font-mono-code">
-              {step === 'details' ? 'Official KITE Robotics Delivery' : 'Thank you for building with KITE'}
-            </p>
+            <div className="text-xs font-mono-code uppercase text-cyan-400 font-semibold tracking-wider flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-cyan-400" />
+              <span>Official KITE Robotics Hardware Dispatch</span>
+            </div>
+            <h2 className="font-display font-extrabold text-xl text-white mt-0.5">
+              {step === 'details' ? 'Complete Your Hardware Order' : 'Order Placed!'}
+            </h2>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-xl bg-slate-900 text-slate-400 hover:text-white transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Modal Body */}
-        <div className="flex-1 overflow-y-auto p-5">
+        {/* Content Body */}
+        <div className="p-5 sm:p-6 overflow-y-auto space-y-6">
           {step === 'details' ? (
-            <form onSubmit={handlePlaceOrder} className="space-y-4">
-              {/* Delivery Address Details */}
+            <form onSubmit={handlePlaceOrder} className="space-y-6">
+              {/* Order summary mini drawer */}
+              <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800/80 space-y-3">
+                <div className="flex items-center justify-between text-xs font-mono-code">
+                  <span className="text-slate-400 flex items-center gap-1.5">
+                    <Package className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Selected Hardware ({actualItems.length} items)</span>
+                  </span>
+                  <span className="text-cyan-400 font-bold">₹{total}</span>
+                </div>
+                <div className="space-y-1.5 max-h-32 overflow-y-auto pr-1">
+                  {actualItems.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center justify-between text-xs text-slate-300 py-1 border-b border-slate-900/60 last:border-none"
+                    >
+                      <span className="truncate max-w-[240px]">{item.product?.name}</span>
+                      <span className="font-mono-code text-slate-400 shrink-0">
+                        {item.quantity} × ₹{item.product?.price}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Step 1: Delivery Address */}
               <div className="space-y-3">
                 <div className="text-xs font-mono-code uppercase text-cyan-400 font-semibold tracking-wider flex items-center gap-1.5">
                   <Truck className="w-4 h-4" />
-                  <span>1. Shipping & Contact Information</span>
+                  <span>1. Institutional & Shipping Destination</span>
                 </div>
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">Full Name</label>
+                    <label className="text-[11px] font-mono-code text-slate-400 block mb-1">
+                      Recipient / Lab Name
+                    </label>
                     <input
                       type="text"
                       required
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:border-cyan-400 focus:outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-cyan-500 font-mono-code"
+                      placeholder="e.g. Dr. Rajesh Sen"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">Mobile Phone (for delivery)</label>
+                    <label className="text-[11px] font-mono-code text-slate-400 block mb-1">
+                      Direct Contact Phone
+                    </label>
                     <input
                       type="tel"
                       required
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:border-cyan-400 focus:outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-cyan-500 font-mono-code"
+                      placeholder="+91 95648 66985"
                     />
                   </div>
-                </div>
-
-                <div>
-                  <label className="block text-[11px] text-slate-400 mb-1">Email (for invoice & tracking)</label>
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:border-cyan-400 focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] text-slate-400 mb-1">Street Address / School / Lab</label>
-                  <input
-                    type="text"
-                    required
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:border-cyan-400 focus:outline-none"
-                  />
-                </div>
-
-                <div className="grid grid-cols-3 gap-2.5">
+                  <div className="sm:col-span-2">
+                    <label className="text-[11px] font-mono-code text-slate-400 block mb-1">
+                      Official Email (for Invoice & Track Link)
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-cyan-500 font-mono-code"
+                      placeholder="admissions@school.edu"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="text-[11px] font-mono-code text-slate-400 block mb-1">
+                      Street / Campus / ATL Lab Address
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-cyan-500 font-mono-code"
+                      placeholder="Room 204, Science Block, Sector V"
+                    />
+                  </div>
                   <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">City</label>
+                    <label className="text-[11px] font-mono-code text-slate-400 block mb-1">
+                      City
+                    </label>
                     <input
                       type="text"
                       required
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:border-cyan-400 focus:outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-cyan-500 font-mono-code"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">State</label>
-                    <input
-                      type="text"
-                      required
-                      value={state}
-                      onChange={(e) => setState(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:border-cyan-400 focus:outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">PIN Code</label>
+                    <label className="text-[11px] font-mono-code text-slate-400 block mb-1">
+                      Pincode
+                    </label>
                     <input
                       type="text"
                       required
                       value={pincode}
                       onChange={(e) => setPincode(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:border-cyan-400 focus:outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-cyan-500 font-mono-code"
                     />
                   </div>
                 </div>
               </div>
 
-              {/* Payment Method Selector */}
-              <div className="space-y-2.5 pt-3 border-t border-slate-800">
+              {/* Step 2: Payment Mode */}
+              <div className="space-y-3">
                 <div className="text-xs font-mono-code uppercase text-cyan-400 font-semibold tracking-wider flex items-center gap-1.5">
                   <CreditCard className="w-4 h-4" />
                   <span>2. Select Payment Mode</span>
                 </div>
-
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setPaymentMethod('upi')}
-                    className={`p-3 rounded-xl border text-left flex items-center gap-2.5 transition-all ${
+                    className={`p-3 rounded-xl border text-left flex items-center gap-2.5 transition-all cursor-pointer ${
                       paymentMethod === 'upi'
                         ? 'bg-cyan-950/40 border-cyan-400 text-white'
                         : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
@@ -200,7 +251,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setPaymentMethod('cards')}
-                    className={`p-3 rounded-xl border text-left flex items-center gap-2.5 transition-all ${
+                    className={`p-3 rounded-xl border text-left flex items-center gap-2.5 transition-all cursor-pointer ${
                       paymentMethod === 'cards'
                         ? 'bg-cyan-950/40 border-cyan-400 text-white'
                         : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
@@ -216,7 +267,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setPaymentMethod('netbanking')}
-                    className={`p-3 rounded-xl border text-left flex items-center gap-2.5 transition-all ${
+                    className={`p-3 rounded-xl border text-left flex items-center gap-2.5 transition-all cursor-pointer ${
                       paymentMethod === 'netbanking'
                         ? 'bg-cyan-950/40 border-cyan-400 text-white'
                         : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
@@ -232,7 +283,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setPaymentMethod('cod')}
-                    className={`p-3 rounded-xl border text-left flex items-center gap-2.5 transition-all ${
+                    className={`p-3 rounded-xl border text-left flex items-center gap-2.5 transition-all cursor-pointer ${
                       paymentMethod === 'cod'
                         ? 'bg-cyan-950/40 border-cyan-400 text-white'
                         : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
@@ -254,14 +305,14 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   <div className="text-base font-bold text-cyan-400">₹{total}</div>
                 </div>
                 <div className="text-right text-[11px] text-emerald-400">
-                  Includes taxes & free courier
+                  Includes GST & free express courier
                 </div>
               </div>
 
               {/* Place Order CTA */}
               <button
                 type="submit"
-                className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/25 active:scale-95 transition-all"
+                className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/25 active:scale-95 transition-all cursor-pointer"
               >
                 <span>Confirm Order & Pay ₹{total}</span>
                 <ArrowRight className="w-4 h-4" />
@@ -273,7 +324,6 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               <div className="w-16 h-16 rounded-3xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-10 h-10" />
               </div>
-
               <div>
                 <h3 className="font-display font-extrabold text-xl text-white">
                   Order Successfully Confirmed!
@@ -291,7 +341,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 </div>
                 <button
                   onClick={copyOrderId}
-                  className="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 hover:text-white flex items-center gap-1 text-xs"
+                  className="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 hover:text-white flex items-center gap-1 text-xs cursor-pointer"
                 >
                   {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                   <span>{copied ? 'Copied' : 'Copy'}</span>
@@ -325,7 +375,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
               <button
                 onClick={onClose}
-                className="w-full max-w-sm py-3 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs sm:text-sm mx-auto block transition-colors"
+                className="w-full max-w-sm py-3 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs sm:text-sm mx-auto block transition-colors cursor-pointer"
               >
                 Back to Hardware Store
               </button>

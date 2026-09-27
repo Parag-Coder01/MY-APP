@@ -1,10 +1,9 @@
 /**
- * Utility functions for sharing, public URL resolution, and device connectivity.
+ * Utility functions for public URL resolution and device connectivity.
  */
 
 export const PUBLIC_APP_URL = 'https://ais-pre-ovf6slpthc75fethtyfkiv-129721295228.asia-east1.run.app';
-export const OFFICIAL_GITHUB_URL = 'https://github.com/paragsarkar100/kite-robotics';
-export const OFFICIAL_ORG_GITHUB_URL = 'https://github.com/kiterobotics';
+export const OFFICIAL_WEBSITE_URL = 'https://www.kiterobotics.in';
 
 /**
  * Returns the public URL that ANYONE can open on ANY device without requiring
@@ -24,7 +23,7 @@ export function getPublicShareUrl(): string {
     return currentHref.replace('ais-dev-', 'ais-pre-');
   }
 
-  // If on localhost or preview container, return PUBLIC_APP_URL
+  // If on localhost or private container, return PUBLIC_APP_URL
   if (currentOrigin.includes('localhost') || currentOrigin.includes('127.0.0.1')) {
     return PUBLIC_APP_URL;
   }
@@ -68,35 +67,5 @@ export async function copyTextToClipboard(text: string): Promise<boolean> {
     return successful;
   } catch {
     return false;
-  }
-}
-
-/**
- * Generates WhatsApp share URL
- */
-export function getWhatsAppShareUrl(url: string, message = 'Check out KITE Robotics mobile app!'): string {
-  const fullText = `${message}\n${url}`;
-  return `https://wa.me/?text=${encodeURIComponent(fullText)}`;
-}
-
-/**
- * Safely opens an external URL even inside restricted iframes
- */
-export function openExternalUrl(url: string): void {
-  if (typeof window === 'undefined') return;
-  try {
-    const win = window.open(url, '_blank', 'noopener,noreferrer');
-    if (!win || win.closed || typeof win.closed === 'undefined') {
-      // Pop-up might have been blocked, try direct location if allowed or trigger click
-      const a = document.createElement('a');
-      a.href = url;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-  } catch {
-    window.location.href = url;
   }
 }

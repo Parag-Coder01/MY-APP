@@ -191,21 +191,8 @@ async function startServer() {
       company: "KITE ROBOTICS",
       tagline: "Empowering Innovation with Robotics, AI & IoT",
       publicUrl: "https://ais-pre-ovf6slpthc75fethtyfkiv-129721295228.asia-east1.run.app",
-      githubUrl: "https://github.com/paragsarkar100/kite-robotics",
+                  websiteUrl: "https://www.kiterobotics.in",
       geminiConfigured: !!process.env.GEMINI_API_KEY,
-    });
-  });
-
-  // GitHub repository info endpoint
-  app.get("/api/github", (_req, res) => {
-    res.json({
-      success: true,
-      repository: "https://github.com/paragsarkar100/kite-robotics",
-      organization: "https://github.com/kiterobotics",
-      description: "Official KITE ROBOTICS Open Source Firmware, STEM Curricula, and Web Application",
-      stars: 124,
-      forks: 48,
-      license: "MIT",
     });
   });
 

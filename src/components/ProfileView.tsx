@@ -19,8 +19,8 @@ interface ProfileViewProps {
 
 export const ProfileView: React.FC<ProfileViewProps> = ({
   user,
-  courses,
-  ordersCount,
+  courses = [],
+  ordersCount = 0,
   onOpenRolePicker,
   onOpenLoginModal,
   onOpenCertificates,

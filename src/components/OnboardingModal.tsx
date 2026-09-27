@@ -6,8 +6,8 @@ import { KiteLogo } from './KiteLogo';
 interface OnboardingModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onGetStarted: () => void;
-  onOpenLogin: () => void;
+  onGetStarted?: () => void;
+  onOpenLogin?: () => void;
 }
 
 interface Slide {
@@ -36,7 +36,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
       subtitle: "Hands-on robotics hardware engineering designed to cultivate real inventors, not just consumers of technology.",
       visualImage: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=80",
       icon: <Cpu className="w-5 h-5 text-cyan-400" />,
-      highlights: ["Physical Hardware Assembly", "Sensors & Motor Driver Labs", "Autonomous Rovers"],
+      highlights: ["Physical Hardware Assembly", "Sensory Labs", "Autonomous Rovers"],
     },
     {
       id: 2,
@@ -71,11 +71,19 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
 
   const active = slides[currentSlide];
 
+  const handleFinish = () => {
+    if (onGetStarted) {
+      onGetStarted();
+    } else {
+      onClose();
+    }
+  };
+
   const handleNext = () => {
     if (currentSlide < slides.length - 1) {
       setCurrentSlide((prev) => prev + 1);
     } else {
-      onGetStarted();
+      handleFinish();
     }
   };
 
@@ -92,7 +100,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
           <KiteLogo size="sm" showTagline={false} />
           <button
             onClick={onClose}
-            className="text-xs font-mono-code text-slate-400 hover:text-cyan-400 transition-colors uppercase tracking-wider py-1 px-2.5 rounded-lg hover:bg-slate-800"
+            className="text-xs font-mono-code text-slate-400 hover:text-cyan-400 transition-colors uppercase tracking-wider py-1 px-2.5 rounded-lg hover:bg-slate-800 cursor-pointer"
           >
             Skip
           </button>
@@ -164,7 +172,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 <button
                   key={s.id}
                   onClick={() => setCurrentSlide(idx)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
+                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
                     idx === currentSlide
                       ? 'w-7 bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.6)]'
                       : 'w-2 bg-slate-700 hover:bg-slate-600'
@@ -178,30 +186,32 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
             {currentSlide === slides.length - 1 ? (
               <div className="flex flex-col gap-2.5">
                 <button
-                  onClick={onGetStarted}
-                  className="w-full py-3.5 px-5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 active:scale-[0.98] transition-all"
+                  onClick={handleFinish}
+                  className="w-full py-3.5 px-5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 active:scale-[0.98] transition-all cursor-pointer"
                 >
-                  <span>Get Started</span>
+                  <span>Explore KITE Robotics</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
-                <button
-                  onClick={onOpenLogin}
-                  className="w-full py-3 px-5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-200 text-sm font-medium hover:text-white transition-colors"
-                >
-                  Already have an account? Log In
-                </button>
+                {onOpenLogin && (
+                  <button
+                    onClick={onOpenLogin}
+                    className="w-full py-3 px-5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-200 text-sm font-medium hover:text-white transition-colors cursor-pointer"
+                  >
+                    Already have an account? Log In
+                  </button>
+                )}
               </div>
             ) : (
               <div className="flex items-center justify-between gap-3">
                 <button
                   onClick={onClose}
-                  className="text-xs text-slate-400 hover:text-slate-200 px-3 py-2 font-mono-code"
+                  className="text-xs text-slate-400 hover:text-slate-200 px-3 py-2 font-mono-code cursor-pointer"
                 >
                   Skip All
                 </button>
                 <button
                   onClick={handleNext}
-                  className="py-3 px-6 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm flex items-center gap-2 shadow-md shadow-cyan-500/30 active:scale-95 transition-all"
+                  className="py-3 px-6 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm flex items-center gap-2 shadow-md shadow-cyan-500/30 active:scale-95 transition-all cursor-pointer"
                 >
                   <span>Continue</span>
                   <ChevronRight className="w-4 h-4" />

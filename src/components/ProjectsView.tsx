@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { FolderGit2, Cpu, Wrench, Code2, Download, ExternalLink, Bookmark, Check, Layers, ChevronRight, X, Github } from 'lucide-react';
+import { FolderGit2, Cpu, Wrench, Code2, Download, ExternalLink, Bookmark, Check, Layers, ChevronRight, X } from 'lucide-react';
 import { ProjectItem } from '../types';
 import { MOCK_PROJECTS } from '../data/mockData';
-import { OFFICIAL_GITHUB_URL } from '../utils/shareUtils';
 
 export const ProjectsView: React.FC = () => {
   const [selectedDifficulty, setSelectedDifficulty] = useState<'All' | 'Beginner' | 'Intermediate' | 'Advanced'>('All');
@@ -32,38 +31,29 @@ export const ProjectsView: React.FC = () => {
   });
 
   return (
-    <div className="space-y-6 pb-12 relative">
+    <div className="space-y-8 pb-16">
+      {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-cyan-500 text-slate-950 px-4 py-2.5 rounded-xl font-bold text-xs shadow-xl animate-bounce">
-          {toastMessage}
+        <div className="fixed bottom-20 right-6 z-50 px-4 py-2.5 rounded-xl bg-cyan-500 text-slate-950 text-xs font-mono-code font-bold shadow-xl border border-cyan-400 animate-slideUp flex items-center gap-2">
+          <Check className="w-4 h-4" />
+          <span>{toastMessage}</span>
         </div>
       )}
-      {/* Header */}
+
+      {/* Header section */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="text-xs font-mono-code text-cyan-400 uppercase tracking-widest flex items-center gap-1.5">
-            <FolderGit2 className="w-4 h-4" />
-            <span>Hands-on Engineering Library</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono-code mb-2">
+            <FolderGit2 className="w-3.5 h-3.5" />
+            <span>Open Source Robotics & IoT Blueprint Hub</span>
           </div>
-          <h2 className="font-display font-black text-2xl sm:text-3xl text-white mt-1">
-            Robotics & AI Projects Showcase
+          <h2 className="font-display font-black text-2xl sm:text-3xl text-white">
+            DIY Hardware Projects & Firmware
           </h2>
           <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl">
             Curated open-hardware guides, pinouts, circuit schematics, and production firmware code for all skill levels.
           </p>
         </div>
-
-        <a
-          href={OFFICIAL_GITHUB_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-cyan-500 text-white text-xs font-mono-code font-bold transition-all shadow-md shrink-0 w-fit"
-          title="Browse KITE Robotics on GitHub"
-        >
-          <Github className="w-4 h-4 text-cyan-400" />
-          <span>View on GitHub</span>
-          <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
-        </a>
       </div>
 
       {/* Difficulty Tabs */}
@@ -75,7 +65,7 @@ export const ProjectsView: React.FC = () => {
             className={`px-3.5 py-2 rounded-xl transition-all ${
               selectedDifficulty === diff
                 ? 'bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/20'
-                : 'bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-700 hover:text-slate-200'
+                : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
             }`}
           >
             {diff}
@@ -84,209 +74,235 @@ export const ProjectsView: React.FC = () => {
       </div>
 
       {/* Projects Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {filtered.map((proj) => (
-          <div
-            key={proj.id}
-            className="rounded-3xl bg-slate-900/80 border border-slate-800 hover:border-cyan-800/60 transition-all flex flex-col justify-between overflow-hidden group shadow-lg"
-          >
-            {/* Visual */}
-            <div
-              onClick={() => setActiveProjectModal(proj)}
-              className="relative h-48 w-full bg-slate-950 cursor-pointer overflow-hidden"
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filtered.map((proj) => {
+          const isSaved = savedProjects.includes(proj.id);
+          return (
+            <motion.div
+              key={proj.id}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="rounded-3xl bg-slate-900/90 border border-slate-800 overflow-hidden flex flex-col hover:border-cyan-500/50 transition-all group"
             >
-              <img
-                src={proj.image}
-                alt={proj.name || proj.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
-
-              <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-slate-950/80 text-[10px] font-mono-code font-bold text-cyan-400 border border-slate-700 backdrop-blur-sm">
-                {proj.difficulty}
-              </div>
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleSave(proj.id);
-                }}
-                className="absolute top-3 right-3 p-2 rounded-lg bg-slate-950/80 text-slate-300 hover:text-white border border-slate-700 backdrop-blur-sm"
-                title="Save Project"
-              >
-                <Bookmark
-                  className={`w-3.5 h-3.5 ${
-                    savedProjects.includes(proj.id) ? 'fill-cyan-400 text-cyan-400' : ''
-                  }`}
+              {/* Image banner */}
+              <div className="relative h-44 overflow-hidden bg-slate-950">
+                <img
+                  src={proj.image}
+                  alt={proj.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-              </button>
-
-              <div className="absolute bottom-3 left-3 right-3 text-[11px] font-mono-code text-slate-300">
-                {proj.components.slice(0, 2).join(' • ')}
-              </div>
-            </div>
-
-            {/* Content Details */}
-            <div className="p-5 flex-1 flex flex-col justify-between">
-              <div>
-                <h3
-                  onClick={() => setActiveProjectModal(proj)}
-                  className="font-display font-bold text-base text-white hover:text-cyan-400 cursor-pointer transition-colors line-clamp-2"
-                >
-                  {proj.name || proj.title}
-                </h3>
-                <p className="text-xs text-slate-400 mt-2 line-clamp-2 leading-relaxed">
-                  {proj.description}
-                </p>
-
-                {/* Skills chips */}
-                <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-slate-800/80">
-                  {(proj.skillsLearned || proj.skills || []).map((skill: string, idx: number) => (
-                    <span
-                      key={idx}
-                      className="px-2 py-0.5 rounded text-[10px] font-mono-code bg-slate-950 border border-slate-800 text-slate-300"
-                    >
-                      {skill}
-                    </span>
-                  ))}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
+                <div className="absolute top-3 left-3 flex items-center gap-2">
+                  <span className="text-[10px] font-mono-code px-2 py-0.5 rounded-full bg-slate-950/80 backdrop-blur-md border border-slate-700 text-cyan-400 font-bold uppercase">
+                    {proj.difficulty}
+                  </span>
+                  <span className="text-[10px] font-mono-code px-2 py-0.5 rounded-full bg-slate-950/80 backdrop-blur-md border border-slate-700 text-slate-300">
+                    ⏱ {proj.estimatedTime}
+                  </span>
                 </div>
-              </div>
-
-              {/* Actions */}
-              <div className="pt-4 mt-3 border-t border-slate-800/80 flex items-center justify-between">
-                <span className="text-[11px] font-mono-code text-slate-400">
-                  {proj.components.length} Hardware Parts
-                </span>
                 <button
-                  onClick={() => setActiveProjectModal(proj)}
-                  className="px-3.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500 text-cyan-400 hover:text-slate-950 text-xs font-bold transition-all flex items-center gap-1"
+                  onClick={() => toggleSave(proj.id)}
+                  aria-label="Save project"
+                  className={`absolute top-3 right-3 p-2 rounded-xl backdrop-blur-md border transition-all ${
+                    isSaved
+                      ? 'bg-cyan-500 text-slate-950 border-cyan-400'
+                      : 'bg-slate-950/70 text-slate-300 border-slate-700 hover:text-white hover:bg-slate-900'
+                  }`}
                 >
-                  <span>Build Guide</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
+                  <Bookmark className={`w-3.5 h-3.5 ${isSaved ? 'fill-current' : ''}`} />
                 </button>
               </div>
-            </div>
-          </div>
-        ))}
+
+              {/* Body */}
+              <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                <div className="space-y-2">
+                  <h3 className="font-display font-bold text-base text-white group-hover:text-cyan-400 transition-colors">
+                    {proj.title}
+                  </h3>
+                  <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">
+                    {proj.description}
+                  </p>
+                </div>
+
+                {/* Hardware components list */}
+                <div className="space-y-1.5 pt-2 border-t border-slate-800">
+                  <div className="text-[10px] font-mono-code uppercase text-slate-500 font-bold">
+                    Bill of Materials:
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {proj.components.map((c, i) => (
+                      <span
+                        key={i}
+                        className="text-[10px] font-mono-code px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-slate-300"
+                      >
+                        {c}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center gap-2 pt-2">
+                  <button
+                    onClick={() => setActiveProjectModal(proj)}
+                    className="flex-1 py-2.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500 border border-cyan-500/30 text-cyan-400 hover:text-slate-950 font-mono-code text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <Layers className="w-3.5 h-3.5" />
+                    <span>View Schematics</span>
+                  </button>
+                  <button
+                    onClick={() => showToast(`Downloaded project manual & pinout guide for ${proj.title}`)}
+                    className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors cursor-pointer"
+                    title="Download Project ZIP"
+                  >
+                    <Download className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
 
-      {/* Project Build Guide Modal */}
+      {/* Schematic & Build Detail Modal */}
       {activeProjectModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl p-6 text-slate-100 my-auto max-h-[92vh] flex flex-col"
+            className="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl p-6 space-y-6 my-auto max-h-[90vh] overflow-y-auto"
           >
+            {/* Close Button */}
             <button
               onClick={() => setActiveProjectModal(null)}
-              className="absolute top-4 right-4 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="absolute top-4 right-4 p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <div className="flex items-center gap-2 text-xs font-mono-code text-cyan-400 uppercase">
-              <span>{activeProjectModal.difficulty} Project</span>
-              <span>•</span>
-              <span>KITE Engineering Labs</span>
+            {/* Header */}
+            <div className="space-y-2 pr-10">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-mono-code px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-bold uppercase">
+                  {activeProjectModal.difficulty}
+                </span>
+                <span className="text-[10px] font-mono-code text-slate-400">
+                  Build time: {activeProjectModal.estimatedTime}
+                </span>
+              </div>
+              <h2 className="font-display font-black text-xl sm:text-2xl text-white">
+                {activeProjectModal.title}
+              </h2>
             </div>
 
-            <h3 className="font-display font-extrabold text-xl text-white mt-1">
-              {activeProjectModal.name || activeProjectModal.title}
-            </h3>
-
-            <div className="flex-1 overflow-y-auto space-y-4 my-4 pr-1">
+            {/* Image Preview */}
+            <div className="h-56 rounded-2xl overflow-hidden border border-slate-800 relative bg-slate-950">
               <img
                 src={activeProjectModal.image}
-                alt="Project"
-                className="w-full h-52 object-cover rounded-2xl border border-slate-800"
+                alt={activeProjectModal.title}
+                className="w-full h-full object-cover"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
+              <div className="absolute bottom-3 left-3 text-xs font-mono-code text-cyan-400 font-semibold bg-slate-900/80 px-2.5 py-1 rounded-lg border border-slate-700">
+                Validated on KITE Hardware Bench
+              </div>
+            </div>
 
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                {activeProjectModal.description}
-              </p>
+            {/* Bill of Materials list */}
+            <div className="space-y-2">
+              <h3 className="text-xs font-mono-code font-bold uppercase text-slate-400 flex items-center gap-1.5">
+                <Cpu className="w-4 h-4 text-cyan-400" />
+                <span>Components & Hardware Requirements</span>
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {activeProjectModal.components.map((comp, idx) => (
+                  <div
+                    key={idx}
+                    className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-2 text-xs font-mono-code text-slate-300"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                    <span>{comp}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-              {/* Hardware Components Table */}
-              <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
-                <div className="text-xs font-mono-code uppercase text-cyan-400 font-bold">
-                  BOM (Bill of Materials)
+            {/* Step by Step Construction Plan */}
+            <div className="space-y-2">
+              <h3 className="text-xs font-mono-code font-bold uppercase text-slate-400 flex items-center gap-1.5">
+                <Wrench className="w-4 h-4 text-emerald-400" />
+                <span>Assembly & Wiring Guide</span>
+              </h3>
+              <div className="space-y-2">
+                {activeProjectModal.steps.map((st, i) => (
+                  <div
+                    key={i}
+                    className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-start gap-3"
+                  >
+                    <span className="w-5 h-5 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-[10px] font-mono-code font-bold text-cyan-400 shrink-0 mt-0.5">
+                      {i + 1}
+                    </span>
+                    <p className="text-xs text-slate-300 leading-relaxed">{st}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Code / Wiring Snippet */}
+            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+              <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono-code text-emerald-400 font-bold">
+                <div className="flex items-center gap-1.5">
+                  <Code2 className="w-4 h-4" />
+                  <span>Firmware Implementation (C++ / Arduino)</span>
                 </div>
-                <div className="grid grid-cols-2 gap-2 text-xs text-slate-300">
-                  {activeProjectModal.components.map((c, i) => (
-                    <div key={i} className="flex items-center gap-2">
-                      <Cpu className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                      <span>{c}</span>
-                    </div>
-                  ))}
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => showToast("Downloading firmware sketch (INO / ZIP)...")}
+                    className="text-cyan-400 hover:underline flex items-center gap-1 cursor-pointer"
+                  >
+                    <Download className="w-3 h-3" />
+                    <span>Download INO</span>
+                  </button>
                 </div>
               </div>
-
-              {/* Code / Wiring Snippet */}
-              <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
-                <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono-code text-emerald-400 font-bold">
-                  <div className="flex items-center gap-1.5">
-                    <Code2 className="w-4 h-4" />
-                    <span>Firmware Implementation (C++ / Arduino)</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <a
-                      href={OFFICIAL_GITHUB_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-slate-300 hover:text-white flex items-center gap-1"
-                      title="View firmware on GitHub"
-                    >
-                      <Github className="w-3.5 h-3.5 text-cyan-400" />
-                      <span>GitHub</span>
-                      <ExternalLink className="w-3 h-3 text-slate-500" />
-                    </a>
-                    <button
-                      onClick={() => showToast("Downloading firmware sketch (INO / ZIP)...")}
-                      className="text-cyan-400 hover:underline flex items-center gap-1 cursor-pointer"
-                    >
-                      <Download className="w-3 h-3" />
-                      <span>Download INO</span>
-                    </button>
-                  </div>
-                </div>
-                <pre className="p-3 rounded-xl bg-slate-900 text-[11px] font-mono-code text-slate-300 overflow-x-auto">
-{`// KITE ROBOTICS Embedded Firmware
-#include <Arduino.h>
+              <pre className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-[11px] font-mono-code text-slate-300 overflow-x-auto leading-relaxed">
+{`// KITE ROBOTICS Firmware Blueprint
+#include <Wire.h>
+#define MOTOR_PWM 9
+#define SENSOR_PIN A0
 
 void setup() {
   Serial.begin(115200);
-  pinMode(13, OUTPUT);
-  Serial.println("[KITE-CORE] System Initialized.");
+  pinMode(MOTOR_PWM, OUTPUT);
+  pinMode(SENSOR_PIN, INPUT);
+  Serial.println("System Initialized -> KITE Engine Active");
 }
 
 void loop() {
-  digitalWrite(13, HIGH);
-  delay(500);
-  digitalWrite(13, LOW);
-  delay(500);
+  int sensorVal = analogRead(SENSOR_PIN);
+  int outputPower = map(sensorVal, 0, 1023, 0, 255);
+  analogWrite(MOTOR_PWM, outputPower);
+  delay(20);
 }`}
-                </pre>
-              </div>
+              </pre>
             </div>
 
-            <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
-              <button
-                onClick={() => toggleSave(activeProjectModal.id)}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 font-medium flex items-center gap-1.5"
-              >
-                <Bookmark className="w-4 h-4" />
-                <span>{savedProjects.includes(activeProjectModal.id) ? 'Saved' : 'Save for Later'}</span>
-              </button>
-
+            {/* Bottom Actions */}
+            <div className="flex items-center gap-3 pt-2">
               <button
                 onClick={() => {
-                  showToast("Project lab guide sent to your student dashboard.");
+                  showToast("Complete documentation package generated.");
                   setActiveProjectModal(null);
                 }}
-                className="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs"
+                className="flex-1 py-3 rounded-xl bg-cyan-500 text-slate-950 font-mono-code font-bold text-xs uppercase tracking-wider hover:bg-cyan-400 transition-colors shadow-lg shadow-cyan-500/20 cursor-pointer"
               >
-                Start Lab Exercise
+                Download Schematic PDF
+              </button>
+              <button
+                onClick={() => setActiveProjectModal(null)}
+                className="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono-code text-xs font-bold transition-colors cursor-pointer"
+              >
+                Close
               </button>
             </div>
           </motion.div>

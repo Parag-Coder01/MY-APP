@@ -42,6 +42,8 @@ import { StemKitsPdfViewer } from './StemKitsPdfViewer';
 import { PartnerITServicesExpanded } from './PartnerITServicesExpanded';
 import { PartnerBooksExpanded } from './PartnerBooksExpanded';
 import { PartnerAdminItemsExpanded } from './PartnerAdminItemsExpanded';
+import { PartnerWorkshopsExpanded } from './PartnerWorkshopsExpanded';
+import collegeWorkshopImg from '../assets/images/college_workshop_lab_1790484866240.jpg';
 
 import heroRobotAi from '../assets/images/hero_robot_ai_1790142280343.jpg';
 import heroKitsParts from '../assets/images/hero_kits_parts_1790142293541.jpg';
@@ -326,6 +328,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
   const [isITServicesExpanded, setIsITServicesExpanded] = useState(false);
   const [isBooksExpanded, setIsBooksExpanded] = useState(false);
   const [isAdminItemsExpanded, setIsAdminItemsExpanded] = useState(false);
+  const [isWorkshopsExpanded, setIsWorkshopsExpanded] = useState(false);
 
   // 0. Auto-swiping Welcome Strip Slide (stays compact within the white strip region)
   const [activeWelcomeIndex, setActiveWelcomeIndex] = useState(0);
@@ -1072,6 +1075,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                         setIsITServicesExpanded(false);
                         setIsBooksExpanded(false);
                         setIsAdminItemsExpanded(false);
+                        setIsWorkshopsExpanded(false);
                       } else if (isStemKits) {
                         // Expand in-place, display PDF content & download option
                         setIsStemKitsExpanded((prev) => !prev);
@@ -1079,6 +1083,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                         setIsITServicesExpanded(false);
                         setIsBooksExpanded(false);
                         setIsAdminItemsExpanded(false);
+                        setIsWorkshopsExpanded(false);
                       } else if (isITServices) {
                         // Expand in-place, display Website, APP, LMS, ERP
                         setIsITServicesExpanded((prev) => !prev);
@@ -1086,6 +1091,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                         setIsStemKitsExpanded(false);
                         setIsBooksExpanded(false);
                         setIsAdminItemsExpanded(false);
+                        setIsWorkshopsExpanded(false);
                       } else if (isBooks) {
                         // Expand in-place, display AI & Robotics Book, AI/ML Guidebook, Assignments, Notes & D.P.P, E-Books, Formulae Sets
                         setIsBooksExpanded((prev) => !prev);
@@ -1093,6 +1099,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                         setIsStemKitsExpanded(false);
                         setIsITServicesExpanded(false);
                         setIsAdminItemsExpanded(false);
+                        setIsWorkshopsExpanded(false);
                       } else if (isAdminItems) {
                         // Expand in-place, display ID Cards, Tshirt, Merchandise, Batches
                         setIsAdminItemsExpanded((prev) => !prev);
@@ -1196,11 +1203,79 @@ export const HomeView: React.FC<HomeViewProps> = ({
             )}
           </AnimatePresence>
 
+
+
           {/* Smooth Expanded Box for STEM Kits PDF Content & Downloader */}
           <AnimatePresence>
             {isStemKitsExpanded && (
               <StemKitsPdfViewer
                 onClose={() => setIsStemKitsExpanded(false)}
+                onOpenContact={() => onSelectExtendedView('contact')}
+              />
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* NEW SEPARATE BOX JUST BELOW SCHOOL, COLLEGE & EDUCATIONAL INSTITUTION: */}
+        {/* WORKSHOPS BOX (College Professional Image, 8 Technical Tracks, Booking) */}
+        {/* ========================================================================= */}
+        <div className="rounded-3xl dark:bg-slate-900/90 bg-slate-900/95 border-2 dark:border-cyan-500/30 border-slate-800 p-4 sm:p-7 shadow-2xl backdrop-blur-md relative overflow-hidden space-y-4 sm:space-y-5 text-white">
+          {/* Subtle Ambient Radial Glow */}
+          <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-cyan-500/10 blur-[90px] pointer-events-none" />
+
+          {/* Section Header: Heading "Workshops", College Image, Description, Toggle Button */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 pb-4 border-b border-slate-800/80">
+            <div className="flex items-center gap-3.5 sm:gap-5">
+              {/* College Professional Image for the Workshop Box */}
+              <div
+                onClick={() => setIsWorkshopsExpanded((prev) => !prev)}
+                className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-2xl sm:rounded-3xl overflow-hidden shrink-0 border-2 sm:border-3 border-cyan-400 shadow-xl ring-4 ring-cyan-500/20 bg-slate-950 group cursor-pointer"
+                title="Click to view workshop offerings"
+              >
+                <img
+                  src={collegeWorkshopImg}
+                  alt="Professional College Robotics, AI & Engineering Workshop"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 ring-1 ring-inset ring-white/15 rounded-2xl sm:rounded-3xl pointer-events-none" />
+                <div className="absolute inset-0 bg-cyan-950/20 group-hover:bg-transparent transition-colors" />
+              </div>
+
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono-code font-bold uppercase tracking-wider bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                    College & School Programs
+                  </span>
+                </div>
+                <h3 className="font-display font-black text-base sm:text-xl lg:text-2xl text-white tracking-tight leading-snug mt-1">
+                  Workshops
+                </h3>
+                <p className="text-xs sm:text-sm text-cyan-200/90 mt-1 leading-relaxed font-medium break-words">
+                  Industry-grade experiential bootcamps, hands-on faculty & student workshops, and certified technical training conducted at your campus.
+                </p>
+              </div>
+            </div>
+
+            {/* Quick Action / Expand Toggle Button */}
+            <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+              <button
+                type="button"
+                onClick={() => setIsWorkshopsExpanded((prev) => !prev)}
+                className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-mono-code text-xs font-bold transition-all shadow-lg shadow-cyan-500/20 active:scale-95 flex items-center gap-2 cursor-pointer"
+              >
+                <span>{isWorkshopsExpanded ? 'Hide Workshops ▲' : 'Explore Workshops ▼'}</span>
+              </button>
+            </div>
+          </div>
+
+
+
+          {/* Expanded Workshops Content with 8 Tracks & Full Booking Information */}
+          <AnimatePresence>
+            {isWorkshopsExpanded && (
+              <PartnerWorkshopsExpanded
+                onClose={() => setIsWorkshopsExpanded(false)}
                 onOpenContact={() => onSelectExtendedView('contact')}
               />
             )}
