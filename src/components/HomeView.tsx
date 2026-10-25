@@ -53,6 +53,12 @@ import partnerCoursesImg from '../assets/images/partner_stem_courses_17902211359
 import partnerBooksImg from '../assets/images/stem_curriculum_books_1790221111349.jpg';
 import partnerAdminImg from '../assets/images/school_admin_items_1790221123062.jpg';
 import schoolCollegeCampusImg from '../assets/images/school_college_campus_1790221588811.jpg';
+import certifiedCoursesBannerImg from '../assets/images/certified_courses_banner_1790506935418.jpg';
+import bizBannerImg from '../assets/images/biz_solutions_banner_1790652902381.jpg';
+import bizAppImg from '../assets/images/service_app_mockup_1790248617831.jpg';
+import bizWebsiteImg from '../assets/images/service_website_mockup_1790248603554.jpg';
+import bizDatabaseImg from '../assets/images/biz_database_arch_1790652887051.jpg';
+import bizErpImg from '../assets/images/service_erp_mockup_1790248645800.jpg';
 
 interface WelcomeStripSlide {
   id: string;
@@ -1280,6 +1286,278 @@ export const HomeView: React.FC<HomeViewProps> = ({
               />
             )}
           </AnimatePresence>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* NEW BOX JUST UNDER WORKSHOP SECTION: CERTIFIED COURSES */}
+        {/* Redirects user directly to Courses section upon click */}
+        {/* ========================================================================= */}
+        <div className="rounded-3xl dark:bg-slate-900/90 bg-slate-900/95 border-2 dark:border-cyan-500/30 border-slate-800 p-4 sm:p-7 shadow-2xl backdrop-blur-md relative overflow-hidden space-y-4 sm:space-y-5 text-white">
+          {/* Subtle Ambient Radial Glow */}
+          <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-blue-500/10 blur-[90px] pointer-events-none" />
+
+          {/* Section Header: Heading "Certified Courses", Visual Badge, Description, Direct Action Button */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 pb-4 border-b border-slate-800/80">
+            <div className="flex items-center gap-3.5 sm:gap-5">
+              {/* Professional Visual Image for the Certified Courses Box */}
+              <div
+                onClick={() => onSelectTab('learn')}
+                className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-2xl sm:rounded-3xl overflow-hidden shrink-0 border-2 sm:border-3 border-cyan-400 shadow-xl ring-4 ring-cyan-500/20 bg-slate-950 group cursor-pointer"
+                title="Click to explore all certified courses"
+              >
+                <img
+                  src={certifiedCoursesBannerImg}
+                  alt="Accredited STEM & Robotics Certified Courses"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 ring-1 ring-inset ring-white/15 rounded-2xl sm:rounded-3xl pointer-events-none" />
+                <div className="absolute inset-0 bg-blue-950/20 group-hover:bg-transparent transition-colors" />
+              </div>
+
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono-code font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-500/40 flex items-center gap-1">
+                    <Award className="w-3 h-3 text-cyan-400" />
+                    <span>Industry Recognized Certification</span>
+                  </span>
+                </div>
+                <h3 className="font-display font-black text-base sm:text-xl lg:text-2xl text-white tracking-tight leading-snug mt-1 flex items-center gap-2">
+                  <span>Certified Courses</span>
+                </h3>
+                <p className="text-xs sm:text-sm text-cyan-200/90 mt-1 leading-relaxed font-medium break-words">
+                  Government & STEM accredited certifications across Robotics, AI, IoT, Embedded C, ROS, and Drone Piloting with lifetime verifiable credentials.
+                </p>
+              </div>
+            </div>
+
+            {/* Direct Action Button to Courses Section */}
+            <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+              <button
+                type="button"
+                onClick={() => onSelectTab('learn')}
+                className="px-5 py-2.5 rounded-full bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-mono-code text-xs font-bold transition-all shadow-lg shadow-cyan-500/20 active:scale-95 flex items-center gap-2 cursor-pointer group"
+              >
+                <span>Explore Certified Courses</span>
+                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          </div>
+
+          {/* Attractive Commercial Banner Showcase with Direct Click Redirection */}
+          <div
+            onClick={() => onSelectTab('learn')}
+            className="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-800 hover:border-cyan-400/80 transition-all duration-300 cursor-pointer shadow-xl group bg-slate-950"
+          >
+            <div className="relative h-48 sm:h-64 md:h-72 w-full overflow-hidden">
+              <img
+                src={certifiedCoursesBannerImg}
+                alt="Accredited Certified Courses in Robotics, AI and STEM"
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 brightness-95"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-transparent to-slate-950/60" />
+
+              {/* Floating Certification Badges */}
+              <div className="absolute top-3 left-3 sm:top-4 sm:left-4 flex flex-wrap items-center gap-2">
+                <span className="px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-md border border-cyan-400/50 text-cyan-300 font-mono-code text-[10px] sm:text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-lg">
+                  <Award className="w-3.5 h-3.5 text-cyan-400" />
+                  ISO & STEM Accredited
+                </span>
+                <span className="hidden sm:inline-flex px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-md border border-slate-700/80 text-slate-200 font-mono-code text-xs font-medium">
+                  Verifiable Digital Credentials
+                </span>
+              </div>
+
+              {/* Bottom Overlaid Text & Call to Action */}
+              <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+                <div className="space-y-1.5 max-w-xl">
+                  <span className="px-2.5 py-0.5 rounded-md bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 text-[10px] font-mono-code font-extrabold uppercase tracking-wider shadow">
+                    Self-Paced & Instructor-Led
+                  </span>
+                  <h4 className="font-display font-black text-lg sm:text-2xl text-white leading-tight drop-shadow-md">
+                    Master Technical Skills with Hands-on Lab Kits & Verified Certificates
+                  </h4>
+                  <p className="text-xs text-slate-200 hidden sm:block drop-shadow-sm">
+                    Interactive video lessons, guided project challenges, hardware kit shipments, and personalized mentor evaluations.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-mono-code text-xs font-bold transition-all shadow-xl shadow-cyan-500/30 flex items-center gap-2 whitespace-nowrap group-hover:scale-105">
+                    <span>View All Courses</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* NEW SEPARATE BOX UNDER CERTIFIED COURSES: BUSINESS (APP, WEBSITE, DATABASE, ERP) */}
+        {/* Visual options showcase with attractive real images & icons (non-functional for now) */}
+        {/* ========================================================================= */}
+        <div className="rounded-3xl dark:bg-slate-900/90 bg-slate-900/95 border-2 dark:border-cyan-500/30 border-slate-800 p-4 sm:p-7 shadow-2xl backdrop-blur-md relative overflow-hidden space-y-5 sm:space-y-6 text-white">
+          {/* Subtle Ambient Radial Glow */}
+          <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-cyan-500/10 blur-[90px] pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full bg-blue-600/10 blur-[80px] pointer-events-none" />
+
+          {/* Section Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 pb-4 border-b border-slate-800/80">
+            <div className="flex items-center gap-3.5 sm:gap-5">
+              {/* Business Brand Image */}
+              <div
+                className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-2xl sm:rounded-3xl overflow-hidden shrink-0 border-2 sm:border-3 border-cyan-400 shadow-xl ring-4 ring-cyan-500/20 bg-slate-950"
+              >
+                <img
+                  src={bizBannerImg}
+                  alt="Enterprise Business Technology & IT Solutions"
+                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                />
+                <div className="absolute inset-0 ring-1 ring-inset ring-white/15 rounded-2xl sm:rounded-3xl pointer-events-none" />
+                <div className="absolute inset-0 bg-cyan-950/20" />
+              </div>
+
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono-code font-bold uppercase tracking-wider bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 flex items-center gap-1">
+                    <Building2 className="w-3 h-3 text-cyan-400" />
+                    <span>Enterprise IT & Software Engineering</span>
+                  </span>
+                </div>
+                <h3 className="font-display font-black text-base sm:text-xl lg:text-2xl text-white tracking-tight leading-snug mt-1 flex items-center gap-2">
+                  <span>Business</span>
+                </h3>
+                <p className="text-xs sm:text-sm text-cyan-200/90 mt-1 leading-relaxed font-medium break-words">
+                  Scalable enterprise engineering solutions tailored for educational institutions, robotics labs, and forward-thinking corporate operations.
+                </p>
+              </div>
+            </div>
+
+            {/* Status Indicator Chip */}
+            <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+              <span className="px-3.5 py-1.5 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono-code text-cyan-300 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                <span>4 Production Verticals</span>
+              </span>
+            </div>
+          </div>
+
+          {/* 4 Business Options Grid (APP, WEBSITE, DATABASE, ERP) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+            {[
+              {
+                id: 'biz-app',
+                title: 'APP',
+                subtitle: 'iOS & Android Native Ecosystems',
+                desc: 'Cross-platform mobile apps built with React Native and Flutter, offline sync, real-time push alerts, and hardware telemetry.',
+                badge: 'Mobile App',
+                icon: Smartphone,
+                image: bizAppImg,
+                accentBorder: 'border-cyan-500/40',
+                accentBg: 'bg-cyan-500/20',
+                accentText: 'text-cyan-400',
+              },
+              {
+                id: 'biz-website',
+                title: 'WEBSITE',
+                subtitle: 'High-Performance Web Platforms',
+                desc: 'Modern responsive websites, interactive 3D web experiences, headless CMS, high SEO ranking, and lightning-fast edge delivery.',
+                badge: 'Web Portal',
+                icon: Globe,
+                image: bizWebsiteImg,
+                accentBorder: 'border-blue-500/40',
+                accentBg: 'bg-blue-500/20',
+                accentText: 'text-blue-400',
+              },
+              {
+                id: 'biz-database',
+                title: 'DATABASE',
+                subtitle: 'Cloud Architecture & Pipelines',
+                desc: 'Fault-tolerant distributed SQL & NoSQL clusters, high concurrency data pipelines, automated backups, and encrypted warehouses.',
+                badge: 'Data Infra',
+                icon: Database,
+                image: bizDatabaseImg,
+                accentBorder: 'border-emerald-500/40',
+                accentBg: 'bg-emerald-500/20',
+                accentText: 'text-emerald-400',
+              },
+              {
+                id: 'biz-erp',
+                title: 'ERP',
+                subtitle: 'Enterprise Resource Management',
+                desc: 'All-in-one institutional ERP integrating student admissions, attendance, inventory, payroll, fee billing, and real-time KPI metrics.',
+                badge: 'Automation',
+                icon: Laptop,
+                image: bizErpImg,
+                accentBorder: 'border-purple-500/40',
+                accentBg: 'bg-purple-500/20',
+                accentText: 'text-purple-400',
+              },
+            ].map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <div
+                  key={item.id}
+                  className="rounded-2xl border border-slate-800 hover:border-cyan-400/80 bg-slate-900/90 shadow-xl overflow-hidden transition-all duration-300 hover:shadow-cyan-950/50 hover:-translate-y-1 flex flex-col group select-none"
+                >
+                  {/* Dominant Real Showcase Image */}
+                  <div className="relative w-full h-48 sm:h-52 overflow-hidden bg-slate-950">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-out"
+                    />
+                    {/* Visual Scrim Overlays */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent pointer-events-none" />
+                    
+                    {/* Top Floating Badge with Real Icon */}
+                    <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-950/85 backdrop-blur-md border border-cyan-500/30 text-cyan-300 font-mono-code text-[10px] font-bold shadow-md">
+                      <IconComponent className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>{item.badge}</span>
+                    </div>
+
+                    {/* Bottom overlay with Subtitle */}
+                    <div className="absolute bottom-2.5 left-3 right-3 pointer-events-none">
+                      <span className="text-[11px] font-mono-code text-cyan-300/90 font-medium drop-shadow-sm block truncate">
+                        {item.subtitle}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Clean Bottom Area: Option Title & Descriptive Overview */}
+                  <div className="p-4 flex flex-col justify-between flex-1 gap-3 bg-slate-900">
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-display font-black text-base sm:text-lg text-white group-hover:text-cyan-400 transition-colors leading-none tracking-tight">
+                          {item.title}
+                        </h4>
+                        <span className="text-[10px] font-mono-code text-slate-500 uppercase tracking-widest font-semibold">
+                          Enterprise
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">
+                        {item.desc}
+                      </p>
+                    </div>
+
+                    {/* Clean Status Option Pill (Visual only, no navigation on click) */}
+                    <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono-code">
+                      <span className="text-slate-400 flex items-center gap-1.5 text-[11px]">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                        <span>Available Architecture</span>
+                      </span>
+                      <span className="text-cyan-400 font-bold text-[11px] flex items-center gap-0.5">
+                        <span>Details</span>
+                        <ChevronRight className="w-3 h-3 text-cyan-400" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { SplashScreen } from './components/SplashScreen';
+import { ThreeDIntroScreen } from './components/ThreeDIntroScreen';
 import { OnboardingModal } from './components/OnboardingModal';
 import { AuthModal } from './components/AuthModal';
 import { ManageProfileModal } from './components/ManageProfileModal';
@@ -54,6 +55,8 @@ function AppContent() {
   const { isDark, toggleTheme } = useTheme();
 
   // Splash & Onboarding states
+  // Bold 3D Intro Experience on Every Load & Reload
+  const [show3DIntro, setShow3DIntro] = useState(true);
   const [showSplash, setShowSplash] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
 
@@ -522,6 +525,14 @@ function AppContent() {
         <AdminDashboardModal
           isOpen={showAdminDashboard}
           onClose={() => setShowAdminDashboard(false)}
+        />
+
+        {/* Bold 3D Intro Effects Experience */}
+        <ThreeDIntroScreen
+          isOpen={show3DIntro}
+          onFinish={() => {
+            setShow3DIntro(false);
+          }}
         />
 
         {/* SplashScreen */}
