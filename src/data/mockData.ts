@@ -5,6 +5,7 @@ export const COMPANY_INFO = {
   tagline: "Empowering Innovation with Robotics, AI & IoT.",
   positioning: "Next-generation Robotics, AI, IoT and STEM ecosystem focused on hands-on learning, technology education, robotics products, workshops, school programs, curriculum support, innovation and intelligent solutions.",
   phone: "+91 95648 66985",
+  whatsapp: "+91 95648 66985",
   email: "info@kiterobotics.in",
   website: "www.kiterobotics.in",
   address: "Tech Innovation Hub, Cyber City, Sector 7",
@@ -21,9 +22,9 @@ export const COMPANY_INFO = {
   ],
   stats: {
     studentsMentored: "25,000+",
-    partnerSchools: "120+",
-    roboticsKitsDeployed: "15,000+",
-    atlLabsSetup: "45+",
+    partnerSchools: "100+",
+    roboticsKitsDeployed: "200+",
+    atlLabsSetup: "200+",
   },
 };
 

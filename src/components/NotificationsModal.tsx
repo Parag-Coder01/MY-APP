@@ -8,6 +8,7 @@ interface NotificationsModalProps {
   onClose: () => void;
   notifications: AppNotification[];
   onMarkAllAsRead: () => void;
+  onClearNotification?: (id: string) => void;
 }
 
 export const NotificationsModal: React.FC<NotificationsModalProps> = ({
@@ -15,6 +16,7 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({
   onClose,
   notifications,
   onMarkAllAsRead,
+  onClearNotification,
 }) => {
   if (!isOpen) return null;
 

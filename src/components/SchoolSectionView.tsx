@@ -4,7 +4,15 @@ import { School, CheckCircle2, Send, Download, Sparkles, Cpu, Award, Users, Book
 import { COMPANY_INFO } from '../data/mockData';
 import { generateAndDownloadKitePdf } from '../utils/pdfGenerator';
 
-export const SchoolSectionView: React.FC = () => {
+interface SchoolSectionViewProps {
+  onOpenContact?: () => void;
+  onOpenStore?: () => void;
+}
+
+export const SchoolSectionView: React.FC<SchoolSectionViewProps> = ({
+  onOpenContact,
+  onOpenStore,
+}) => {
   const [schoolName, setSchoolName] = useState('');
   const [coordinatorName, setCoordinatorName] = useState('');
   const [phone, setPhone] = useState('');

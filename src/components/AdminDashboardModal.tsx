@@ -83,14 +83,14 @@ export const AdminDashboardModal: React.FC<AdminDashboardModalProps> = ({ isOpen
                 </div>
 
                 <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
-                  <div className="text-xs text-slate-400 font-mono-code">Partner Schools</div>
-                  <div className="text-2xl font-bold font-mono-code text-amber-400 mt-1">120+</div>
+                  <div className="text-xs text-slate-400 font-mono-code">Schools Connected</div>
+                  <div className="text-2xl font-bold font-mono-code text-amber-400 mt-1">100+</div>
                   <div className="text-[10px] text-emerald-400 mt-0.5">Pan-India Network</div>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
-                  <div className="text-xs text-slate-400 font-mono-code">ATL Labs Setup</div>
-                  <div className="text-2xl font-bold font-mono-code text-emerald-400 mt-1">45+</div>
+                  <div className="text-xs text-slate-400 font-mono-code">Robotics kits deployed</div>
+                  <div className="text-2xl font-bold font-mono-code text-emerald-400 mt-1">200+</div>
                   <div className="text-[10px] text-slate-400 mt-0.5">NITI Aayog Compliant</div>
                 </div>
 

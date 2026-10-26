@@ -150,19 +150,23 @@ export interface ProjectItem {
   components: string[];
   skillsLearned: string[];
   estimatedHours: string;
+  estimatedTime?: string;
   circuitType: string;
   title?: string;
   skills?: string[];
+  steps?: string[];
 }
 
 export interface CertificateItem {
   id: string;
   certificateId: string;
   title: string;
+  courseName?: string;
   studentName: string;
   issueDate: string;
   type: 'Course Completion' | 'Workshop Excellence' | 'Innovation Hackathon' | string;
   score?: string;
+  grade?: string;
   instructor: string;
   verified: boolean;
   verificationUrl?: string;
@@ -198,6 +202,7 @@ export type MainTab = 'home' | 'learn' | 'store' | 'kms-ai' | 'profile';
 export type ExtendedView =
   | 'workshops'
   | 'schools'
+  | 'school-section'
   | 'projects'
   | 'about'
   | 'contact'
@@ -206,6 +211,7 @@ export type ExtendedView =
   | 'curriculum'
   | 'ebooks'
   | 'careers'
+  | 'internship'
   | 'it-services'
   | 'drone-technology'
   | 'login'

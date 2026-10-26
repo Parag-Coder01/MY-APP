@@ -15,7 +15,7 @@ export const CertificatesView: React.FC = () => {
     (c) =>
       c.studentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       c.certificateId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      c.courseName.toLowerCase().includes(searchQuery.toLowerCase())
+      (c.courseName || c.title || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleVerifyId = (e: React.FormEvent) => {
@@ -116,11 +116,11 @@ export const CertificatesView: React.FC = () => {
                   {cert.studentName}
                 </h3>
                 <p className="text-xs text-slate-300 font-mono-code">
-                  Course: {cert.courseName}
+                  Course: {cert.courseName || cert.title}
                 </p>
                 <div className="flex items-center gap-2 text-[11px] text-slate-400">
                   <Award className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Grade / Distinction: <strong className="text-white">{cert.grade}</strong></span>
+                  <span>Grade / Distinction: <strong className="text-white">{cert.grade || cert.score || 'Distinction'}</strong></span>
                 </div>
               </div>
 
@@ -179,7 +179,7 @@ export const CertificatesView: React.FC = () => {
                 For successfully demonstrating engineering rigor, hands-on circuitry, and final capstone project execution in
               </p>
               <div className="font-mono-code font-bold text-sm sm:text-base text-white bg-slate-900/80 py-1.5 px-4 rounded-xl border border-slate-800 inline-block">
-                {selectedCert.courseName}
+                {selectedCert.courseName || selectedCert.title}
               </div>
 
               <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-800 text-left text-xs font-mono-code">
@@ -191,7 +191,7 @@ export const CertificatesView: React.FC = () => {
                 </div>
                 <div className="text-right">
                   <div className="text-[10px] text-slate-500">FINAL EVALUATION</div>
-                  <div className="text-emerald-400 font-bold">{selectedCert.grade}</div>
+                  <div className="text-emerald-400 font-bold">{selectedCert.grade || selectedCert.score || 'Distinction'}</div>
                   <div className="text-[10px] text-slate-500 mt-1">STATUS</div>
                   <div className="text-emerald-400 flex items-center justify-end gap-1">
                     <CheckCircle2 className="w-3 h-3" />

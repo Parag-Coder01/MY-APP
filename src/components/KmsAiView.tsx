@@ -1,9 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Send, Sparkles, Mic, MicOff, Image as ImageIcon, Copy, Check, Terminal, Cpu, Zap, RefreshCw, AlertCircle, Wrench, ChevronRight } from 'lucide-react';
-import { ChatMessage } from '../types';
+import { ChatMessage, UserRole } from '../types';
 
-export const KmsAiView: React.FC = () => {
+interface KmsAiViewProps {
+  userRole?: UserRole;
+}
+
+export const KmsAiView: React.FC<KmsAiViewProps> = ({ userRole }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'init-1',

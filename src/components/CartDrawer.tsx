@@ -8,8 +8,9 @@ interface CartDrawerProps {
   onClose: () => void;
   items: CartItem[];
   onUpdateQuantity: (productId: string, quantity: number) => void;
-  onRemoveItem: (productId: string) => void;
-  onProceedToCheckout: () => void;
+  onRemoveItem?: (productId: string) => void;
+  onProceedToCheckout?: () => void;
+  onCheckout?: () => void;
 }
 
 export const CartDrawer: React.FC<CartDrawerProps> = ({
@@ -17,9 +18,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   onClose,
   items,
   onUpdateQuantity,
-  onRemoveItem,
+  onRemoveItem = () => {},
   onProceedToCheckout,
+  onCheckout,
 }) => {
+  const handleProceed = onCheckout || onProceedToCheckout || (() => {});
   if (!isOpen) return null;
 
   const subtotal = items.reduce((acc, it) => acc + it.product.price * it.quantity, 0);
@@ -141,7 +144,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
             <button
               onClick={() => {
-                onProceedToCheckout();
+                handleProceed();
                 onClose();
               }}
               className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/25 active:scale-95 transition-all"

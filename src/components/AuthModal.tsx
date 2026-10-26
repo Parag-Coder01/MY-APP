@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   X,
@@ -29,9 +29,12 @@ import { KiteLogo } from './KiteLogo';
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  currentUser: UserProfile;
+  currentUser?: UserProfile;
   initialMode?: 'login' | 'signup';
-  onLoginSuccess: (user: UserProfile) => void;
+  initialRole?: UserRole;
+  handleSuccess?: (user: UserProfile) => void;
+  onLoginSuccess?: (user: UserProfile) => void;
+  onSuccess?: (user: UserProfile) => void;
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({
@@ -39,8 +42,34 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   onClose,
   currentUser,
   initialMode = 'login',
+  initialRole = 'student',
+  handleSuccess: handleSuccessProp,
   onLoginSuccess,
+  onSuccess,
 }) => {
+  const handleSuccess = (user: UserProfile) => {
+    if (typeof onLoginSuccess === 'function') {
+      try {
+        onLoginSuccess(user);
+      } catch (err) {
+        console.error('Error in onLoginSuccess callback:', err);
+      }
+    }
+    if (typeof onSuccess === 'function') {
+      try {
+        onSuccess(user);
+      } catch (err) {
+        console.error('Error in onSuccess callback:', err);
+      }
+    }
+    if (typeof handleSuccessProp === 'function') {
+      try {
+        handleSuccessProp(user);
+      } catch (err) {
+        console.error('Error in handleSuccess callback:', err);
+      }
+    }
+  };
   const [authMode, setAuthMode] = useState<'login' | 'signup'>(initialMode);
   const [loginMethod, setLoginMethod] = useState<'password' | 'otp'>('password');
   
@@ -51,11 +80,30 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [selectedRole, setSelectedRole] = useState<UserRole>('student');
+  const [selectedRole, setSelectedRole] = useState<UserRole>(initialRole);
   const [institutionName, setInstitutionName] = useState('');
   const [grade, setGrade] = useState('');
   const [city, setCity] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
+
+  // Synchronize when modal is opened with specific role or mode
+  useEffect(() => {
+    if (isOpen) {
+      if (initialRole) {
+        setSelectedRole(initialRole);
+        if (initialRole === 'student') {
+          setIdentifier('aarav@kiterobotics.in');
+        } else if (initialRole === 'parent') {
+          setIdentifier('sunita.sharma@gmail.com');
+        } else if (initialRole === 'educator') {
+          setIdentifier('priya.mentor@kiterobotics.in');
+        }
+      }
+      if (initialMode) {
+        setAuthMode(initialMode);
+      }
+    }
+  }, [isOpen, initialRole, initialMode]);
 
   // OTP flow state
   const [otpStep, setOtpStep] = useState(false);
@@ -159,7 +207,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       if (data.success && data.user) {
         setSuccessMessage(`Logged in as ${data.user.name} (${acc.label})`);
         setTimeout(() => {
-          onLoginSuccess(data.user);
+          handleSuccess(data.user);
           onClose();
         }, 600);
       } else {
@@ -172,12 +220,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         id: `usr_${acc.role}`,
         name: acc.name,
         email: acc.email,
+        phone: currentUser?.phone || phone || '+91 95648 66985',
         role: acc.role as UserRole,
         enrolledCoursesCount: 4,
         completedProjectsCount: 10,
         certificatesCount: 2,
       };
-      onLoginSuccess(fallbackUser);
+      handleSuccess(fallbackUser);
       onClose();
     } finally {
       setLoading(false);
@@ -204,7 +253,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       if (data.success && data.user) {
         setSuccessMessage(`Welcome back, ${data.user.name}!`);
         setTimeout(() => {
-          onLoginSuccess(data.user);
+          handleSuccess(data.user);
           onClose();
         }, 700);
       } else {
@@ -264,7 +313,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       if (data.success && data.user) {
         setSuccessMessage(`Authenticated via OTP as ${data.user.name}!`);
         setTimeout(() => {
-          onLoginSuccess(data.user);
+          handleSuccess(data.user);
           onClose();
         }, 700);
       } else {
@@ -315,7 +364,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       if (data.success && data.user) {
         setSuccessMessage(`Account created successfully! Welcome to KITE, ${data.user.name}!`);
         setTimeout(() => {
-          onLoginSuccess(data.user);
+          handleSuccess(data.user);
           onClose();
         }, 800);
       } else {
@@ -337,6 +386,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         id: 'usr_google_' + Date.now(),
         name: name || 'Aarav Sharma (Google User)',
         email: email || 'aarav.sharma@gmail.com',
+        phone: currentUser?.phone || phone || '+91 95648 66985',
         role: selectedRole,
         enrolledCoursesCount: 2,
         completedProjectsCount: 1,
@@ -344,7 +394,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       };
       setSuccessMessage('Google Account connected successfully!');
       setTimeout(() => {
-        onLoginSuccess(googleUser);
+        handleSuccess(googleUser);
         onClose();
       }, 500);
       setLoading(false);

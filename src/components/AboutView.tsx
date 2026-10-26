@@ -4,11 +4,14 @@ import { COMPANY_INFO } from '../data/mockData';
 import { KiteLogo } from './KiteLogo';
 import { AnimatedCounter } from './AnimatedCounter';
 
+import { MainTab } from '../types';
+
 interface AboutViewProps {
-  onContactClick: () => void;
+  onContactClick?: () => void;
+  onSelectTab?: (tab: MainTab) => void;
 }
 
-export const AboutView: React.FC<AboutViewProps> = ({ onContactClick }) => {
+export const AboutView: React.FC<AboutViewProps> = ({ onContactClick, onSelectTab }) => {
   const whyChooseUs = [
     {
       title: 'Practical Hardware Approach',
@@ -68,15 +71,15 @@ export const AboutView: React.FC<AboutViewProps> = ({ onContactClick }) => {
             </div>
             <div>
               <div className="text-xl sm:text-2xl font-display font-black text-amber-400">
-                <AnimatedCounter target={120} suffix="+" duration={1500} />
+                <AnimatedCounter target={100} suffix="+" duration={1500} />
               </div>
-              <div className="text-[11px] font-mono-code text-slate-400 mt-0.5">Partner Schools</div>
+              <div className="text-[11px] font-mono-code text-slate-400 mt-0.5">Schools Connected</div>
             </div>
             <div>
               <div className="text-xl sm:text-2xl font-display font-black text-emerald-400">
-                <AnimatedCounter target={45} suffix="+" duration={1400} />
+                <AnimatedCounter target={200} suffix="+" duration={1400} />
               </div>
-              <div className="text-[11px] font-mono-code text-slate-400 mt-0.5">ATL Labs Setup</div>
+              <div className="text-[11px] font-mono-code text-slate-400 mt-0.5">Robotics kits deployed</div>
             </div>
           </div>
         </div>

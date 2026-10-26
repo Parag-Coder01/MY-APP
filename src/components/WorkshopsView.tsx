@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Calendar, MapPin, Users, Clock, Award, CheckCircle2, Ticket, Sparkles, ArrowRight, ShieldCheck, X } from 'lucide-react';
 import { Workshop } from '../types';
+import { INITIAL_WORKSHOPS } from '../data/mockData';
 
 interface WorkshopsViewProps {
-  workshops: Workshop[];
+  workshops?: Workshop[];
+  onRegister?: (workshopTitle: string) => void;
 }
 
-export const WorkshopsView: React.FC<WorkshopsViewProps> = ({ workshops }) => {
+export const WorkshopsView: React.FC<WorkshopsViewProps> = ({
+  workshops = INITIAL_WORKSHOPS,
+  onRegister,
+}) => {
   const [activeFilter, setActiveFilter] = useState<'all' | 'flagship' | 'offline' | 'online'>('all');
   const [selectedWorkshop, setSelectedWorkshop] = useState<Workshop | null>(null);
   const [registeredSuccessId, setRegisteredSuccessId] = useState<string | null>(null);

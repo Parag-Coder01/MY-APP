@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Search, Filter, Star, Clock, Layers, Award, PlayCircle, BookOpen, CheckCircle } from 'lucide-react';
-import { Course } from '../types';
+import { Course, UserRole } from '../types';
 
 interface LearnViewProps {
   courses: Course[];
   onSelectCourse: (course: Course) => void;
+  userRole?: UserRole;
 }
 
 export const LearnView: React.FC<LearnViewProps> = ({
   courses,
   onSelectCourse,
+  userRole,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');

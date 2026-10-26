@@ -6,14 +6,17 @@ import { Course } from '../types';
 interface CourseDetailModalProps {
   course: Course | null;
   onClose: () => void;
-  onEnrollOrContinue: (course: Course) => void;
+  onEnrollOrContinue?: (course: Course) => void;
+  onEnroll?: (course: Course) => void;
 }
 
 export const CourseDetailModal: React.FC<CourseDetailModalProps> = ({
   course,
   onClose,
   onEnrollOrContinue,
+  onEnroll,
 }) => {
+  const handleEnroll = onEnroll || onEnrollOrContinue || (() => {});
   const [activeTab, setActiveTab] = useState<'curriculum' | 'projects' | 'instructor' | 'certificate'>('curriculum');
   const [activeVideoLesson, setActiveVideoLesson] = useState<string | null>(null);
   const [expandedModule, setExpandedModule] = useState<number>(0);
@@ -285,7 +288,7 @@ export const CourseDetailModal: React.FC<CourseDetailModalProps> = ({
 
           <button
             onClick={() => {
-              onEnrollOrContinue(course);
+              handleEnroll(course);
               onClose();
             }}
             className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/25 active:scale-95 transition-all flex items-center gap-2"

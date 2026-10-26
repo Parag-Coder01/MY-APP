@@ -2,7 +2,15 @@ import React, { useState } from 'react';
 import { BookOpen, CheckCircle, Download, Layers, Sparkles, GraduationCap, Award, ArrowRight } from 'lucide-react';
 import { MOCK_CURRICULUM } from '../data/mockData';
 
-export const CurriculumView: React.FC = () => {
+interface CurriculumViewProps {
+  onSelectCourse?: (courseId: string) => void;
+  onOpenContact?: () => void;
+}
+
+export const CurriculumView: React.FC<CurriculumViewProps> = ({
+  onSelectCourse,
+  onOpenContact,
+}) => {
   const [activeGradeIndex, setActiveGradeIndex] = useState(1); // Default to middle school
   const activePlan = MOCK_CURRICULUM[activeGradeIndex];
 

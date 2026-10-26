@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { BookOpen, Download, Eye, FileText, Sparkles, Check, Search } from 'lucide-react';
 import { MOCK_EBOOKS } from '../data/mockData';
 
-export const EBooksView: React.FC = () => {
+interface EBooksViewProps {
+  onOpenContact?: () => void;
+}
+
+export const EBooksView: React.FC<EBooksViewProps> = ({ onOpenContact }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activePreview, setActivePreview] = useState<typeof MOCK_EBOOKS[0] | null>(null);
 

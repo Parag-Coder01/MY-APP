@@ -313,7 +313,9 @@ interface HomeViewProps {
   onSelectProduct: (product: Product) => void;
   onAddToCart: (product: Product) => void;
   onBuyNow: (product: Product) => void;
-  onOpenStudentDashboard: () => void;
+  onOpenStudentDashboard?: () => void;
+  onOpenAuthModal?: (mode?: 'login' | 'signup') => void;
+  onOpenInstallPrompt?: () => void;
 }
 
 export const HomeView: React.FC<HomeViewProps> = ({
@@ -327,6 +329,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
   onAddToCart,
   onBuyNow,
   onOpenStudentDashboard,
+  onOpenAuthModal,
+  onOpenInstallPrompt,
 }) => {
   const [showITServicesModal, setShowITServicesModal] = useState(false);
   const [isCoursesExpanded, setIsCoursesExpanded] = useState(false);
@@ -690,19 +694,19 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
             <div className="p-2 sm:p-3 rounded-2xl bg-slate-950/60 border border-slate-800/80 hover:border-amber-500/30 transition-colors backdrop-blur-sm min-w-0 flex flex-col justify-center">
               <div className="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-display font-black text-amber-400 tracking-tight leading-none whitespace-nowrap">
-                <AnimatedCounter target={120} suffix="+" duration={1400} delay={300} />
+                <AnimatedCounter target={100} suffix="+" duration={1400} delay={300} />
               </div>
               <div className="text-[10px] sm:text-[11px] text-slate-400 font-mono-code mt-1 font-medium leading-tight break-words">
-                Schools & Labs
+                Schools Connected
               </div>
             </div>
 
             <div className="p-2 sm:p-3 rounded-2xl bg-slate-950/60 border border-slate-800/80 hover:border-emerald-500/30 transition-colors backdrop-blur-sm min-w-0 flex flex-col justify-center">
               <div className="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-display font-black text-emerald-400 tracking-tight leading-none whitespace-nowrap">
-                <AnimatedCounter target={45} suffix="+" duration={1300} delay={450} />
+                <AnimatedCounter target={200} suffix="+" duration={1300} delay={450} />
               </div>
               <div className="text-[10px] sm:text-[11px] text-slate-400 font-mono-code mt-1 font-medium leading-tight break-words">
-                ATL Labs Setup
+                Robotics kits deployed
               </div>
             </div>
           </div>

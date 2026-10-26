@@ -8,9 +8,9 @@ interface StudentDashboardModalProps {
   onClose: () => void;
   user: UserProfile;
   courses: Course[];
-  workshops: Workshop[];
-  onSelectCourse: (course: Course) => void;
-  onOpenCertificates: () => void;
+  workshops?: Workshop[];
+  onSelectCourse?: (course: Course) => void;
+  onOpenCertificates?: () => void;
 }
 
 export const StudentDashboardModal: React.FC<StudentDashboardModalProps> = ({
@@ -18,7 +18,7 @@ export const StudentDashboardModal: React.FC<StudentDashboardModalProps> = ({
   onClose,
   user,
   courses,
-  workshops,
+  workshops = [],
   onSelectCourse,
   onOpenCertificates,
 }) => {
@@ -158,7 +158,7 @@ export const StudentDashboardModal: React.FC<StudentDashboardModalProps> = ({
 
                   <button
                     onClick={() => {
-                      onSelectCourse(course);
+                      if (onSelectCourse) onSelectCourse(course);
                       onClose();
                     }}
                     className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold shrink-0 self-end sm:self-center transition-all"
@@ -186,7 +186,7 @@ export const StudentDashboardModal: React.FC<StudentDashboardModalProps> = ({
 
             <button
               onClick={() => {
-                onOpenCertificates();
+                if (onOpenCertificates) onOpenCertificates();
                 onClose();
               }}
               className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-400 text-xs font-bold font-mono-code flex items-center gap-1 transition-colors"

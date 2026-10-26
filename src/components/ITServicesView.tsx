@@ -32,12 +32,15 @@ export type ITServiceType = 'all' | 'website' | 'app' | 'lms' | 'erp';
 interface ITServicesViewProps {
   initialService?: ITServiceType;
   onContactClick?: () => void;
+  onOpenContact?: () => void;
 }
 
 export const ITServicesView: React.FC<ITServicesViewProps> = ({
   initialService = 'all',
   onContactClick,
+  onOpenContact,
 }) => {
+  const handleContact = onContactClick || onOpenContact;
   const [activeTab, setActiveTab] = useState<ITServiceType>(initialService);
   const [selectedServiceForQuote, setSelectedServiceForQuote] = useState<string>('Website Development');
 

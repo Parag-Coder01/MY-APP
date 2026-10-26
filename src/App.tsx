@@ -25,6 +25,7 @@ import { ContactView } from './components/ContactView';
 import { CurriculumView } from './components/CurriculumView';
 import { EBooksView } from './components/EBooksView';
 import { CareersView } from './components/CareersView';
+import { InternshipView } from './components/InternshipView';
 import { ITServicesView } from './components/ITServicesView';
 import { StudentDashboardModal } from './components/StudentDashboardModal';
 import { NotificationsModal } from './components/NotificationsModal';
@@ -42,6 +43,7 @@ import {
   Product,
   CartItem,
   UserProfile,
+  UserRole,
 } from './types';
 import {
   MOCK_COURSES,
@@ -86,6 +88,7 @@ function AppContent() {
   // Modals & Auth State
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authModalInitialMode, setAuthModalInitialMode] = useState<'login' | 'signup'>('login');
+  const [authModalInitialRole, setAuthModalInitialRole] = useState<UserRole>('student');
   const [showManageProfileModal, setShowManageProfileModal] = useState(false);
   const [showQuickMenu, setShowQuickMenu] = useState(false);
   const [showCartDrawer, setShowCartDrawer] = useState(false);
@@ -242,7 +245,7 @@ function AppContent() {
         case 'curriculum':
           return (
             <CurriculumView
-              onSelectCourse={(courseId) => {
+              onSelectCourse={(courseId: string) => {
                 const target = courses.find((c) => c.id === courseId);
                 if (target) {
                   setSelectedCourse(target);
@@ -265,6 +268,8 @@ function AppContent() {
           return <ContactView />;
         case 'careers':
           return <CareersView />;
+        case 'internship':
+          return <InternshipView />;
         case 'it-services':
           return <ITServicesView onOpenContact={() => handleSelectExtendedView('contact')} />;
         default:
@@ -282,7 +287,7 @@ function AppContent() {
             onSelectProduct={setSelectedProduct}
             onAddToCart={handleAddToCart}
             onBuyNow={handleBuyNow}
-            onOpenAuthModal={(mode) => {
+            onOpenAuthModal={(mode?: 'login' | 'signup') => {
               setAuthModalInitialMode(mode || 'login');
               setShowAuthModal(true);
             }}
@@ -415,9 +420,12 @@ function AppContent() {
           onClose={() => setShowQuickMenu(false)}
           user={user}
           isLoggedIn={isLoggedIn}
-          onLogin={(mode) => {
+          onLogin={(mode, role) => {
             setShowQuickMenu(false);
             setAuthModalInitialMode(mode || 'login');
+            if (role) {
+              setAuthModalInitialRole(role);
+            }
             setShowAuthModal(true);
           }}
           onLogout={handleLogout}
@@ -436,6 +444,93 @@ function AppContent() {
           onOpenStudentDashboard={() => {
             setShowQuickMenu(false);
             setShowStudentDashboard(true);
+          }}
+          onSelectRolePersona={(targetRole) => {
+            setShowQuickMenu(false);
+            // Switch user persona to targeted role with appropriate profile
+            const roleProfiles: Record<UserRole, UserProfile> = {
+              student: {
+                id: 'usr_student_aarav',
+                name: 'Aarav Sharma',
+                email: 'aarav@kiterobotics.in',
+                phone: '+91 95648 66985',
+                role: 'student',
+                institution: 'DPS International ATL Innovation Lab',
+                grade: 'Class 10 — Robotics Lead',
+                city: 'New Delhi',
+                enrolledCoursesCount: 4,
+                completedProjectsCount: 12,
+                certificatesCount: 3,
+              },
+              parent: {
+                id: 'usr_parent_sharma',
+                name: 'Sunita Sharma',
+                email: 'sunita.sharma@gmail.com',
+                phone: '+91 98112 44556',
+                role: 'parent',
+                institution: 'Parent of Aarav Sharma (Class 10)',
+                grade: 'Guardian & STEM Supporter',
+                city: 'New Delhi',
+                enrolledCoursesCount: 1,
+                completedProjectsCount: 4,
+                certificatesCount: 2,
+              },
+              educator: {
+                id: 'usr_educator_priya',
+                name: 'Priya Sen',
+                email: 'priya.mentor@kiterobotics.in',
+                phone: '+91 98112 23344',
+                role: 'educator',
+                institution: 'National Robotics Mentors Forum & KITE Labs',
+                grade: 'Senior STEM Robotics Trainer',
+                city: 'Kolkata',
+                enrolledCoursesCount: 12,
+                completedProjectsCount: 48,
+                certificatesCount: 10,
+              },
+              customer: {
+                id: 'usr_guest_explorer',
+                name: 'Guest Explorer',
+                email: 'guest@kiterobotics.in',
+                phone: '+91 98765 00000',
+                role: 'customer',
+                institution: 'Robotics & STEM Enthusiast',
+                grade: 'Hardware Explorer',
+                city: 'India',
+                enrolledCoursesCount: 1,
+                completedProjectsCount: 2,
+                certificatesCount: 1,
+              },
+              school: {
+                id: 'usr_school_sharma',
+                name: 'Dr. Rajesh K. Sharma',
+                email: 'principal@dps-robotics.edu.in',
+                phone: '+91 98765 43210',
+                role: 'school',
+                institution: 'DPS International ATL Innovation Lab',
+                grade: 'ATL In-Charge & Vice Principal',
+                city: 'Bengaluru',
+                enrolledCoursesCount: 8,
+                completedProjectsCount: 35,
+                certificatesCount: 15,
+              },
+              other: {
+                id: 'usr_other',
+                name: 'Community Member',
+                email: 'member@kiterobotics.in',
+                phone: '+91 99999 88888',
+                role: 'other',
+                institution: 'Open Hardware Community',
+                grade: 'Member',
+                city: 'India',
+                enrolledCoursesCount: 1,
+                completedProjectsCount: 1,
+                certificatesCount: 1,
+              },
+            };
+
+            const selectedProfile = roleProfiles[targetRole] || roleProfiles.student;
+            handleLoginSuccess(selectedProfile);
           }}
         />
 
@@ -483,8 +578,11 @@ function AppContent() {
         <AuthModal
           isOpen={showAuthModal}
           initialMode={authModalInitialMode}
+          initialRole={authModalInitialRole}
+          currentUser={user}
           onClose={() => setShowAuthModal(false)}
           onSuccess={handleLoginSuccess}
+          onLoginSuccess={handleLoginSuccess}
         />
 
         {/* Manage Profile Modal */}
@@ -516,7 +614,7 @@ function AppContent() {
           onMarkAllAsRead={() => {
             setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
           }}
-          onClearNotification={(id) => {
+          onClearNotification={(id: string) => {
             setNotifications((prev) => prev.filter((n) => n.id !== id));
           }}
         />

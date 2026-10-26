@@ -234,7 +234,7 @@ export const ProjectsView: React.FC = () => {
                 <span>Assembly & Wiring Guide</span>
               </h3>
               <div className="space-y-2">
-                {activeProjectModal.steps.map((st, i) => (
+                {(activeProjectModal.steps || []).map((st: string, i: number) => (
                   <div
                     key={i}
                     className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-start gap-3"
